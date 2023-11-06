@@ -1,0 +1,35 @@
+.ContactUsPage .InfoContainer{
+    margin: 2rem;
+    direction: rtl;
+    display: flex;
+    justify-content: space-around;
+}
+.ContactUsPage .contactInfo{
+    background-color: #ebe7e765;
+    margin: 1rem;
+    min-width: 250px;
+    max-width: fit-content;
+    padding: 2rem;
+    border: 1px solid rgb(162, 162, 162);
+    border-radius: 7%;
+    text-align: center;
+}
+.ContactUsPage .header{
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.ContactUsPage .contactInfo p{
+    font-size: x-large;
+}
+.ContactUsPage .form-map{
+    display: flex;
+    flex-direction: column;    
+    align-items: center;
+}
+@media screen and (max-width:1290px){
+    .ContactUsPage .InfoContainer{
+        flex-direction: column;
+        align-items: center;
+    }
+
+}

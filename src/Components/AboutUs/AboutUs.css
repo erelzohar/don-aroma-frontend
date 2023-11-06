@@ -1,0 +1,12 @@
+.AboutUs {
+    display: flex;
+    flex-direction: column;
+    margin: 10%;
+	direction: rtl;
+    font-size: x-large;
+    word-spacing: 3px;
+    line-height: 50px;
+}
+.AboutUs h1{
+    text-align: center;
+}

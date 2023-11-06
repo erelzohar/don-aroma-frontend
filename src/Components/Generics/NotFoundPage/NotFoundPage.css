@@ -1,0 +1,16 @@
+.NotFoundPage {
+	display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 60px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    color: rgba(0, 0, 0, 0.751);
+}
+.NotFoundPage h3{
+    margin: 0;
+}
+.NotFoundPage a{
+    font-size: 30px;
+    text-decoration: underline;
+}

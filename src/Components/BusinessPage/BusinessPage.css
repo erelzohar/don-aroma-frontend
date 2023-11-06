@@ -1,0 +1,91 @@
+.BusinessPage {
+    background-image: linear-gradient(rgba(255,255,255,.75), rgba(255,255,255,.75)), url(../../Assets/Images/business-bg-desktop.webp);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    padding: 1rem 1rem 0 1rem ;
+    margin: 0;
+    direction: rtl;
+    text-align: center;
+    font-size: x-large;
+}
+
+.BusinessPage .underlined {
+    text-decoration: underline;
+}
+.BusinessPage h1,
+.BusinessPage h2 {
+    color: rgba(17, 17, 17, 0.872);
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+.BusinessPage .container {
+    display: flex;
+    word-spacing: 2px;
+    line-height: 4vh;
+
+}
+.BusinessPage .inner-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.BusinessPage .ul-flex ul * {
+    padding: 2rem;
+    padding-right: 0;
+
+}
+
+.BusinessPage .ul-flex ul {
+    display: flex;
+    margin: 2rem;
+}
+
+.BusinessPage ol {
+    display: flex;
+    flex-direction: column;
+    min-width: 35vw;
+    padding: 0;
+    margin: 1rem;
+}
+
+.BusinessPage .bigandstrong {
+    display: flex;
+    margin: 3vw;
+}
+
+.BusinessPage .iconsFlex {
+    display: flex;
+    justify-content: space-around;
+    padding: 1rem;
+    font-weight: bold;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.BusinessPage .iconItem>*:first-child {
+    font-size: 50px;
+    color: #9f7a0c;
+}
+.BusinessPage .iconItem{
+    padding: 1rem;
+}
+@media screen and (max-width:1100px) {
+    .BusinessPage{
+        background-image: linear-gradient(rgba(255,255,255,.75), rgba(255,255,255,.75)), url(../../Assets/Images/business-bg-mobile.webp);
+
+    }
+    .BusinessPage .container {
+        flex-direction: column;
+    }
+
+    .BusinessPage .ul-flex ul {
+        display: block;
+        margin: 0;
+    }
+}
+@media screen and (max-width:700px) {
+    .BusinessPage .iconsFlex{
+        flex-direction: column;
+    }
+
+}

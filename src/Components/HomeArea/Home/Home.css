@@ -1,0 +1,62 @@
+.Home{
+
+}
+.Home h1, .Home h2, .Home h3, .Home h4{
+    display: inline-block;
+}
+.Home .intro-message{
+    height: 30vh;
+    background-image: url("../../../Assets/Images/horizonal-cover.webp");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    display: flex;
+    color: honeydew;
+    font-size: 2.5vh;
+}
+.Home .home-heading{
+    font-size: 30px;
+    margin: 1rem;
+    color: rgba(0, 0, 0, 0.728);
+}
+.Home a{
+    text-decoration: none;
+}
+.Home .img{
+    width: 10vw;
+    margin: 1rem;
+    margin-top: 0;
+}
+
+.Home .home-section{
+    direction: rtl;
+    margin-top: 10vh;
+    text-align: center;
+}
+.Home .inner-about-us{
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    font-size: 1.5vw;
+    margin: 2rem;
+    border-radius:10%;
+    letter-spacing: 1.5px;
+}
+.Home .about-us-section{
+    display: flex;
+    justify-content: center;
+}
+
+.Home .businnessSection{
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 50px;
+    margin:7rem auto 5rem auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: rgba(0, 0, 0, 0.728);
+    font-size: large;
+    max-width: 1000px;
+}

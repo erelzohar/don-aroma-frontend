@@ -1,0 +1,26 @@
+.Faq {
+    direction: rtl;
+    width: 80%;
+    height: 100%;
+    margin: auto;
+}
+.faq-link{
+    color: rgb(75, 75, 242);
+    margin: 2px;
+    text-decoration: underline;
+}
+.accordions{
+    margin: 5px;
+}
+.Faq .MuiTypography-root{
+    padding: 10px;
+    font-size: large;
+    
+}
+.MuiAccordionSummary-content .MuiTypography-root{
+    font-weight: bold;
+}
+.MuiAccordionDetails-root{
+    box-shadow: rgba(0, 0, 0, 0.154) 0px 4px 8px 0px inset;
+    border-radius: 3px;
+}

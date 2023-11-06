@@ -1,0 +1,11 @@
+.ProductList .filters{
+    margin:2rem 1rem 1rem 1rem;
+}
+
+.ProductsListGrid {
+    --auto-grid-min-size: 25rem;
+    grid-template-columns: repeat(auto-fill, minmax(var(--auto-grid-min-size), 1fr));
+    grid-gap: 1rem;
+    align-content: center;
+    justify-content: center;
+}

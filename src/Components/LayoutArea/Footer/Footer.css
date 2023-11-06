@@ -1,0 +1,27 @@
+.Footer{
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	background-color: #ece5e56c;
+	height: 100%;
+}
+.Footer .grid-container{
+	direction: rtl;
+	width: 100%;
+	display: grid;
+	grid-template-columns: repeat(3,1fr);
+}
+.footer-info{
+	margin: 2vh 6vw 2vh 6vw;
+	display: flex;
+	flex-direction: column;
+	text-align: right;
+	font-size: large;
+}
+.footer-info >*{
+	margin: 3px;
+}
+.footer-info-header{
+	color: #9d7500;
+}

@@ -1,0 +1,33 @@
+.Layout {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+}
+.Layout *{
+    box-sizing: border-box;
+}
+
+.Layout>footer {
+    grid-column: span 6;
+}
+.Layout>header {
+    grid-column: span 6;
+}
+.Layout>main {
+    background-image: linear-gradient(rgba(255,255,255,.75), rgba(255,255,255,.75)), url(../../../Assets/Images/main-bg-desktop.webp);
+    grid-column: span 6;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+@media screen and (max-width:1100px){
+    .Layout>main {
+        background-image: linear-gradient(rgba(255,255,255,.75), rgba(255,255,255,.75)), url(../../../Assets/Images/main-bg-mobile.webp);
+    }
+}

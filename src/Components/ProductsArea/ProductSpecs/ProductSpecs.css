@@ -1,0 +1,93 @@
+.ProductSpecs {
+    height: 100%;
+    direction: rtl;
+    justify-content: center;
+    align-items: center;
+    margin: 1rem;
+}
+
+.ProductSpecs .gridContainer {
+    background-color: rgba(255, 255, 255, 0.478);
+    margin: auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-items: center;
+    width: 70%;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+.ProductSpecs .imgDiv img {
+    padding: 2rem;
+    width: 100%;
+    height: fit-content;
+    margin: 0;
+}
+
+.interestedCarousel {
+    margin-top: 3rem;
+    text-align: center;
+}
+
+.specDiv {
+    font-size: x-large;
+    word-spacing: 3px;
+    margin: 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 4vh;
+}
+
+.specDiv .productName {
+    line-height: 4rem;
+    color: #9f7a0c;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.ProductSpecs .imgDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 1rem;
+    border-left: 3px solid rgba(61, 61, 61, 0.35);
+}
+
+.productPicker {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.productPicker >*{
+    margin: 1rem;
+}
+.productHashtags {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-style: italic;
+    color: rgba(19, 19, 19, 0.753);
+    font-weight: bold;
+}
+
+.productHashtags a {
+    color: rgb(78, 78, 165);
+    text-decoration: underline;
+    margin: 0.2rem;
+}
+
+@media screen and (max-width:900px) {
+    .ProductSpecs .imgDiv {
+        border: none;
+    }
+
+    .ProductSpecs .gridContainer {
+        grid-template-columns: 1fr;
+        width: 100%;
+    }
+
+    .specDiv {
+        text-align: center;
+        margin-top: 0;
+    }
+
+}

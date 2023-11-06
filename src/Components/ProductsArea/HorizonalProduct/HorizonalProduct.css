@@ -1,0 +1,36 @@
+.HorizonalProduct {
+    direction: rtl;
+    margin: 1rem 5vw 1rem 5vw;
+    padding: 1rem;
+    border-radius: 7px;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: center;
+    font-size: larger;
+    transition: all 300ms;
+    box-shadow: rgba(0, 0, 0, 0.04) 0px 3px 5px;
+}
+.HorizonalProduct .product-name-link{
+    width: 60%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.HorizonalProduct:hover{
+    box-shadow: rgba(0, 0, 0, 0.300) 0px 15px 25px, rgba(0, 0, 0, 0.300) 0px 5px 10px;
+}
+.HorizonalProduct .product-img{
+    width: 50%;
+    max-width: 200px;
+    border-radius: 3px; 
+}
+.HorizonalProduct .product-div-button{
+    transition: all 500ms;
+    margin: 1rem;
+}
+.HorizonalProduct .product-desc{
+    margin: 1rem 1rem 1rem 0;    
+}
+
+
