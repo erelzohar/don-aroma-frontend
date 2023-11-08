@@ -39,8 +39,7 @@ const productsReducer = createSlice({
         updateProduct: (state, action: PayloadAction<ProductModel>) => {
             const newProductsState = [ ...state.products ];
             const index = newProductsState.findIndex(p => p._id === action.payload._id);
-            // newProductsState[index].category = state.categories.find(c=>)
-            newProductsState[index] = action.payload;
+            newProductsState[index] = action.payload;            
             state.products = newProductsState;
         },
         deleteProduct: (state, action: PayloadAction<string>) => {

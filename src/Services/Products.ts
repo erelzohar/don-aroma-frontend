@@ -69,13 +69,16 @@ class ProductsService {
         try {
             const formData = ProductModel.convertToFormData(productToUpsert, image);
             const res = await jwtAxios.post<ProductModel>(globals.productsUrl, formData);
-
+            
+            
             if (productToUpsert._id) {
                 store.dispatch(updateProduct(res.data));
-                return notify.success('!המוצר עודכן בהצלחה');
+                notify.success('!המוצר עודכן בהצלחה');
+                return res.data;
             }
             store.dispatch(addProduct(res.data));
             notify.success('!המוצר נוסף בהצלחה');
+            return res.data;
         }
         catch (err) {
             notify.error(err);

@@ -71,7 +71,7 @@ function Register(): JSX.Element {
         transform: 'translate(-50%, -50%)',
         width: '80%',
         maxWidth:"600px",
-        bgcolor: 'rgba(255,255,255,.7)',
+        bgcolor: '#fff',
         boxShadow: 24,
         p: 3,
         borderRadius: '7px'

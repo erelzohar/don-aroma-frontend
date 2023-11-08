@@ -8,7 +8,7 @@ function Logout(): JSX.Element {
     useEffect(()=>{
         store.dispatch(userLoggedOut());
         localStorage.removeItem("donaroma");
-        notify.custom("הינך מחובר כאורח")
+        notify.custom("הינך מחובר כאורח");
     },[])
     return <Navigate to="/" />
 }

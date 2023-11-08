@@ -1,4 +1,6 @@
 .AdminMessages {
 	display: flex;
     margin: 1rem;
+    direction: rtl;
+    background: #ffffffad;
 }

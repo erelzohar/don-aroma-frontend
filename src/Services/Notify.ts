@@ -4,7 +4,6 @@ class Notify {
 
     private notification = new Notyf({
         duration: 4000,
-        ripple: true,
         position: { x: "left", y: "top" },
         dismissible: true,
         types: [{ type: "custom", background: "rgb(99, 115, 237)", dismissible: true,ripple:true, duration: 4000,icon:"&#9888;" }]

@@ -1,40 +1,31 @@
 import "./ProductSpecs.css";
-import img from "../../../Assets/Images/Brownie.jpeg";
-import { Checkbox, FormControl, InputLabel, MenuItem, Rating, Select, Typography } from "@mui/material";
-import { Favorite, FavoriteBorder, Brightness1 } from "@mui/icons-material";
-import UseNumberInputCompact from "../../Generics/NumberInput/NumberInput";
+import {Rating, Typography } from "@mui/material";
 import ProductsCarousel from "../../ProductsArea/ProductsCarousel/ProductsCarousel";
-import store from "../../../Redux/Store";
-import { useEffect, useState } from "react";
+import store, { useAppSelector } from "../../../Redux/Store";
+import { useEffect } from "react";
 import productsService from "../../../Services/Products";
 import { Link, useParams } from "react-router-dom";
-import ProductModel from "../../../Models/ProductModel";
 import globals from "../../../Services/Globals";
-import logo from "../../../Assets/Images/Brownie.webp";
 import { IoIosBowtie } from "react-icons/io";
+import ProductForm from "../../AdminArea/ProductForm/ProductForm";
 
 function ProductSpecs(): JSX.Element {
 
-    const [products, setProducts] = useState(store.getState().productsState.products);
+    const products = useAppSelector(state => state.productsState.products);
     const params = useParams();
     const productId = params.productId;
-    const [productToSpec, setProductToSpec] = useState<ProductModel>(store.getState().productsState.products.find(p => p._id === productId));
-
+    let productToSpec = useAppSelector(state => state.productsState.products.find(p => p._id === productId));
+    console.log(productToSpec);
+    
     useEffect(() => {
-        if (products.length === 0) {
-            productsService.getProducts()
-                .then(res => {
-                    setProducts(res);
-                    return setProductToSpec(res.find(p => p._id === productId));
-                });
-        }
-        setProductToSpec(products.find(p => p._id === productId));
+        if (products.length === 0) productsService.getProducts();
     }, [params])
     return (
         <div className="ProductSpecs">
+            {store.getState().authState.user?.isAdmin && productToSpec && <ProductForm product={productToSpec} />}
             {productToSpec && <div className="gridContainer">
                 <div className="imgDiv">
-                    <img src={productToSpec.imageName === "" ? logo : globals.productsUrl + "/img/" + productToSpec.imageName} alt="" />
+                    <img src={globals.productsUrl + "/img/" + productToSpec.imageName} alt="" />
                     {productToSpec.level > 0 && <><Typography fontSize='large' display="flex" fontWeight='bold' alignItems="center">דומיננטיות :
                         <Rating
                             sx={{ margin: "1rem" }}
@@ -52,7 +43,7 @@ function ProductSpecs(): JSX.Element {
                             <Link to={"/products/" + productToSpec.category._id}>
                                 #{productToSpec.category.name}
                             </Link>
-                            {productToSpec.scentCategory && <Link to={"/products/scents/" + productToSpec.scentCategory}>
+                            {productToSpec.scentCategory && <Link to={"/products/scents/" + productToSpec.scentCategory._id}>
                                 #{store.getState().productsState.scentCategories.find(c => c._id === productToSpec.scentCategory._id).name}
                             </Link>}
                         </p>
@@ -64,15 +55,15 @@ function ProductSpecs(): JSX.Element {
                         <h1 className="productName">{productToSpec.name}</h1>
                         <section>{productToSpec.description} </section>
                     </div>
-                    <div className="productPicker">
-                        {productToSpec.scents.length>0 &&<div className="scents">
+                    {/* <div className="productPicker">
+                        {productToSpec.scents.length > 0 && <div className="scents">
                             <FormControl fullWidth margin="normal">
-                                <InputLabel id="demo-simple-scent-label">קטגורית ריח</InputLabel>
+                                <InputLabel id="demo-simple-scent-label">ניחוח </InputLabel>
                                 <Select
                                     defaultValue={productToSpec.scents[0]}
                                     labelId="demo-simple-scent-label"
                                     id="demo-simple-scent"
-                                    label="קטגורית ריח"
+                                    label="ניחוח "
                                 >
                                     {productToSpec.scents.map((c, i) => <MenuItem key={i} value={c}>{c}</MenuItem>)}
 
@@ -88,7 +79,7 @@ function ProductSpecs(): JSX.Element {
                         <div className="quantity">
                             <UseNumberInputCompact />
                         </div>
-                    </div>
+                    </div> */}
                 </div>
 
             </div>}

@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import "./HorizonalProduct.css";
-import logo from "../../../Assets/Images/Brownie.webp";
 import { Button } from "@mui/material";
 import { useRef } from "react";
 import ProductModel from "../../../Models/ProductModel";
@@ -38,7 +37,7 @@ function HorizonalProduct(product: ProductModel): JSX.Element {
         <Zoom triggerOnce>
             <div className="HorizonalProduct" onMouseEnter={flip} onMouseLeave={unflip}>
                 <Link to={"/specs/" + product._id} className="product-name-link">
-                    <img width={"100%"} loading="lazy" className="product-img" src={product.imageName === "" ? logo : globals.productsUrl + "/img/" + product.imageName} alt="img" />
+                    <img width={"100%"} loading="lazy" className="product-img" src={globals.productsUrl + "/img/" + product.imageName} alt="img" />
                     <p className="product-desc">
                         {product.name}
                     </p>

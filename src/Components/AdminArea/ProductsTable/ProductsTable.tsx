@@ -2,8 +2,7 @@ import * as React from 'react';
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Button, Checkbox } from '@mui/material';
 import ProductModel from '../../../Models/ProductModel';
 import CategoryModel from '../../../Models/CategoryModel';
-import { Link } from 'react-router-dom';
-import { Delete, Edit, Add, StarBorder, Grade } from '@mui/icons-material';
+import { Delete, StarBorder, Grade } from '@mui/icons-material';
 import productsService from '../../../Services/Products';
 import globals from '../../../Services/Globals';
 import ProductForm from '../ProductForm/ProductForm';
@@ -101,10 +100,11 @@ function ProductsTable(props: TableProps): JSX.Element {
         setRowsPerPage(+event.target.value);
         setPage(0);
     };
-    const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(event.target.id);
+    const handleCheckboxChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
         console.log(event.target.checked);
-
+        const product = { ...rows.find(e => e._id === event.target.id) }
+        product.isRecommended = event.target.checked;
+        await productsService.upsertProduct(product, null);
 
     }
 
@@ -117,7 +117,6 @@ function ProductsTable(props: TableProps): JSX.Element {
                         <TableRow>
                             {columns.map((column, i) => (
                                 <TableCell
-
                                     key={column.id + i}
                                     align={column.align}
                                     style={{ minWidth: column.minWidth, fontSize: "medium", maxWidth: column.maxWidth }}
@@ -132,7 +131,6 @@ function ProductsTable(props: TableProps): JSX.Element {
                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                             .map((row, i) => {
                                 return (
-
                                     <TableRow hover role="checkbox" tabIndex={-1} key={row._id + i}>
                                         {columns.map((column, j) => {
                                             const value = row[column.id];
@@ -140,9 +138,9 @@ function ProductsTable(props: TableProps): JSX.Element {
                                                 <TableCell key={j + column.id} align={column.align} >
                                                     <span style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                                                         {column.id === 'name' && <span style={{ display: 'flex', flexDirection: 'column' }}>
-                                                            <Checkbox onChange={handleCheckboxChange} id={row._id} color='warning' icon={<StarBorder />} checkedIcon={<Grade />} />
+                                                            <Checkbox checked={row.isRecommended ? true : false} onChange={handleCheckboxChange} id={row._id} color='warning' icon={<StarBorder />} checkedIcon={<Grade />} />
                                                             <span style={{ display: "flex", maxHeight: "60px" }}>
-                                                                <Button variant="contained" color="error" type="submit" onClick={() => { productsService.deleteProduct(row._id) }}><Delete /></Button>
+                                                                <Button color="error" type="submit" onClick={async () => { await productsService.deleteProduct(row._id) }}><Delete /></Button>
                                                                 <ProductForm product={row} />
                                                             </span></span>}
                                                         {column.id === 'imageName' && value && <span><img style={{ width: "25%" }} src={globals.productsUrl + "/img/" + value} alt="" /></span>}
@@ -152,7 +150,6 @@ function ProductsTable(props: TableProps): JSX.Element {
                                             );
                                         })}
                                     </TableRow>
-
                                 );
                             })}
                     </TableBody>

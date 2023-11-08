@@ -1,16 +1,17 @@
 import "./CategoryCard.css";
-import img from "../../../Assets/Images/horizonal-cover.webp";
 import CategoryModel from "../../../Models/CategoryModel";
 import { Link } from "react-router-dom";
+import globals from "../../../Services/Globals";
 
 function CategoryCard(category: CategoryModel): JSX.Element {
     return (
-        <Link to={"/products/" + category._id} preventScrollReset={false}>
-                <div className="CategoryCard" style={{ backgroundImage: `url(${img})`}}>
-                    <div className="fill-height"></div>
-                    <h2 className="category-name">{category.name}</h2>
-                </div>
-        </Link>
+        <div className="CategoryCard" style={{ backgroundImage: `url(${globals.productsUrl + "/img/" + category.imageName})` }}>
+            <Link to={"/products/" + category._id}>
+                <div className="fill-height"></div>
+                <h2 className="category-name">{category.name}</h2>
+            </Link>
+        </div>
+
     );
 }
 

@@ -8,27 +8,26 @@ import productsService from "../../../Services/Products";
 import ContactUs from "../../Generics/ContactUs/ContactUs";
 import { useAppSelector } from "../../../Redux/Store";
 import clockGif from "../../../Assets/Images/clock.gif";
+import messagesService from "../../../Services/Messages";
 
 
 
 
 function Home(): JSX.Element {
-    const products = useAppSelector(state=>state.productsState.products);
-
+    const products = useAppSelector(state => state.productsState.products);
+    const messages = useAppSelector(state => state.messagesState.messages);
 
     useEffect(() => {
-        if (products.length === 0) {
-            productsService.getProducts();
-        }
-
+        if (products.length === 0) productsService.getProducts();
+        if (messages.length === 0) messagesService.getMessages();
     }, [])
     return (
         <div className="Home">
-            <Slide direction="down" triggerOnce>
+            {messages.length > 0 && <Slide direction="down" triggerOnce>
                 <div className="intro-message">
-                    <h1>לרגל החגים 650% הנחה על כל פריט שני</h1>
+                    <h1>{messages.find(m => m.type === "intro")?.message}</h1>
                 </div>
-            </Slide>
+            </Slide>}
             <div className="home-section" >
                 <h1 className="home-heading">קטגוריות נבחרות</h1>
                 <CategoriesList />
@@ -38,7 +37,7 @@ function Home(): JSX.Element {
                     <h1 className="home-heading">המומלצים שלנו</h1>
                 </Link>
 
-                <ProductsCarousel products={products} />
+                <ProductsCarousel products={productsService.shuffle(products.filter(p => p.isRecommended))} />
             </div>
             <div className="home-section businnessSection">
                 <Zoom>

@@ -1,8 +1,7 @@
 import { Link } from "react-router-dom";
 import "./ProductCard.css";
-import logo from "../../../Assets/Images/Brownie.webp";
 import { Button } from "@mui/material";
-import { useRef, useState } from "react";
+import { useRef} from "react";
 import ProductModel from "../../../Models/ProductModel";
 import { Zoom } from "react-awesome-reveal";
 import globals from "../../../Services/Globals";
@@ -38,7 +37,7 @@ function ProductCard(product: ProductModel): JSX.Element {
         <Zoom triggerOnce fraction={0.6}>
             <div className="ProductCard" onMouseEnter={flip} onMouseLeave={unflip}>
                 <Link to={"/specs/" + product._id}>
-                    <img width={"100%"} className="product-img" src={globals.productsUrl + "/img/" + (product.imageName ? product.imageName : 'image')} alt={product.name} />
+                    <img width={"100%"} className="product-img" src={globals.productsUrl + "/img/" + product.imageName} alt={product.name} />
                     <p className="product-desc">
                         {product.name}
                     </p>

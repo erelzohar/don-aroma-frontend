@@ -1,12 +1,10 @@
 import { Avatar, Box, IconButton, Menu, MenuItem, Tooltip, Typography } from "@mui/material";
 import LogoutIcon from '@mui/icons-material/Logout';
-import "./UserSettings.css";
 import { useState } from "react";
 import UserModel from "../../../Models/UserModel";
 import { Link } from "react-router-dom";
 
 function UserSettings(props:UserModel): JSX.Element {
-    const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
     const [anchorElUser, setAnchorElUser] =useState<null | HTMLElement>(null);
 

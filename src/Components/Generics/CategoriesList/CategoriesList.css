@@ -1,6 +1,5 @@
 .CategoriesList {
     grid-template-columns: repeat(2,clamp(450px,30vw,30vw));
-    /* grid-template-rows: repeat(6,25vh); */
     margin: 1rem;
     padding: 1rem;
 	display: grid;

@@ -41,7 +41,7 @@ const resolver: Resolver<Credentials> = async (values) => {
 }
 function Login(): JSX.Element {
     const navigate = useNavigate();
-    const { register, handleSubmit, reset, formState: { errors }, setError } = useForm<Credentials>({ resolver, mode: 'onBlur' });
+    const { register, handleSubmit, formState: { errors } } = useForm<Credentials>({ resolver, mode: 'onBlur' });
     const submit: SubmitHandler<Credentials> = async data => {
         try {
             const formData = new FormData();

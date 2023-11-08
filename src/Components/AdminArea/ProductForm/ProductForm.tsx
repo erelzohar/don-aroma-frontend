@@ -1,5 +1,4 @@
 import "./ProductForm.css";
-import jwtAxios from "../../../Services/JwtAxios";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -22,7 +21,7 @@ interface ProductFormProps {
 const schema = yup
     .object()
     .shape({
-        name: yup.string().min(2).max(100).required(),
+        name: yup.string().max(100).required(),
         category: yup.string().required(),
         description: yup.string(),
         price: yup.number().min(0).max(10000),
@@ -40,24 +39,32 @@ interface InitialState {
     scentCategories: CategoryModel[]
     open: boolean
     productImage?: File
+    scentToPush: string
+    colorToPush: string
 }
 function ProductForm(props: ProductFormProps): JSX.Element {
-    const productToEdit = props?.product ? props.product : new ProductModel();
+    let productToEdit = props?.product ? props.product : new ProductModel();
+    
     const initialState: InitialState = {
         productCategory: productToEdit.category ? productToEdit.category._id : '',
         ProductScentCategory: productToEdit.scentCategory ? productToEdit.scentCategory._id : '',
         productLevel: productToEdit.level ? productToEdit.level : 0,
         productScents: productToEdit.scents ? productToEdit.scents : [],
+        scentToPush: '',
+        colorToPush: '',
         productColors: productToEdit.colors ? productToEdit.colors : [],
         categories: store.getState().productsState.categories,
         scentCategories: store.getState().productsState.scentCategories,
         open: false
     }
-    const [{ productCategory, productScents, productColors, ProductScentCategory, productLevel, categories, scentCategories, open, productImage }, setState] = useState(initialState);
+    const [{ productCategory, colorToPush, scentToPush, productScents, productColors, ProductScentCategory, productLevel, categories, scentCategories, open, productImage }, setState] = useState(initialState);
     const handleOpen = () => setState(prevState => ({ ...prevState, open: true }));
     const handleClose = () => {
-        setState(initialState);
-        reset();
+        if (!productToEdit._id) {
+            setState(initialState);
+            return reset();
+        }
+        setState(prev => ({ ...prev, open: false }));
     };
     const imgRef = useRef<HTMLImageElement>(null);
 
@@ -66,6 +73,34 @@ function ProductForm(props: ProductFormProps): JSX.Element {
         if (scentCategories.length === 0) productsService.getScentCategories().then(res => { setState(prevState => ({ ...prevState, scentCategories: res })) });
     }, [])
 
+    const handleScentDelete = (event: React.MouseEvent<HTMLButtonElement>) => {
+        const index = event.currentTarget.id.split("-id-")[1];
+        const newState = [...productScents];
+        newState.splice(+index, 1);
+        setState(prevState => ({ ...prevState, productScents: newState }));
+    }
+    const handleScentAdd = (event: React.MouseEvent<HTMLButtonElement>) => {
+        if (scentToPush.length < 2) return;
+        const newState = [...productScents];
+        newState.push(scentToPush);
+        setState(prev => ({ ...prev, productScents: newState, scentToPush: '' }));
+    }
+    const handleColorDelete = (event: React.MouseEvent<HTMLButtonElement>) => {
+        const index = event.currentTarget.id.split("-id-")[1];
+        const newState = [...productColors];
+        newState.splice(+index, 1);
+        setState(prevState => ({ ...prevState, productColors: newState }));
+    }
+    const handleColorAdd = (event: React.MouseEvent<HTMLButtonElement>) => {
+        if (colorToPush.length < 2) return;
+        const newState = [...productColors];
+        newState.push(colorToPush);
+        setState(prev => ({ ...prev, productColors: newState, colorToPush: '' }));
+    }
+
+
+    const handleColorToPushChange = (event: React.ChangeEvent<HTMLInputElement>) => { setState(prev => ({ ...prev, colorToPush: event.target.value })) };
+    const handleScentToPushChange = (event: React.ChangeEvent<HTMLInputElement>) => { setState(prev => ({ ...prev, scentToPush: event.target.value })) };
     const handleCategoryChange = (event: SelectChangeEvent) => { setState(prevState => ({ ...prevState, productCategory: event.target.value })) };
     const handleScentChange = (event: SelectChangeEvent) => { setState(prevState => ({ ...prevState, ProductScentCategory: event.target.value })) }
     const handleLevelChange = (event: SelectChangeEvent) => { setState(prevState => ({ ...prevState, productLevel: +event.target.value })) };
@@ -81,30 +116,22 @@ function ProductForm(props: ProductFormProps): JSX.Element {
             setState(prevState => ({ ...prevState, productImage: (event.target as HTMLInputElement).files[0] }))
         }
     };
+
     const { register, handleSubmit, reset, formState: { errors }, setError } = useForm({ resolver: yupResolver(schema), mode: 'onBlur' });
     const submit: SubmitHandler<ProductModel> = async data => {
         try {
             const productToUpsert: ProductModel = { ...data };
-            if (productToEdit._id) {
-                productToUpsert._id = productToEdit._id;
-                if (productToEdit.imageName) {
-                    productToUpsert.imageName = productToEdit.imageName;
-                }
+            productToUpsert._id = productToEdit._id;
+            if (productToEdit.imageName) {
+                productToUpsert.imageName = productToEdit.imageName;
             }
+            productToUpsert.scents = productScents;
+            productToUpsert.colors = productColors;
             productToUpsert.level = productLevel;
-            productToUpsert.category = new CategoryModel(({ _id: productCategory } as CategoryModel))
-            if (ProductScentCategory) productToUpsert.scentCategory = new CategoryModel(({ _id: ProductScentCategory } as CategoryModel))
-            await productsService.upsertProduct(productToUpsert, productImage);
-            // const formData = ProductModel.convertToFormData(productToUpsert, productImage);
-            // const res = await jwtAxios.post<ProductModel>(globals.productsUrl, formData);
-            handleClose();
-
-            // if (productToEdit._id) {
-            //     store.dispatch(updateProduct(res.data));
-            //     return notify.success('!המוצר עודכן בהצלחה');
-            // }
-            // store.dispatch(addProduct(res.data));
-            // notify.success('!המוצר נוסף בהצלחה');
+            productToUpsert.category = categories.find(c => productCategory === c._id);
+            productToUpsert.scentCategory = productCategory === "650acfabc4c0c3b0a4da8ad3" ? scentCategories.find(c => ProductScentCategory === c._id) : null;
+            const res = await productsService.upsertProduct(productToUpsert, productImage);
+            if (res) handleClose();
         }
         catch (err: any) {
             notify.error(err);
@@ -115,14 +142,13 @@ function ProductForm(props: ProductFormProps): JSX.Element {
         <div className="ProductForm">
             <Button
                 onClick={handleOpen}
-                variant='contained'
                 color={props.product ? 'info' : 'success'}
             >
                 {props.product ? <Edit /> : <Add />}
             </Button>
             <Dialog open={open} onClose={handleClose} fullWidth maxWidth='md'>
-                <Button onClick={handleClose} variant='contained' color='error' sx={{ maxWidth: '5%', margin: '5px' }}>X</Button>
-                <DialogTitle>{props.product ? "עריכת מוצר" : "הוספת מוצר"}</DialogTitle>
+                <Button onClick={handleClose} color='error' sx={{ maxWidth: '5%', margin: '5px' }}>X</Button>
+                <DialogTitle dir="rtl">{props.product ? "עריכת מוצר" : "הוספת מוצר"}</DialogTitle>
                 <DialogContent>
                     <form className="modalForm" id="product-form" noValidate onSubmit={handleSubmit(submit)} dir="rtl">
                         <TextField
@@ -156,6 +182,7 @@ function ProductForm(props: ProductFormProps): JSX.Element {
                                 <InputLabel id="demo-simple-scent-label">קטגורית ריח</InputLabel>
                                 <Select
                                     {...register("scentCategory")}
+                                    defaultValue={productCategory}
                                     value={ProductScentCategory}
                                     onChange={handleScentChange}
                                     labelId="demo-simple-scent-label"
@@ -204,13 +231,16 @@ function ProductForm(props: ProductFormProps): JSX.Element {
                                 {productScents.map((e, i) =>
                                     <span key={i} className="form-array-child">
                                         <TextField
+                                            margin="dense"
                                             value={e}
                                             dir="rtl"
-                                            label="ריח נוסף"
                                             variant="outlined"
+                                            disabled
                                         />
                                         <Button
+                                            id={"button-id-" + i}
                                             color="error"
+                                            onClick={handleScentDelete}
                                         >
                                             <Delete />
                                         </Button>
@@ -218,13 +248,16 @@ function ProductForm(props: ProductFormProps): JSX.Element {
                                 )}
                                 <span className="form-array-child">
                                     <TextField
-                                        margin="none"
+                                        margin="normal"
                                         dir="rtl"
-                                        label="ריח נוסף"
                                         variant="outlined"
+                                        label="ריח נוסף"
+                                        value={scentToPush}
+                                        onChange={handleScentToPushChange}
                                     />
                                     <Button
                                         color="info"
+                                        onClick={handleScentAdd}
                                     >
                                         <Add />
                                     </Button>
@@ -235,14 +268,16 @@ function ProductForm(props: ProductFormProps): JSX.Element {
                                 {productColors.map((e, i) =>
                                     <span key={i} className="form-array-child">
                                         <TextField
-
+                                            margin="dense"
                                             value={e}
-                                            dir="rtl"
-                                            label="ריח נוסף"
+                                            dir="ltr"
                                             variant="outlined"
+                                            disabled
                                         />
                                         <Button
+                                            id={"button-id-" + i}
                                             color="error"
+                                            onClick={handleColorDelete}
                                         >
                                             <Delete />
                                         </Button>
@@ -250,12 +285,15 @@ function ProductForm(props: ProductFormProps): JSX.Element {
                                 )}
                                 <span className="form-array-child">
                                     <TextField
-                                        margin="none"
-                                        dir="rtl"
+                                        margin="normal"
+                                        dir="ltr"
                                         label="הוסף צבע"
                                         variant="outlined"
+                                        value={colorToPush}
+                                        onChange={handleColorToPushChange}
                                     />
                                     <Button
+                                        onClick={handleColorAdd}
                                         color="info"
                                     >
                                         <Add />

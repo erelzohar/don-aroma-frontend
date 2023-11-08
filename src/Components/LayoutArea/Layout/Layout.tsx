@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Footer from "../Footer/Footer";
 import Header from "../Header/Header";
 import "./Layout.css";
@@ -48,20 +48,20 @@ function Layout(): JSX.Element {
                     <Routes>
                         <Route path="/" element={<Home />} />
                         {/* auth routes */}
-                        <Route path="/auth/register" element={<Register />} />
-                        <Route path="/auth/login" element={<Login />} />
-                        <Route path="/auth/logout" element={<Logout />} />
+                        <Route path="auth/register" element={<Register />} />
+                        <Route path="auth/login" element={<Login />} />
+                        <Route path="auth/logout" element={<Logout />} />
                         {/* products routes */}
-                        <Route path="/specs/:productId" element={<ProductSpecs />} />
-                        <Route path="/products/scents/:scentId" element={<ProductsList />} />
-                        <Route path="/products/:categoryId" element={<ProductsList />} />
-                        <Route path="/products" element={<ProductsList />} />
+                        <Route path="specs/:productId" element={<ProductSpecs />} />
+                        <Route path="products/scents/:scentId" element={<ProductsList />} />
+                        <Route path="products/:categoryId" element={<ProductsList />} />
+                        <Route path="products" element={<ProductsList />} />
                         {/* single routes */}
-                        <Route path="/faq" element={<Faq />} />
-                        <Route path="/about-us" element={<AboutUs />} />
-                        <Route path="/policy" element={<Policy />} />
-                        <Route path="/contact-us" element={<ContactUsPage />} />
-                        <Route path="/business" element={<BusinessPage />} />
+                        <Route path="faq" element={<Faq />} />
+                        <Route path="about-us" element={<AboutUs />} />
+                        <Route path="policy" element={<Policy />} />
+                        <Route path="contact-us" element={<ContactUsPage />} />
+                        <Route path="business" element={<BusinessPage />} />
 
                         {/* protected */}
                         <Route path="/manage/admin" element={<ProtectedRoute redirectPath="/*" protectedComponent={<AdminPage />} />} />
@@ -73,7 +73,7 @@ function Layout(): JSX.Element {
                     </Routes>
                 </main>
                 <footer>
-                    {(!user || !user?.isAdmin) && <SpeedDialComponent />}
+                    {(!user?.isAdmin) && <SpeedDialComponent />}
                     <Footer />
                 </footer>
             </div>

@@ -1,5 +1,5 @@
 .Home{
-
+    transform: translateZ(0);
 }
 .Home h1, .Home h2, .Home h3, .Home h4{
     display: inline-block;
