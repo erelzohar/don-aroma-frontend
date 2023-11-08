@@ -176,7 +176,7 @@ function Header(): JSX.Element {
                         {user?.isAdmin && <Link key={"admin"} className='header-links' to="/manage/admin">עריכה</Link>}
                     </Box>
                     <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-                        <HeaderDrawer pages={drawerPages} isAdmin={user?.isAdmin} />
+                        <HeaderDrawer pages={drawerPages} user={user} />
                     </Box>
                     <Typography
                         noWrap

@@ -6,6 +6,7 @@
 }
 .Home .intro-message{
     height: 30vh;
+    direction: rtl;
     background-image: url("../../../Assets/Images/horizonal-cover.jpg");
     background-size: cover;
     background-position: center;

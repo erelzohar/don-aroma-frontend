@@ -3,8 +3,9 @@ import "./HeaderDrawer.css";
 import { Box, Drawer, List, Divider, ListItem, ListItemButton, ListItemText, ListItemIcon } from '@mui/material';
 import { IconButton } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { Remove, KeyboardArrowDown, Menu as MenuIcon, Edit } from '@mui/icons-material';
+import { Remove, KeyboardArrowDown, Menu as MenuIcon, Edit, PersonAdd, Login, Logout } from '@mui/icons-material';
 import { Slide } from 'react-awesome-reveal';
+import UserModel from '../../../Models/UserModel';
 
 
 export interface HeaderDrawerChild {
@@ -16,27 +17,29 @@ export interface HeaderDrawerChild {
 
 interface HeaderDrawerProps {
     pages: HeaderDrawerChild[];
-    isAdmin?: boolean;
+    user?: UserModel;
 }
 
 export default function HeaderDrawer(props: HeaderDrawerProps) {
     const childRef = React.useRef<HTMLSpanElement>(null);
+    const loggedinUserRef = React.useRef<HTMLSpanElement>(null);
+    const userIconRef = React.useRef<HTMLSpanElement>(null);
     const iconSpanRef = React.useRef<HTMLSpanElement>(null);
     const [state, setState] = React.useState(false);
 
-    const handleChild = (e: React.MouseEvent) => {
-        if (childRef.current) {
-            if (childRef.current.style.display === "" || childRef.current.style.display === "none") {
-                childRef.current.style.display = "block";
-                if (iconSpanRef.current) {
-                    iconSpanRef.current.style.transform = "rotate(0.5turn)"
+    const handleChild = (e: React.MouseEvent, ref: React.MutableRefObject<HTMLSpanElement>,iconRef:React.MutableRefObject<HTMLSpanElement>) => {
+        if (ref.current) {
+            if (ref.current.style.display === "" || ref.current.style.display === "none") {
+                ref.current.style.display = "block";
+                if (iconRef.current) {
+                    iconRef.current.style.transform = "rotate(0.5turn)"
                 }
                 return;
             }
-            if (iconSpanRef.current) {
-                iconSpanRef.current.style.transform = ""
+            if (iconRef.current) {
+                iconRef.current.style.transform = ""
             }
-            childRef.current.style.display = "none";
+            ref.current.style.display = "none";
         }
     }
 
@@ -60,7 +63,7 @@ export default function HeaderDrawer(props: HeaderDrawerProps) {
             role="presentation"
         >
             <List>
-                {props.isAdmin && <ListItem
+                {props.user?.isAdmin && <ListItem
                     disablePadding
                     onClick={toggleDrawer(false)}
                     onKeyDown={toggleDrawer(false)}>
@@ -73,13 +76,73 @@ export default function HeaderDrawer(props: HeaderDrawerProps) {
                         </ListItemButton>
                     </Link>
                 </ListItem>}
+                {!props.user && <><ListItem
+                    disablePadding
+                    onClick={toggleDrawer(false)}
+                    onKeyDown={toggleDrawer(false)}>
+                    <Link to="/auth/register">
+                        <ListItemButton>
+                            <ListItemIcon>
+                                <PersonAdd />
+                            </ListItemIcon>
+                            <ListItemText primary="הרשמה" />
+                        </ListItemButton>
+                    </Link>
+                </ListItem><ListItem
+                    disablePadding
+                    onClick={toggleDrawer(false)}
+                    onKeyDown={toggleDrawer(false)}>
+                        <Link to="/auth/login">
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <Login />
+                                </ListItemIcon>
+                                <ListItemText primary="התחברות" />
+                            </ListItemButton>
+                        </Link>
+                    </ListItem></>}
+                {
+                    props.user && <>
+                        <Divider />
+                        <List>
+                            <ListItem disablePadding
+                                onClick={(e) => handleChild(e, loggedinUserRef,userIconRef)}
+                            >
+                                <ListItemButton >
+                                    <ListItemIcon >
+                                        <span style={{ transition: "all 500ms ease" }} ref={userIconRef}><KeyboardArrowDown /></span>
+                                    </ListItemIcon>
+                                    <ListItemText primary={props.user.firstName + " " + props.user.lastName} />
+                                </ListItemButton>
+                            </ListItem>
+                            <span className="loggedinChildrenDiv" ref={loggedinUserRef}>
+                                <Slide direction='down' cascade duration={150}>
+                                    <ListItem
+                                        disableGutters
+                                        onClick={toggleDrawer(false)}
+                                        onKeyDown={toggleDrawer(false)}>
+                                        <Link to="/auth/logout">
+                                            <ListItemButton>
+                                                <ListItemIcon>
+                                                    <Logout />
+                                                </ListItemIcon>
+                                                <ListItemText primary="התנתק" />
+                                            </ListItemButton>
+                                        </Link>
+                                    </ListItem>
+                                </Slide>
+                            </span>
+                        </List>
+                        <Divider />
+                    </>
+                }
                 {props.pages.map((p, i) => {
                     if (p.children) {
                         return <span key={p.url + i}>
                             <Divider />
                             <List>
                                 <ListItem disablePadding
-                                    onClick={handleChild}
+                                    onClick={(e) => handleChild(e, childRef,iconSpanRef)}
                                 >
                                     <ListItemButton >
                                         <ListItemIcon >
