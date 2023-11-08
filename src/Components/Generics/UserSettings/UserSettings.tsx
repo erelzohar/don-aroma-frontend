@@ -18,7 +18,7 @@ function UserSettings(props:UserModel): JSX.Element {
         <Box sx={{flexGrow: 0,display:"flex",flexDirection:"column",alignItems:"center", justifyContent:"center",margin:"2rem" }}>
         <Tooltip title="הגדרות">
             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt={props.firstName} src="/static/images/avatar/2.jpg" />
+                <Avatar alt={props.firstName} />
             </IconButton>
         </Tooltip>
         <Menu

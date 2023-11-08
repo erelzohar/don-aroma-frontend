@@ -1,7 +1,7 @@
 import "./Header.css";
 import { AppBar, Box, Toolbar, Typography, Container } from '@mui/material';
 import { Link } from 'react-router-dom';
-import logo from "../../../Assets/Images/logo-donaroma.svg";
+import logo from "../../../Assets/Images/logo-donaroma.jpg";
 import HeaderDrawer, { HeaderDrawerChild } from '../HeaderDrawer/HeaderDrawer';
 import { BsFacebook, BsFillTelephoneFill, BsShieldFillExclamation } from 'react-icons/bs';
 import { AiFillInstagram, AiFillGift, AiOutlineWechat } from "react-icons/ai";

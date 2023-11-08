@@ -11,6 +11,7 @@ import { useEffect, useRef, useState } from "react";
 import productsService from "../../../Services/Products";
 import CategoryModel from "../../../Models/CategoryModel";
 import { Add, Delete, Edit } from "@mui/icons-material";
+import Loader from "../../Generics/Loader/Loader";
 
 
 interface ProductFormProps {
@@ -41,10 +42,11 @@ interface InitialState {
     productImage?: File
     scentToPush: string
     colorToPush: string
+    isLoading: boolean
 }
 function ProductForm(props: ProductFormProps): JSX.Element {
     let productToEdit = props?.product ? props.product : new ProductModel();
-    
+
     const initialState: InitialState = {
         productCategory: productToEdit.category ? productToEdit.category._id : '',
         ProductScentCategory: productToEdit.scentCategory ? productToEdit.scentCategory._id : '',
@@ -55,9 +57,10 @@ function ProductForm(props: ProductFormProps): JSX.Element {
         productColors: productToEdit.colors ? productToEdit.colors : [],
         categories: store.getState().productsState.categories,
         scentCategories: store.getState().productsState.scentCategories,
-        open: false
+        open: false,
+        isLoading: false
     }
-    const [{ productCategory, colorToPush, scentToPush, productScents, productColors, ProductScentCategory, productLevel, categories, scentCategories, open, productImage }, setState] = useState(initialState);
+    const [{ isLoading, productCategory, colorToPush, scentToPush, productScents, productColors, ProductScentCategory, productLevel, categories, scentCategories, open, productImage }, setState] = useState(initialState);
     const handleOpen = () => setState(prevState => ({ ...prevState, open: true }));
     const handleClose = () => {
         if (!productToEdit._id) {
@@ -120,6 +123,7 @@ function ProductForm(props: ProductFormProps): JSX.Element {
     const { register, handleSubmit, reset, formState: { errors }, setError } = useForm({ resolver: yupResolver(schema), mode: 'onBlur' });
     const submit: SubmitHandler<ProductModel> = async data => {
         try {
+            setState(prev => ({ ...prev, isLoading: true }));
             const productToUpsert: ProductModel = { ...data };
             productToUpsert._id = productToEdit._id;
             if (productToEdit.imageName) {
@@ -131,6 +135,7 @@ function ProductForm(props: ProductFormProps): JSX.Element {
             productToUpsert.category = categories.find(c => productCategory === c._id);
             productToUpsert.scentCategory = productCategory === "650acfabc4c0c3b0a4da8ad3" ? scentCategories.find(c => ProductScentCategory === c._id) : null;
             const res = await productsService.upsertProduct(productToUpsert, productImage);
+            setState(prev => ({ ...prev, isLoading: false }));
             if (res) handleClose();
         }
         catch (err: any) {
@@ -318,7 +323,7 @@ function ProductForm(props: ProductFormProps): JSX.Element {
                             <input type="file" onChange={handleImageChange} id="image-input" style={{ margin: '1rem' }} multiple={false} accept="image/*" />
                             {productToEdit?.imageName ? <img width="50%" src={globals.productsUrl + "/img/" + productToEdit?.imageName} ref={imgRef} alt="" /> : <img width="50%" src="" alt="" ref={imgRef} />}
                         </FormControl>
-                        <Button type="submit" variant="contained" color="success">שלח</Button>
+                        <Button disabled={isLoading} type="submit" variant="contained" color="success">{isLoading ? "שולח..." : "שלח"}</Button>
                     </form>
                 </DialogContent>
             </Dialog>

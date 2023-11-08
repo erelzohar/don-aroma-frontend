@@ -1,6 +1,6 @@
 .BusinessPage {
     transform: translateZ(0);
-    background-image: linear-gradient(rgba(255,255,255,.75), rgba(255,255,255,.75)), url(../../Assets/Images/business-bg-desktop.webp);
+    background-image: linear-gradient(rgba(255,255,255,.75), rgba(255,255,255,.75)), url(../../Assets/Images/business-bg-desktop.jpg);
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -73,7 +73,7 @@
 }
 @media screen and (max-width:1100px) {
     .BusinessPage{
-        background-image: linear-gradient(rgba(255,255,255,.75), rgba(255,255,255,.75)), url(../../Assets/Images/business-bg-mobile.webp);
+        background-image: linear-gradient(rgba(255,255,255,.75), rgba(255,255,255,.75)), url(../../Assets/Images/business-bg-mobile.jpg);
 
     }
     .BusinessPage .container {
