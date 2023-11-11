@@ -65,11 +65,10 @@ class ProductsService {
             notify.error(err);
         }
     }
-    public async upsertProduct(productToUpsert:ProductModel,image:File){
+    public async upsertProduct(productToUpsert:ProductModel,images:File[],imagesToDelete:string[]=null){
         try {
-            const formData = ProductModel.convertToFormData(productToUpsert, image);
+            const formData = ProductModel.convertToFormData(productToUpsert, images,imagesToDelete);
             const res = await jwtAxios.post<ProductModel>(globals.productsUrl, formData);
-            
             
             if (productToUpsert._id) {
                 store.dispatch(updateProduct(res.data));

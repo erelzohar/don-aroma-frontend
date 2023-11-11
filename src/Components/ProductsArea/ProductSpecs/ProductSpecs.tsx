@@ -1,13 +1,14 @@
 import "./ProductSpecs.css";
-import {Rating, Typography } from "@mui/material";
+import { Rating, Typography } from "@mui/material";
 import ProductsCarousel from "../../ProductsArea/ProductsCarousel/ProductsCarousel";
 import store, { useAppSelector } from "../../../Redux/Store";
 import { useEffect } from "react";
 import productsService from "../../../Services/Products";
 import { Link, useParams } from "react-router-dom";
-import globals from "../../../Services/Globals";
 import { IoIosBowtie } from "react-icons/io";
 import ProductForm from "../../AdminArea/ProductForm/ProductForm";
+import Slideshow from "../../Generics/Slideshow/Slideshow";
+
 
 function ProductSpecs(): JSX.Element {
 
@@ -16,17 +17,18 @@ function ProductSpecs(): JSX.Element {
     const productId = params.productId;
     let productToSpec = useAppSelector(state => state.productsState.products.find(p => p._id === productId));
     console.log(productToSpec);
-    
+
     useEffect(() => {
         if (products.length === 0) productsService.getProducts();
     }, [params])
     return (
         <div className="ProductSpecs">
-            {store.getState().authState.user?.isAdmin && productToSpec && <ProductForm product={productToSpec} />}
+
+            {/* {store.getState().authState.user?.isAdmin && <ProductForm product={productToSpec} />} */}
             {productToSpec && <div className="gridContainer">
                 <div className="imgDiv">
-                    <img src={globals.productsUrl + "/img/" + productToSpec.imageName} alt="" />
-                    {productToSpec.level > 0 && <><Typography fontSize='large' display="flex" fontWeight='bold' alignItems="center">דומיננטיות :
+                <Slideshow imageNames={productToSpec?.images} />
+                    {productToSpec.level > 0 && <><Typography fontSize='large' display="flex" fontWeight='bold' alignItems="center">דומיננטיות:
                         <Rating
                             sx={{ margin: "1rem" }}
                             dir="ltr"

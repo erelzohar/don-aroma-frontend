@@ -37,7 +37,7 @@ function ProductCard(product: ProductModel): JSX.Element {
         <Zoom triggerOnce fraction={0.6}>
             <div className="ProductCard" onMouseEnter={flip} onMouseLeave={unflip}>
                 <Link to={"/specs/" + product._id}>
-                    <img width={"100%"} className="product-img" src={globals.productsUrl + "/img/" + product.imageName} alt={product.name} />
+                    <img width={"100%"} className="product-img" src={globals.productsUrl + "/img/" + product.images[0]} alt={product.name} />
                     <p className="product-desc">
                         {product.name}
                     </p>

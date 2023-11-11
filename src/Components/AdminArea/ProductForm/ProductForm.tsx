@@ -7,11 +7,10 @@ import notify from "../../../Services/Notify";
 import globals from "../../../Services/Globals";
 import store from "../../../Redux/Store";
 import { Button, Dialog, DialogContent, DialogTitle, FormControl, FormControlLabel, FormLabel, InputLabel, MenuItem, Radio, RadioGroup, Select, SelectChangeEvent, TextField } from "@mui/material";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import productsService from "../../../Services/Products";
 import CategoryModel from "../../../Models/CategoryModel";
 import { Add, Delete, Edit } from "@mui/icons-material";
-import Loader from "../../Generics/Loader/Loader";
 
 
 interface ProductFormProps {
@@ -39,13 +38,16 @@ interface InitialState {
     categories: CategoryModel[]
     scentCategories: CategoryModel[]
     open: boolean
-    productImage?: File
+    imagesToPost?: File[]
+    productImageNames: string[]
+    imagesToDelete: string[]
     scentToPush: string
     colorToPush: string
     isLoading: boolean
 }
 function ProductForm(props: ProductFormProps): JSX.Element {
-    let productToEdit = props?.product ? props.product : new ProductModel();
+
+    const [productToEdit, setProductToEdit] = useState(props?.product ? props.product : new ProductModel());
 
     const initialState: InitialState = {
         productCategory: productToEdit.category ? productToEdit.category._id : '',
@@ -58,23 +60,26 @@ function ProductForm(props: ProductFormProps): JSX.Element {
         categories: store.getState().productsState.categories,
         scentCategories: store.getState().productsState.scentCategories,
         open: false,
-        isLoading: false
+        isLoading: false,
+        productImageNames: productToEdit.images ? productToEdit.images : [],
+        imagesToDelete: [],
+        imagesToPost: []
     }
-    const [{ isLoading, productCategory, colorToPush, scentToPush, productScents, productColors, ProductScentCategory, productLevel, categories, scentCategories, open, productImage }, setState] = useState(initialState);
+    const [{ productImageNames, imagesToPost, imagesToDelete, isLoading, productCategory, colorToPush, scentToPush, productScents, productColors, ProductScentCategory, productLevel, categories, scentCategories, open }, setState] = useState(initialState);
     const handleOpen = () => setState(prevState => ({ ...prevState, open: true }));
     const handleClose = () => {
         if (!productToEdit._id) {
             setState(initialState);
             return reset();
         }
-        setState(prev => ({ ...prev, open: false }));
+        setState(prev => ({ ...prev, open: false, imagesToDelete: [], imagesToPost: [] }));
     };
-    const imgRef = useRef<HTMLImageElement>(null);
 
     useEffect(() => {
+        setProductToEdit(props?.product ? props.product : new ProductModel())
         if (categories.length === 0) productsService.getCategories().then(res => { setState(prevState => ({ ...prevState, categories: res })) });
         if (scentCategories.length === 0) productsService.getScentCategories().then(res => { setState(prevState => ({ ...prevState, scentCategories: res })) });
-    }, [])
+    }, [productToEdit])
 
     const handleScentDelete = (event: React.MouseEvent<HTMLButtonElement>) => {
         const index = event.currentTarget.id.split("-id-")[1];
@@ -101,6 +106,20 @@ function ProductForm(props: ProductFormProps): JSX.Element {
         setState(prev => ({ ...prev, productColors: newState, colorToPush: '' }));
     }
 
+    const handleImageDelete = (event: React.MouseEvent<HTMLButtonElement>, imageName: string) => {
+        const oldImages = [...productImageNames];
+        const newImages = [...imagesToPost];
+        const imagesToRemove = [...imagesToDelete];
+        let index = oldImages.findIndex(i => i === imageName);
+        if (index >= 0) {
+            oldImages.splice(index, 1);
+            imagesToRemove.push(imageName);
+            return setState(prev => ({ ...prev, imagesToDelete: imagesToRemove, productImageNames: oldImages }));
+        }
+        index = newImages.findIndex(e => e.name === imageName);
+        if (index >= 0) newImages.splice(index, 1);
+        setState(prev => ({ ...prev, imagesToPost: newImages }));
+    }
 
     const handleColorToPushChange = (event: React.ChangeEvent<HTMLInputElement>) => { setState(prev => ({ ...prev, colorToPush: event.target.value })) };
     const handleScentToPushChange = (event: React.ChangeEvent<HTMLInputElement>) => { setState(prev => ({ ...prev, scentToPush: event.target.value })) };
@@ -109,14 +128,17 @@ function ProductForm(props: ProductFormProps): JSX.Element {
     const handleLevelChange = (event: SelectChangeEvent) => { setState(prevState => ({ ...prevState, productLevel: +event.target.value })) };
     const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if ((event.target.files && (event.target as HTMLInputElement).files.length)) {
-            if (imgRef.current) {
-                var fr = new FileReader();
-                fr.onload = function () {
-                    imgRef.current.src = (fr.result as string);
-                }
-                fr.readAsDataURL(event.target.files[0]);
+            const newState = [...imagesToPost];
+            for (let i = 0; i < (event.target as HTMLInputElement).files.length; i++) {
+
+                newState.push(event.target.files[i]);
             }
-            setState(prevState => ({ ...prevState, productImage: (event.target as HTMLInputElement).files[0] }))
+            setState(prev => ({ ...prev, imagesToPost: newState }))
+            if (productImageNames[0] === "logo-donaroma.com") {
+                const newState = [...productImageNames].splice(0, 1);
+                setState(prev => ({ ...prev, productImageNames: newState }));
+            }
+
         }
     };
 
@@ -126,16 +148,15 @@ function ProductForm(props: ProductFormProps): JSX.Element {
             setState(prev => ({ ...prev, isLoading: true }));
             const productToUpsert: ProductModel = { ...data };
             productToUpsert._id = productToEdit._id;
-            if (productToEdit.imageName) {
-                productToUpsert.imageName = productToEdit.imageName;
-            }
+            productToUpsert.images = productImageNames;
             productToUpsert.scents = productScents;
             productToUpsert.colors = productColors;
             productToUpsert.level = productLevel;
             productToUpsert.category = categories.find(c => productCategory === c._id);
             productToUpsert.scentCategory = productCategory === "650acfabc4c0c3b0a4da8ad3" ? scentCategories.find(c => ProductScentCategory === c._id) : null;
-            const res = await productsService.upsertProduct(productToUpsert, productImage);
-            setState(prev => ({ ...prev, isLoading: false }));
+
+            const res = await productsService.upsertProduct(productToUpsert, imagesToPost, imagesToDelete);
+            setState(prev => ({ ...prev, isLoading: false, productImageNames: res.images }));
             if (res) handleClose();
         }
         catch (err: any) {
@@ -318,10 +339,12 @@ function ProductForm(props: ProductFormProps): JSX.Element {
                             variant="outlined"
                         />
 
-                        <FormControl margin="normal" >
+                        <FormControl margin="normal" id="imagesFormCtrl">
                             <FormLabel>תמונה</FormLabel>
-                            <input type="file" onChange={handleImageChange} id="image-input" style={{ margin: '1rem' }} multiple={false} accept="image/*" />
-                            {productToEdit?.imageName ? <img width="50%" src={globals.productsUrl + "/img/" + productToEdit?.imageName} ref={imgRef} alt="" /> : <img width="50%" src="" alt="" ref={imgRef} />}
+                            <input type="file" onChange={handleImageChange} id="image-input" style={{ margin: '1rem' }} multiple accept="image/*" />
+
+                            {imagesToPost.map((img, i) => <span key={i} className="productImgSpan"><Button onClick={(e) => (handleImageDelete(e, img.name))} color="error">X</Button><img width="50%" src={URL.createObjectURL(img)} alt="" /></span>)}
+                            {productImageNames?.map((img, i) => img !== "logo-donaroma.webp" && <span key={i} className="productImgSpan"><Button onClick={(e) => (handleImageDelete(e, img))} color="error">X</Button><img width="50%" src={globals.productsUrl + "/img/" + img} alt="" /></span>)}
                         </FormControl>
                         <Button disabled={isLoading} type="submit" variant="contained" color="success">{isLoading ? "שולח..." : "שלח"}</Button>
                     </form>

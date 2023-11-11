@@ -3,8 +3,10 @@ import "./HeaderDrawer.css";
 import { Box, Drawer, List, Divider, ListItem, ListItemButton, ListItemText, ListItemIcon } from '@mui/material';
 import { IconButton } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { Remove, KeyboardArrowDown, Menu as MenuIcon, Edit, PersonAdd, Login, Logout } from '@mui/icons-material';
+import { Remove, KeyboardArrowDown, Menu as MenuIcon } from '@mui/icons-material';
 import { Slide } from 'react-awesome-reveal';
+import {BiLogOut,BiLogIn,BiEditAlt} from "react-icons/bi";
+import {BsFillPersonPlusFill} from "react-icons/bs"
 import UserModel from '../../../Models/UserModel';
 
 
@@ -27,7 +29,7 @@ export default function HeaderDrawer(props: HeaderDrawerProps) {
     const iconSpanRef = React.useRef<HTMLSpanElement>(null);
     const [state, setState] = React.useState(false);
 
-    const handleChild = (e: React.MouseEvent, ref: React.MutableRefObject<HTMLSpanElement>,iconRef:React.MutableRefObject<HTMLSpanElement>) => {
+    const handleChild = (e: React.MouseEvent, ref: React.MutableRefObject<HTMLSpanElement>, iconRef: React.MutableRefObject<HTMLSpanElement>) => {
         if (ref.current) {
             if (ref.current.style.display === "" || ref.current.style.display === "none") {
                 ref.current.style.display = "block";
@@ -63,50 +65,12 @@ export default function HeaderDrawer(props: HeaderDrawerProps) {
             role="presentation"
         >
             <List>
-                {props.user?.isAdmin && <ListItem
-                    disablePadding
-                    onClick={toggleDrawer(false)}
-                    onKeyDown={toggleDrawer(false)}>
-                    <Link to="/manage/admin">
-                        <ListItemButton>
-                            <ListItemIcon>
-                                <Edit />
-                            </ListItemIcon>
-                            <ListItemText primary="עריכה" />
-                        </ListItemButton>
-                    </Link>
-                </ListItem>}
-                {!props.user && <><ListItem
-                    disablePadding
-                    onClick={toggleDrawer(false)}
-                    onKeyDown={toggleDrawer(false)}>
-                    <Link to="/auth/register">
-                        <ListItemButton>
-                            <ListItemIcon>
-                                <PersonAdd />
-                            </ListItemIcon>
-                            <ListItemText primary="הרשמה" />
-                        </ListItemButton>
-                    </Link>
-                </ListItem><ListItem
-                    disablePadding
-                    onClick={toggleDrawer(false)}
-                    onKeyDown={toggleDrawer(false)}>
-                        <Link to="/auth/login">
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    <Login />
-                                </ListItemIcon>
-                                <ListItemText primary="התחברות" />
-                            </ListItemButton>
-                        </Link>
-                    </ListItem></>}
                 {
                     props.user && <>
                         <Divider />
                         <List>
                             <ListItem disablePadding
-                                onClick={(e) => handleChild(e, loggedinUserRef,userIconRef)}
+                                onClick={(e) => handleChild(e, loggedinUserRef, userIconRef)}
                             >
                                 <ListItemButton >
                                     <ListItemIcon >
@@ -124,7 +88,7 @@ export default function HeaderDrawer(props: HeaderDrawerProps) {
                                         <Link to="/auth/logout">
                                             <ListItemButton>
                                                 <ListItemIcon>
-                                                    <Logout />
+                                                    <BiLogOut />
                                                 </ListItemIcon>
                                                 <ListItemText primary="התנתק" />
                                             </ListItemButton>
@@ -136,13 +100,52 @@ export default function HeaderDrawer(props: HeaderDrawerProps) {
                         <Divider />
                     </>
                 }
+                {props.user?.isAdmin && <ListItem
+                    disablePadding
+                    onClick={toggleDrawer(false)}
+                    onKeyDown={toggleDrawer(false)}>
+                    <Link to="/manage/admin">
+                        <ListItemButton>
+                            <ListItemIcon>
+                                <BiEditAlt />
+                            </ListItemIcon>
+                            <ListItemText primary="עריכה" />
+                        </ListItemButton>
+                    </Link>
+                </ListItem>}
+                {!props.user && <><ListItem
+                    disablePadding
+                    onClick={toggleDrawer(false)}
+                    onKeyDown={toggleDrawer(false)}>
+                    <Link to="/auth/register">
+                        <ListItemButton>
+                            <ListItemIcon>
+                                <BsFillPersonPlusFill />
+                            </ListItemIcon>
+                            <ListItemText primary="הרשמה" />
+                        </ListItemButton>
+                    </Link>
+                </ListItem><ListItem
+                    disablePadding
+                    onClick={toggleDrawer(false)}
+                    onKeyDown={toggleDrawer(false)}>
+                        <Link to="/auth/login">
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <BiLogIn />
+                                </ListItemIcon>
+                                <ListItemText primary="התחברות" />
+                            </ListItemButton>
+                        </Link>
+                    </ListItem></>}
+
                 {props.pages.map((p, i) => {
                     if (p.children) {
                         return <span key={p.url + i}>
                             <Divider />
                             <List>
                                 <ListItem disablePadding
-                                    onClick={(e) => handleChild(e, childRef,iconSpanRef)}
+                                    onClick={(e) => handleChild(e, childRef, iconSpanRef)}
                                 >
                                     <ListItemButton >
                                         <ListItemIcon >

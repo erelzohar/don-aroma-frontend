@@ -5,7 +5,7 @@ import "./Layout.css";
 import Home from "../../HomeArea/Home/Home";
 import Register from "../../AuthArea/Register/Register";
 import Login from "../../AuthArea/Login/Login";
-import SpeedDialComponent from "../SpeedDialComponent/SpeedDialComponent";
+import SpeedDialComponent from "../../Generics/SpeedDialComponent/SpeedDialComponent";
 import ProductsList from "../../ProductsArea/ProductsList/ProductsList";
 import CartBtn from "../CartBtn/CartBtn";
 import store, { useAppSelector } from "../../../Redux/Store";

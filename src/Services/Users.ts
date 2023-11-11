@@ -17,9 +17,8 @@ class UsersService {
         if(!user) return null;
         const decodedToken : JwtPayload =  jwtDecode(user.token) ;
         if (decodedToken.exp < Date.now() / 1000){
-            notify.custom("Session expired please login");
             localStorage.removeItem('donaroma');
-            window.location.assign("/");
+            notify.custom("Session expired please login");
             return null;
         }
         return user;

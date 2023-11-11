@@ -15,6 +15,7 @@
 .BusinessPage .underlined {
     text-decoration: underline;
     text-underline-position: under;
+    line-height: 7vh;
 }
 .BusinessPage h1,
 .BusinessPage h2 {
@@ -73,7 +74,7 @@
 }
 @media screen and (max-width:1100px) {
     .BusinessPage{
-        background-image: linear-gradient(rgba(255,255,255,.75), rgba(255,255,255,.75)), url(../../Assets/Images/business-bg-mobile.jpg);
+        background-image: linear-gradient(rgba(255,255,255,.75), rgba(255,255,255,.75)), url(../../Assets/Images/business-bg-mobile.jpg) !important;
 
     }
     .BusinessPage .container {

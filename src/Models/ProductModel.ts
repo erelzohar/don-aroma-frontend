@@ -5,7 +5,7 @@ class ProductModel {
     name: string;
     price: number;
     category: CategoryModel;
-    imageName: string;
+    images: string[];
     colors: string[];
     description: string;
     level: number;
@@ -14,13 +14,16 @@ class ProductModel {
     scents: string[];
 
 
-    public static convertToFormData(product: ProductModel, image: File = null): FormData {
+    public static convertToFormData(product: ProductModel, images: File[] = null,imagesToDelete:string[]=null): FormData {
         const formData = new FormData();
         if (product._id) formData.append("_id", product._id);
         formData.append("name", product.name);
         formData.append("price", product.price?.toString());
-        formData.append("image", image);
-        formData.append("imageName", product.imageName);
+        images?.forEach(i => {
+            formData.append("images", i);
+        })
+        if (images) formData.append("images", JSON.stringify(product.images));
+        if (imagesToDelete) formData.append("imagesToDelete", JSON.stringify(imagesToDelete));
         formData.append("category", product.category?._id);
         formData.append("description", product.description);
         formData.append("level", product.level?.toString());

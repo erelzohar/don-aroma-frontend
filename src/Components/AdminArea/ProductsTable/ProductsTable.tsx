@@ -8,7 +8,7 @@ import globals from '../../../Services/Globals';
 import ProductForm from '../ProductForm/ProductForm';
 
 interface Column {
-    id: 'name' | 'price' | 'category' | 'imageName' | 'scents' | 'colors' | 'description' | 'level' | 'scentCategory';
+    id: 'name' | 'price' | 'category' | 'images' | 'scents' | 'colors' | 'description' | 'level' | 'scentCategory';
     label: string;
     minWidth?: number;
     maxWidth?: number;
@@ -33,10 +33,11 @@ const columns: readonly Column[] = [
 
     },
     {
-        id: 'imageName',
+        id: 'images',
         label: 'תמונה',
         align: 'right',
-        minWidth: 170
+        minWidth: 170,
+        format:(imageNames:string[])=>imageNames[0]
     },
     {
         id: 'scents',
@@ -143,8 +144,8 @@ function ProductsTable(props: TableProps): JSX.Element {
                                                                 <Button color="error" type="submit" onClick={async () => { await productsService.deleteProduct(row._id) }}><Delete /></Button>
                                                                 <ProductForm product={row} />
                                                             </span></span>}
-                                                        {column.id === 'imageName' && value && <span><img style={{ width: "25%" }} src={globals.productsUrl + "/img/" + value} alt="" /></span>}
-                                                        {column.id === 'imageName' ? "" : column.format && value ? column.format(value) : !value ? <span> &#9940;</span> : value as string}
+                                                        {column.id === 'images' && value && <span><img style={{ width: "25%" }} src={globals.productsUrl + "/img/" + column.format(value)} alt="" /></span>}
+                                                        {column.id === 'images' ? "" : column.format && value ? column.format(value) : !value ? <span> &#9940;</span> : value as string}
                                                     </span>
                                                 </TableCell>
                                             );

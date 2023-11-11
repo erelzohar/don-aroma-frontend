@@ -6,11 +6,11 @@ import HeaderDrawer, { HeaderDrawerChild } from '../HeaderDrawer/HeaderDrawer';
 import { BsFacebook, BsFillTelephoneFill, BsShieldFillExclamation } from 'react-icons/bs';
 import { AiFillInstagram, AiFillGift, AiOutlineWechat } from "react-icons/ai";
 import { RiWhatsappFill } from "react-icons/ri";
-import { FaAirFreshener, FaBusinessTime, FaQuestion } from "react-icons/fa";
+import { FaAirFreshener, FaBusinessTime, FaQuestion, FaShoppingBag } from "react-icons/fa";
 import DropDownMenu, { dropDownProps } from '../../Generics/DropDownMenu/DropDownMenu';
 import { useEffect } from "react";
 import productsService from "../../../Services/Products";
-import  { useAppSelector } from "../../../Redux/Store";
+import { useAppSelector } from "../../../Redux/Store";
 import UserSettings from "../../Generics/UserSettings/UserSettings";
 
 
@@ -35,6 +35,10 @@ const pages = [
         url: "/products/650adc37c4c0c3b0a4da8aec"
     },
     {
+        name: "אביזרים נלווים",
+        url: "/products/650ad02dc4c0c3b0a4da8ad4"
+    },
+    {
         name: "שירות חודשי לעסקים",
         url: "/business"
     },
@@ -53,6 +57,11 @@ const drawerPages: HeaderDrawerChild[] = [
         name: "חבילות/מארזים",
         url: "/products/650adc37c4c0c3b0a4da8aec",
         icon: <AiFillGift />
+    },
+    {
+        name: "אביזרים נלווים",
+        url: "/products/650ad02dc4c0c3b0a4da8ad4",
+        icon: <FaShoppingBag />
     },
     {
         name: "שירות חודשי לעסקים",
@@ -89,7 +98,7 @@ const drawerPages: HeaderDrawerChild[] = [
 function Header(): JSX.Element {
 
     const user = useAppSelector(state => state.authState.user);
-    
+
     useEffect(() => {
         let index = drawerPages.findIndex(p => p.children);
         productsService.getScentCategories()
@@ -184,7 +193,7 @@ function Header(): JSX.Element {
                         href="/"
                         sx={{
                             display: { xs: 'flex', md: 'none' },
-                            flexGrow:1.5
+                            flexGrow: 1.5
                         }}
                     >
                         <img className='logo' src={logo} alt="LOGO" />
