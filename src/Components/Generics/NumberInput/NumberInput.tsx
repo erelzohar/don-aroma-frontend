@@ -56,8 +56,10 @@ const CompactNumberInput = React.forwardRef(function CompactNumberInput(
     </StyledInputRoot>
   );
 });
-
-export default function UseNumberInputCompact() {
+interface StateProps{
+  setState : React.Dispatch<React.SetStateAction<number>>
+}
+export default function UseNumberInputCompact(props:StateProps) {
   const [value, setValue] = React.useState<number>(1);
 
   return (
@@ -67,7 +69,7 @@ export default function UseNumberInputCompact() {
         placeholder="Type a number…"
         readOnly
         value={value}
-        onChange={(event, val) => setValue(val)}
+        onChange={(event, val) => {setValue(val);props.setState(val)}}
         min={1}
       />
 
@@ -100,8 +102,8 @@ const grey = {
 const StyledInputRoot = styled('div')(
   ({ theme }) => `
     display: grid;
-    grid-template-columns: 2.5rem;
-    grid-template-rows: 2rem 2rem;
+    grid-template-columns: 1.5rem;
+    grid-template-rows: 1.5rem 1.5rem ;
     grid-template-areas:
       "increment"
       "decrement";
@@ -112,10 +114,10 @@ const StyledInputRoot = styled('div')(
     color: ${theme.palette.mode === 'dark' ? grey[300] : grey[900]};
     background: ${theme.palette.mode === 'dark' ? grey[800] : grey[200]};
     border-color: ${theme.palette.mode === 'dark' ? grey[800] : grey[200]};
-    overflow: auto;
+    overflow: hidden;
 
     &:hover {
-      border-color: ${blue[500]};
+      border-color: ${blue[400]};
     }
   `,
 );
@@ -132,7 +134,7 @@ const StyledStepperButton = styled('button')(
   justify-content: center;
   align-items: center;
     
-  font-size: 0.875rem;
+  font-size: 0.4rem;
   box-sizing: border-box;
   border: 0;
   padding: 0;
@@ -141,13 +143,13 @@ const StyledStepperButton = styled('button')(
 
   &:hover {
     cursor: pointer;
-    background: ${blue[500]};
+    background: ${blue[400]};
     color: ${grey[50]};
   }
 
   &:focus-visible {
     outline: 0;
-    background: ${blue[500]};
+    background: ${blue[400]};
     color: ${theme.palette.mode === 'dark' ? grey[300] : grey[50]};
   }
 

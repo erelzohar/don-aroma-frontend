@@ -37,7 +37,7 @@ function HorizonalProduct(product: ProductModel): JSX.Element {
         <Zoom triggerOnce>
             <div className="HorizonalProduct" onMouseEnter={flip} onMouseLeave={unflip}>
                 <Link to={"/specs/" + product._id} className="product-name-link">
-                    <img width={"100%"} loading="lazy" className="product-img" src={globals.productsUrl + "/img/" + product.images[0]} alt="img" />
+                    <img width={"100%"} loading="lazy" className="product-img" src={globals.productsUrl + "img/" + product.images[0]} alt="img" />
                     <p className="product-desc">
                         {product.name}
                     </p>

@@ -79,7 +79,7 @@ function ProductForm(props: ProductFormProps): JSX.Element {
         setProductToEdit(props?.product ? props.product : new ProductModel())
         if (categories.length === 0) productsService.getCategories().then(res => { setState(prevState => ({ ...prevState, categories: res })) });
         if (scentCategories.length === 0) productsService.getScentCategories().then(res => { setState(prevState => ({ ...prevState, scentCategories: res })) });
-    }, [productToEdit])
+    }, [props])
 
     const handleScentDelete = (event: React.MouseEvent<HTMLButtonElement>) => {
         const index = event.currentTarget.id.split("-id-")[1];

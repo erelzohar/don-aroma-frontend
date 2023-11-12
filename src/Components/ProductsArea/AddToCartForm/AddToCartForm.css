@@ -1,0 +1,30 @@
+.AddToCartForm {
+	
+}
+.quantity p{
+    margin: 0;
+    padding-bottom: 3px;
+}
+.buyDiv{
+    display: flex;
+    justify-content: flex-end;
+}
+.buyDiv button{
+    display: flex;
+    justify-content: flex-end;
+    margin: 1rem;
+}
+.productPicker {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: small;
+}
+.productPicker >*{
+    margin: 1rem;
+}
+.ProductSpecs .colorsContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

@@ -48,14 +48,26 @@
     padding: 1rem;
 }
 
-.productPicker {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-.productPicker >*{
-    margin: 1rem;
-}
+
+.strikethrough {
+    position: relative;
+    color: red;
+  }
+  .strikethrough:before {
+    position: absolute;
+    content: "";
+    left: 0;
+    top: 50%;
+    right: 0;
+    border-top: 2px solid;
+    border-color: inherit;
+    
+    -webkit-transform:rotate(-10deg);
+    -moz-transform:rotate(-10deg);
+    -ms-transform:rotate(-10deg);
+    -o-transform:rotate(-10deg);
+    transform:rotate(-10deg);
+  }
 .productHashtags {
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     font-style: italic;
@@ -67,8 +79,14 @@
     color: rgb(78, 78, 165);
     text-decoration: underline;
     margin: 0.2rem;
+    font-weight: 500;
 }
-
+.ProductSpecs .priceDiv{
+    padding: 1rem;
+    font-weight: bold;
+    font-size: x-large;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
 @media screen and (max-width:900px) {
     .ProductSpecs .imgDiv {
         border: none;

@@ -92,6 +92,7 @@ function ProductsTable(props: TableProps): JSX.Element {
     const rows = [...props.products]
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [isLoading, setIsLoading] = React.useState(false);
 
     const handleChangePage = (event: unknown, newPage: number) => {
         setPage(newPage);
@@ -102,11 +103,11 @@ function ProductsTable(props: TableProps): JSX.Element {
         setPage(0);
     };
     const handleCheckboxChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(event.target.checked);
+        setIsLoading(true);
         const product = { ...rows.find(e => e._id === event.target.id) }
         product.isRecommended = event.target.checked;
         await productsService.upsertProduct(product, null);
-
+        setIsLoading(false);
     }
 
     return (
@@ -139,12 +140,12 @@ function ProductsTable(props: TableProps): JSX.Element {
                                                 <TableCell key={j + column.id} align={column.align} >
                                                     <span style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                                                         {column.id === 'name' && <span style={{ display: 'flex', flexDirection: 'column' }}>
-                                                            <Checkbox checked={row.isRecommended ? true : false} onChange={handleCheckboxChange} id={row._id} color='warning' icon={<StarBorder />} checkedIcon={<Grade />} />
+                                                            <Checkbox disabled={isLoading} checked={row.isRecommended ? true : false} onChange={handleCheckboxChange} id={row._id} color='warning' icon={<StarBorder />} checkedIcon={<Grade />} />
                                                             <span style={{ display: "flex", maxHeight: "60px" }}>
                                                                 <Button color="error" type="submit" onClick={async () => { await productsService.deleteProduct(row._id) }}><Delete /></Button>
                                                                 <ProductForm product={row} />
                                                             </span></span>}
-                                                        {column.id === 'images' && value && <span><img style={{ width: "25%" }} src={globals.productsUrl + "/img/" + column.format(value)} alt="" /></span>}
+                                                        {column.id === 'images' && value && <span><img style={{ width: "25%" }} src={globals.productsUrl + "img/" + column.format(value)} alt="" /></span>}
                                                         {column.id === 'images' ? "" : column.format && value ? column.format(value) : !value ? <span> &#9940;</span> : value as string}
                                                     </span>
                                                 </TableCell>

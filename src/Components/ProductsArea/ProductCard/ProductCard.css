@@ -1,10 +1,10 @@
 .ProductCard {
-    margin: 2rem;
     padding: 1rem;
     border-radius: 7px;
     display: flex;
     flex-direction: column;
     text-align: center;
+    height: 100%;
     align-items: center;
     font-size: larger;
     transition: all 300ms;
@@ -17,9 +17,12 @@
     border-radius: 3px; 
 }
 .ProductCard .product-div-button{
+    display: flex;
+    align-items: end;
+    justify-content: center;
+    height: 100%;
     transition: all 500ms;
-    margin: 1rem;
-    
+    margin: 1rem;    
 }
 .ProductCard .product-desc{
     margin-top: 2rem;

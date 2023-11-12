@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import "./ProductCard.css";
 import { Button } from "@mui/material";
-import { useRef} from "react";
+import { useRef } from "react";
 import ProductModel from "../../../Models/ProductModel";
 import { Zoom } from "react-awesome-reveal";
 import globals from "../../../Services/Globals";
@@ -37,13 +37,15 @@ function ProductCard(product: ProductModel): JSX.Element {
         <Zoom triggerOnce fraction={0.6}>
             <div className="ProductCard" onMouseEnter={flip} onMouseLeave={unflip}>
                 <Link to={"/specs/" + product._id}>
-                    <img width={"100%"} className="product-img" src={globals.productsUrl + "/img/" + product.images[0]} alt={product.name} />
+                    <img width={"100%"} className="product-img" src={globals.productsUrl + "img/" + product.images[0]} alt={product.name} />
                     <p className="product-desc">
                         {product.name}
                     </p>
                 </Link>
                 <div className="product-div-button" ref={buttonDivRef}>
-                    <Link to="/" ><Button sx={{ fontSize: "medium", backgroundColor: "#b28d1c" }} ref={buttonRef} color="secondary" variant="contained">{initialPrice}&#8362;</Button></Link>
+                    {/* <Link to="/" > */}
+                    <Button sx={{ fontSize: "medium", backgroundColor: "#b28d1c" }} ref={buttonRef} color="secondary" variant="contained">{initialPrice}&#8362;</Button>
+                    {/* </Link> */}
                 </div>
             </div>
         </Zoom>
