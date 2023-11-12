@@ -49,36 +49,43 @@ function ProductForm(props: ProductFormProps): JSX.Element {
 
     const [productToEdit, setProductToEdit] = useState(props?.product ? props.product : new ProductModel());
 
-    const initialState: InitialState = {
-        productCategory: productToEdit.category ? productToEdit.category._id : '',
-        ProductScentCategory: productToEdit.scentCategory ? productToEdit.scentCategory._id : '',
-        productLevel: productToEdit.level ? productToEdit.level : 0,
-        productScents: productToEdit.scents ? productToEdit.scents : [],
-        scentToPush: '',
-        colorToPush: '',
-        productColors: productToEdit.colors ? productToEdit.colors : [],
-        categories: store.getState().productsState.categories,
-        scentCategories: store.getState().productsState.scentCategories,
-        open: false,
-        isLoading: false,
-        productImageNames: productToEdit.images ? productToEdit.images : [],
-        imagesToDelete: [],
-        imagesToPost: []
+    const initiateState = (product: ProductModel) => {
+        const initialState: InitialState = {
+            productCategory: product.category ? product.category._id : '',
+            ProductScentCategory: product.scentCategory ? product.scentCategory._id : '',
+            productLevel: product.level ? product.level : 0,
+            productScents: product.scents ? product.scents : [],
+            scentToPush: '',
+            colorToPush: '',
+            productColors: product.colors ? product.colors : [],
+            categories: store.getState().productsState.categories,
+            scentCategories: store.getState().productsState.scentCategories,
+            open: false,
+            isLoading: false,
+            productImageNames: product.images ? product.images : [],
+            imagesToDelete: [],
+            imagesToPost: []
+        }
+        return initialState;
     }
-    const [{ productImageNames, imagesToPost, imagesToDelete, isLoading, productCategory, colorToPush, scentToPush, productScents, productColors, ProductScentCategory, productLevel, categories, scentCategories, open }, setState] = useState(initialState);
+    const [{ productImageNames, imagesToPost, imagesToDelete, isLoading, productCategory, colorToPush, scentToPush, productScents, productColors, ProductScentCategory, productLevel, categories, scentCategories, open }, setState] = useState(initiateState(productToEdit));
+
     const handleOpen = () => setState(prevState => ({ ...prevState, open: true }));
     const handleClose = () => {
         if (!productToEdit._id) {
-            setState(initialState);
+            setState(initiateState(productToEdit));
             return reset();
         }
         setState(prev => ({ ...prev, open: false, imagesToDelete: [], imagesToPost: [] }));
     };
 
     useEffect(() => {
-        setProductToEdit(props?.product ? props.product : new ProductModel())
+        reset();
+        setProductToEdit(props?.product ? props.product : new ProductModel());
+        setState(initiateState(props?.product ? props.product : new ProductModel()));
         if (categories.length === 0) productsService.getCategories().then(res => { setState(prevState => ({ ...prevState, categories: res })) });
         if (scentCategories.length === 0) productsService.getScentCategories().then(res => { setState(prevState => ({ ...prevState, scentCategories: res })) });
+
     }, [props])
 
     const handleScentDelete = (event: React.MouseEvent<HTMLButtonElement>) => {

@@ -81,12 +81,7 @@
     margin: 0.2rem;
     font-weight: 500;
 }
-.ProductSpecs .priceDiv{
-    padding: 1rem;
-    font-weight: bold;
-    font-size: x-large;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-}
+
 @media screen and (max-width:900px) {
     .ProductSpecs .imgDiv {
         border: none;
