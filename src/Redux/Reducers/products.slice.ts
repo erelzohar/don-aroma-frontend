@@ -34,7 +34,7 @@ const productsReducer = createSlice({
             state.scentCategories = action.payload;
         },
         addProduct: (state, action: PayloadAction<ProductModel>) => {
-            state.products.unshift(action.payload);
+            state.products.push(action.payload);
         },
         updateProduct: (state, action: PayloadAction<ProductModel>) => {
             const newProductsState = [ ...state.products ];

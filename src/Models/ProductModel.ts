@@ -12,32 +12,29 @@ class ProductModel {
     scentCategory: CategoryModel = null;
     isRecommended: boolean = false;
     scents: string[];
+    stock: number;
 
 
-    public static convertToFormData(product: ProductModel, images: File[] = null,imagesToDelete:string[]=null): FormData {
+    public static convertToFormData(product: ProductModel, images: File[] = null, imagesToDelete: string[] = null): FormData {
         const formData = new FormData();
         if (product._id) formData.append("_id", product._id);
         formData.append("name", product.name);
-        formData.append("price", product.price?.toString());
-        images?.forEach(i => {
+        formData.append("price", product.price?.toString());        
+        if (images) images.forEach(i => {
             formData.append("images", i);
         })
-        if (images) formData.append("images", JSON.stringify(product.images));
+        if (product.images) formData.append("images", JSON.stringify(product.images));
         if (imagesToDelete) formData.append("imagesToDelete", JSON.stringify(imagesToDelete));
         formData.append("category", product.category?._id);
         formData.append("description", product.description);
         formData.append("level", product.level?.toString());
+        formData.append("stock",product.stock.toString());
         if (product.colors) formData.append("colors", JSON.stringify(product.colors));
         if (product.scents) formData.append("scents", JSON.stringify(product.scents));
         if (product.scentCategory) formData.append("scentCategory", product.scentCategory?._id);
         if (product.isRecommended !== undefined) formData.append("isRecommended", product.isRecommended?.toString());
         return formData;
     }
-
-
-
-
-
 
 }
 

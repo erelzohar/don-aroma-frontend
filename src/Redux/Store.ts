@@ -5,6 +5,7 @@ import RootReducer from "./Reducers/RootReducer";
 
 const store = configureStore({
     reducer: RootReducer,
+    devTools:process.env.NODE_ENV !== "production"
 })
 
 type RootState = ReturnType<typeof store.getState>;

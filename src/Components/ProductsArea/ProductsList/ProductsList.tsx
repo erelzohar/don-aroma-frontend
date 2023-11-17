@@ -30,19 +30,28 @@ function ProductsList(): JSX.Element {
         store.dispatch(setProductListDisplay(fixedView));
         gridDiv.current.style.display = nextView;
     };
+    const sortProducts = (products: ProductModel[]): ProductModel[] => {
+        if (!products) return;
+        products = productsService.shuffle(products);
+        const customSort = (a: ProductModel, b: ProductModel) => {
+            if (a.stock === 0) return 1;
+            else if (b.stock === 0) return -1;
+            else if (a.stock === -1 && b.stock !== -1) return 1;
+            else if (a.stock !== -1 && b.stock === -1) return -1;
+            else return 0;
+        };
+
+        const sortedProducts = products.sort(customSort);
+        return sortedProducts.filter(item => item.stock !== 0);
+    }
 
     useEffect(() => {
         productsService.getProducts()
             .then(res => {
-                if (scentCategory) {
-                    setProducts(res.filter(p => p.scentCategory?._id === scentCategory));
-                }
-                else if (category) {
-                    setProducts(res.filter(p => p.category._id === category));
-                }
+                if (scentCategory) setProducts(res.filter(p => p.scentCategory?._id === scentCategory));
+                else if (category) setProducts(res.filter(p => p.category._id === category));
                 else setProducts(res);
             });
-
     }, [params]);
 
     return (
@@ -61,9 +70,9 @@ function ProductsList(): JSX.Element {
                     </ToggleButton>
                 </ToggleButtonGroup>
             </div>
-            <div className={productsState.length>0 ? "ProductsListGrid" : ""} ref={gridDiv} style={{ display: view }}>
-                {productsState.length===0 && <Loader/>}
-                {productsState.map((p, i) => view === "grid" ? <ProductCard key={i} {...p} /> : <HorizonalProduct key={i} {...p} />)}
+            <div className={productsState.length > 0 ? "ProductsListGrid" : ""} ref={gridDiv} style={{ display: view }}>
+                {productsState.length === 0 && <Loader />}
+                {sortProducts(productsState).map((p, i) => view === "grid" ? <ProductCard key={i} {...p} /> : <HorizonalProduct key={i} {...p} />)}
             </div>
         </div>
     );

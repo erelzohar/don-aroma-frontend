@@ -26,7 +26,8 @@ const schema = yup
         description: yup.string(),
         price: yup.number().min(0).max(10000),
         color: yup.string(),
-        scentCategory: yup.string()
+        scentCategory: yup.string(),
+        stock: yup.number().min(-1).max(10000)
     })
 
 interface InitialState {
@@ -85,8 +86,7 @@ function ProductForm(props: ProductFormProps): JSX.Element {
         setState(initiateState(props?.product ? props.product : new ProductModel()));
         if (categories.length === 0) productsService.getCategories().then(res => { setState(prevState => ({ ...prevState, categories: res })) });
         if (scentCategories.length === 0) productsService.getScentCategories().then(res => { setState(prevState => ({ ...prevState, scentCategories: res })) });
-
-    }, [props])
+    }, [props]);
 
     const handleScentDelete = (event: React.MouseEvent<HTMLButtonElement>) => {
         const index = event.currentTarget.id.split("-id-")[1];
@@ -160,11 +160,12 @@ function ProductForm(props: ProductFormProps): JSX.Element {
             productToUpsert.colors = productColors;
             productToUpsert.level = productLevel;
             productToUpsert.category = categories.find(c => productCategory === c._id);
-            productToUpsert.scentCategory = productCategory === "650acfabc4c0c3b0a4da8ad3" ? scentCategories.find(c => ProductScentCategory === c._id) : null;
-
+            productToUpsert.scentCategory = productCategory === "650acfabc4c0c3b0a4da8ad3" ? scentCategories.find(c => ProductScentCategory === c._id) : null;            
             const res = await productsService.upsertProduct(productToUpsert, imagesToPost, imagesToDelete);
-            setState(prev => ({ ...prev, isLoading: false, productImageNames: res.images }));
-            if (res) handleClose();
+
+            setState(prev => ({ ...prev, isLoading: false, productImageNames: res?.images }));
+            if (!res) return notify.error("משהו השתבש...");
+            else handleClose();
         }
         catch (err: any) {
             notify.error(err);
@@ -247,6 +248,18 @@ function ProductForm(props: ProductFormProps): JSX.Element {
                         </FormControl>
                         }
                         <TextField
+                            {...register("stock")}
+                            defaultValue={productToEdit.stock ? productToEdit.stock : 0}
+                            dir="ltr"
+                            error={errors.stock ? true : false}
+                            helperText={errors.stock?.message}
+                            type="number"
+                            margin="normal"
+                            id="price-input"
+                            label="מלאי (-1 להוריד מהמדף)"
+                            variant="outlined"
+                        />
+                        <TextField
                             {...register("price")}
                             defaultValue={productToEdit.price ? productToEdit.price : 0}
                             dir="ltr"
@@ -297,7 +310,7 @@ function ProductForm(props: ProductFormProps): JSX.Element {
                                 </span>
                             </FormControl>
                             <FormControl margin="normal" fullWidth >
-                                <FormLabel id="scents-label">צבעים</FormLabel>
+                                <FormLabel id="scents-label">צבעים(באנגלית)</FormLabel>
                                 {productColors.map((e, i) =>
                                     <span key={i} className="form-array-child">
                                         <TextField
@@ -320,7 +333,7 @@ function ProductForm(props: ProductFormProps): JSX.Element {
                                     <TextField
                                         margin="normal"
                                         dir="ltr"
-                                        label="הוסף צבע"
+                                        label="Color"
                                         variant="outlined"
                                         value={colorToPush}
                                         onChange={handleColorToPushChange}

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import logo from "../../../Assets/Images/logo-donaroma.jpg";
 import HeaderDrawer, { HeaderDrawerChild } from '../HeaderDrawer/HeaderDrawer';
 import { BsFacebook, BsFillTelephoneFill, BsShieldFillExclamation } from 'react-icons/bs';
-import { AiFillInstagram, AiFillGift, AiOutlineWechat } from "react-icons/ai";
+import { AiFillInstagram, AiFillHome, AiFillGift, AiOutlineWechat } from "react-icons/ai";
 import { RiWhatsappFill } from "react-icons/ri";
 import { FaAirFreshener, FaBusinessTime, FaQuestion, FaShoppingBag } from "react-icons/fa";
 import DropDownMenu, { dropDownProps } from '../../Generics/DropDownMenu/DropDownMenu';
@@ -74,6 +74,11 @@ const drawerPages: HeaderDrawerChild[] = [
         children: []
     },
     {
+        name: "דף הבית",
+        url: "/",
+        icon: <AiFillHome />
+    },
+    {
         name: "שאלות נפוצות",
         url: "/faq",
         icon: <FaQuestion />
@@ -136,7 +141,7 @@ function Header(): JSX.Element {
                             <Link to="/policy">תקנון</Link>
                             <span> | </span>
                             <Link to="/contact-us">צור קשר</Link>
-                            {user && <span ><UserSettings {...user} /></span>}
+                            {user && <div ><UserSettings {...user} /></div>}
                         </div>
                     </Box>
                     <Box
@@ -174,6 +179,7 @@ function Header(): JSX.Element {
                             flexGrow: 1,
                             display: { xs: 'none', md: 'flex' },
                             width: "80%",
+                            textAlign: "center",
                             justifyContent: "space-around",
                             margin: "0 1rem 1rem 1rem",
                             borderTop: "1px solid black",

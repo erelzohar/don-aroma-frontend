@@ -53,7 +53,7 @@ function Login(): JSX.Element {
             usersService.SaveUserLocal(res.data);
             notify.success('!התחברת בהצלחה');
             navigate("/");
-            
+
         }
         catch (err: any) {
             notify.error(err);
@@ -65,7 +65,7 @@ function Login(): JSX.Element {
         left: '50%',
         transform: 'translate(-50%, -50%)',
         width: '80%',
-        maxWidth:'600px',
+        maxWidth: '600px',
         bgcolor: '#fff',
         boxShadow: 24,
         p: 4,
@@ -75,6 +75,7 @@ function Login(): JSX.Element {
         <div className="Login">
             <Modal
                 open={true}
+                onClose={() => { navigate("/") }}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
             >

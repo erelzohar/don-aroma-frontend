@@ -57,18 +57,19 @@ const CompactNumberInput = React.forwardRef(function CompactNumberInput(
   );
 });
 interface StateProps{
-  setState : React.Dispatch<React.SetStateAction<number>>
+  setState : React.Dispatch<React.SetStateAction<number>>;
+  startVal?:number
 }
 export default function UseNumberInputCompact(props:StateProps) {
   const [value, setValue] = React.useState<number>(1);
-
+  
   return (
     <Layout>
       <CompactNumberInput
         aria-label="Compact number input"
         placeholder="Type a number…"
         readOnly
-        value={value}
+        value={props.startVal ? props.startVal : value}
         onChange={(event, val) => {setValue(val);props.setState(val)}}
         min={1}
       />

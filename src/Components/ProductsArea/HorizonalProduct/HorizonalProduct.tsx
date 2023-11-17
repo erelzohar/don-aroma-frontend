@@ -5,6 +5,7 @@ import { useRef } from "react";
 import ProductModel from "../../../Models/ProductModel";
 import { Zoom } from "react-awesome-reveal";
 import globals from "../../../Services/Globals";
+import LazyImage from "../../Generics/LazyImage/LazyImage";
 
 
 function HorizonalProduct(product: ProductModel): JSX.Element {
@@ -35,15 +36,19 @@ function HorizonalProduct(product: ProductModel): JSX.Element {
 
     return (
         <Zoom triggerOnce>
-            <div className="HorizonalProduct" onMouseEnter={flip} onMouseLeave={unflip}>
+            <div className="HorizonalProduct"
+            //  onMouseEnter={flip} onMouseLeave={unflip}
+             >
                 <Link to={"/specs/" + product._id} className="product-name-link">
-                    <img width={"100%"} loading="lazy" className="product-img" src={globals.productsUrl + "img/" + product.images[0]} alt="img" />
+                    <LazyImage imageSrc={globals.productsUrl + "img/" + product.images[0]} imageAlt={product.name} />
                     <p className="product-desc">
                         {product.name}
                     </p>
                 </Link>
                 <div className="product-div-button" ref={buttonDivRef}>
-                    <Link to="/"><Button sx={{ fontSize: "medium", backgroundColor: "#b28d1c" }} ref={buttonRef} color="secondary" variant="contained">{initialPrice}&#8362;</Button></Link>
+                    {/* <Link to="/"> */}
+                        <Button sx={{ fontSize: "medium", backgroundColor: "#b28d1c" }} ref={buttonRef} color="secondary" variant="contained">{initialPrice}&#8362;</Button>
+                    {/* </Link> */}
                 </div>
             </div>
         </Zoom>

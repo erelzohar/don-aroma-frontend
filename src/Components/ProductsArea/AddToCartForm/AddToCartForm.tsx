@@ -4,10 +4,14 @@ import { useState } from "react";
 import { Brightness1, RadioButtonUnchecked, ShoppingCart } from "@mui/icons-material";
 import UseNumberInputCompact from "../../Generics/NumberInput/NumberInput";
 import ProductModel from "../../../Models/ProductModel";
+import store from "../../../Redux/Store";
+import { addItem } from "../../../Redux/Reducers/cart.slice";
+import CartItemModel from "../../../Models/CartItemModel";
 
 interface Props {
     product: ProductModel
 }
+
 const colorMap = {
     white: '#ffffff',
     black: '#000000'
@@ -24,11 +28,15 @@ function AddToCartForm(props: Props): JSX.Element {
         setColor(colorInput);
     }
 
-    const submit =()=>{
-        console.log(color);
-        console.log(scent);
-        console.log(quantity);
-        
+    const submit = () => {
+        const cartItem: CartItemModel = {
+            product: props.product,
+            color,
+            scent,
+            quantity
+        };
+        store.dispatch(addItem(cartItem));
+
     }
     return (
         <div className="AddToCartForm">
@@ -60,8 +68,8 @@ function AddToCartForm(props: Props): JSX.Element {
                     <span>{color}</span>
                 </div>}
                 <div className="quantity">
-                    <p>כמות</p>
-                    <UseNumberInputCompact setState={setQuantity} />
+                    {/* <p>כמות</p>
+                    <UseNumberInputCompact setState={setQuantity} /> */}
                 </div>
             </div>
             <div className="priceDiv">
@@ -69,7 +77,7 @@ function AddToCartForm(props: Props): JSX.Element {
                 <p>מחיר באתר : {props.product.price}&#8362;</p>
             </div>
             <div className="buyDiv">
-                <Button onClick={submit} variant="contained" color="success" endIcon={<ShoppingCart/>}>הוסף לעגלה&nbsp;</Button>
+                {/* <Button onClick={submit} variant="contained" color="success" endIcon={<ShoppingCart />}>הוסף לעגלה&nbsp;</Button> */}
             </div>
         </div>
     );

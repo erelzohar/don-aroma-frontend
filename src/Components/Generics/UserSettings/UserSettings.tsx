@@ -15,10 +15,10 @@ function UserSettings(props:UserModel): JSX.Element {
         setAnchorElUser(null);
     };
     return (
-        <Box sx={{flexGrow: 0,display:"flex",flexDirection:"column",alignItems:"center", justifyContent:"center",margin:"2rem" }}>
+        <Box sx={{flexGrow: 0,display:"flex",flexDirection:"column",alignItems:"center", justifyContent:"center",margin:"0.5rem 0 2rem 0" }}>
         <Tooltip title="הגדרות">
             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt={props.firstName} />
+                <Avatar src="avatar" alt={props.firstName} />
             </IconButton>
         </Tooltip>
         <Menu

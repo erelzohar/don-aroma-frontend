@@ -6,9 +6,10 @@ import { Delete, StarBorder, Grade } from '@mui/icons-material';
 import productsService from '../../../Services/Products';
 import globals from '../../../Services/Globals';
 import ProductForm from '../ProductForm/ProductForm';
+import { ToggleButton, ToggleButtonGroup } from '@mui/material';
 
 interface Column {
-    id: 'name' | 'price' | 'category' | 'images' | 'scents' | 'colors' | 'description' | 'level' | 'scentCategory';
+    id: 'name' | 'price' | 'stock' | 'category' | 'images' | 'scents' | 'colors' | 'description' | 'level' | 'scentCategory';
     label: string;
     minWidth?: number;
     maxWidth?: number;
@@ -25,6 +26,12 @@ const columns: readonly Column[] = [
         format: (value: number) => value.toLocaleString()
     },
     {
+        id: 'stock',
+        label: 'מלאי',
+        minWidth: 50,
+        format: (value: number) => value?.toString()
+    },
+    {
         id: 'category',
         label: 'קטגוריה',
         minWidth: 170,
@@ -37,7 +44,7 @@ const columns: readonly Column[] = [
         label: 'תמונה',
         align: 'right',
         minWidth: 170,
-        format:(imageNames:string[])=>imageNames[0]
+        format: (imageNames: string[]) => imageNames[0] 
     },
     {
         id: 'scents',
@@ -89,11 +96,21 @@ interface TableProps {
 
 function ProductsTable(props: TableProps): JSX.Element {
 
-    const rows = [...props.products]
+    const [rows, setRows] = React.useState(props.products ? [...props.products] : []);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [isLoading, setIsLoading] = React.useState(false);
+    const [filter, setFilter] = React.useState(1);
 
+    React.useEffect(() => {
+        setRows([...props.products].filter(r => {
+            if (filter === 1) return true;
+            return r.stock === filter;
+        }))
+    }, [props, filter])
+    const handleChange = (event: React.MouseEvent<HTMLElement>, filterNum: number) => {
+        setFilter(filterNum);
+    };
     const handleChangePage = (event: unknown, newPage: number) => {
         setPage(newPage);
     };
@@ -112,7 +129,21 @@ function ProductsTable(props: TableProps): JSX.Element {
 
     return (
         <Paper sx={{ width: '98%', overflow: 'hidden', direction: "rtl", margin: "1rem auto auto auto" }}>
-            <ProductForm />
+            <div style={{ display: "flex" }} className="upper-settings">
+                <ProductForm />
+                <ToggleButtonGroup
+                    color="primary"
+                    value={filter}
+                    exclusive
+                    onChange={handleChange}
+                    aria-label="Platform"
+                >
+                    <ToggleButton value={0}>לא במלאי</ToggleButton>
+                    <ToggleButton value={1}>כל המוצרים</ToggleButton>
+                    <ToggleButton value={-1}>מוסתרים</ToggleButton>
+                </ToggleButtonGroup>
+            </div>
+
             <TableContainer>
                 <Table aria-label="sticky table">
                     <TableHead>
@@ -140,7 +171,7 @@ function ProductsTable(props: TableProps): JSX.Element {
                                                 <TableCell key={j + column.id} align={column.align} >
                                                     <span style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                                                         {column.id === 'name' && <span style={{ display: 'flex', flexDirection: 'column' }}>
-                                                            <Checkbox disabled={isLoading} checked={row.isRecommended ? true : false} onChange={handleCheckboxChange} id={row._id} color='warning' icon={<StarBorder />} checkedIcon={<Grade />} />
+                                                            <Checkbox disabled={isLoading} checked={row.isRecommended} onChange={handleCheckboxChange} id={row._id} color='warning' icon={<StarBorder />} checkedIcon={<Grade />} />
                                                             <span style={{ display: "flex", maxHeight: "60px" }}>
                                                                 <Button color="error" type="submit" onClick={async () => { await productsService.deleteProduct(row._id) }}><Delete /></Button>
                                                                 <ProductForm product={row} />
