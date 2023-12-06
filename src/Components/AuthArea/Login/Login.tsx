@@ -52,7 +52,7 @@ function Login(): JSX.Element {
             store.dispatch(userLoggedIn(res.data));
             usersService.SaveUserLocal(res.data);
             notify.success('!התחברת בהצלחה');
-            navigate("/");
+            navigate(-1);
 
         }
         catch (err: any) {
@@ -87,7 +87,7 @@ function Login(): JSX.Element {
                     <form className="modalForm" id="login-form" noValidate onSubmit={handleSubmit(submit)}>
                         <TextField dir="ltr" margin="normal" required type="email" {...register("email")} id="email-input" error={errors.email ? true : false} helperText={errors.email?.message} label="אימייל" variant="outlined" />
                         <TextField dir="ltr" margin="normal" required type="password" {...register("password")} id="password-input" error={errors.password ? true : false} helperText={errors.password?.message} label="סיסמא" variant="outlined" />
-                        <Button type="submit" variant="contained" color="success">התחבר</Button>
+                        <Button sx={{ margin: "1rem", padding: '0.5rem 2rem 0.5rem 2rem', borderRadius: '20px' }} type="submit" variant="contained" color="success">התחבר</Button>
                     </form>
                     <span className="registerSpan">אין לך חשבון עדיין? <Link to="/auth/register">הירשם כאן</Link></span>
 

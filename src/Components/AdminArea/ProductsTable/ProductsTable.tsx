@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Button, Checkbox } from '@mui/material';
+import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Checkbox, FormControl, InputLabel, Select, MenuItem, IconButton } from '@mui/material';
 import ProductModel from '../../../Models/ProductModel';
 import CategoryModel from '../../../Models/CategoryModel';
 import { Delete, StarBorder, Grade } from '@mui/icons-material';
@@ -7,13 +7,15 @@ import productsService from '../../../Services/Products';
 import globals from '../../../Services/Globals';
 import ProductForm from '../ProductForm/ProductForm';
 import { ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { useAppSelector } from '../../../Redux/Store';
+import SaleModel from '../../../Models/SaleModel';
 
 interface Column {
-    id: 'name' | 'price' | 'stock' | 'category' | 'images' | 'scents' | 'colors' | 'description' | 'level' | 'scentCategory';
+    id: 'name' | 'price' | 'sales' | 'stock' | 'category' | 'sortIndex' | 'images' | 'scents' | 'colors' | 'description' | 'level' | 'scentCategory';
     label: string;
     minWidth?: number;
     maxWidth?: number;
-    align?: 'right';
+    align?: 'right' | 'center';
     format?: (value: any) => string;
 }
 
@@ -26,9 +28,20 @@ const columns: readonly Column[] = [
         format: (value: number) => value.toLocaleString()
     },
     {
+        id: 'sales',
+        label: 'מבצעים',
+        minWidth: 100,
+        format: (value: SaleModel[]) => {
+            let string ='';
+            value.forEach(v=>string=string+v.name+", ");
+            return string;
+        }
+    },
+    {
         id: 'stock',
         label: 'מלאי',
         minWidth: 50,
+        align: 'right',
         format: (value: number) => value?.toString()
     },
     {
@@ -40,11 +53,19 @@ const columns: readonly Column[] = [
 
     },
     {
+        id: 'sortIndex',
+        label: 'מיקום בקטגוריה',
+        minWidth: 50,
+        align: 'right',
+        format: (value: number) => value?.toString()
+
+    },
+    {
         id: 'images',
         label: 'תמונה',
         align: 'right',
         minWidth: 170,
-        format: (imageNames: string[]) => imageNames[0] 
+        format: (imageNames: string[]) => imageNames[0]
     },
     {
         id: 'scents',
@@ -95,19 +116,35 @@ interface TableProps {
 }
 
 function ProductsTable(props: TableProps): JSX.Element {
-
+    const categories = useAppSelector(state => state.productsState.categories);
     const [rows, setRows] = React.useState(props.products ? [...props.products] : []);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [isLoading, setIsLoading] = React.useState(false);
     const [filter, setFilter] = React.useState(1);
+    const [categoryFilter, setCategoryFilter] = React.useState('');
 
     React.useEffect(() => {
-        setRows([...props.products].filter(r => {
+        let products = [...props.products];
+        if (categoryFilter !== '') products = products.filter(p => p.category._id === categoryFilter);
+
+        products = products.filter(r => {
             if (filter === 1) return true;
             return r.stock === filter;
-        }))
-    }, [props, filter])
+        })
+        if (categoryFilter !== '') products.sort((a, b) => {
+            if (!a.sortIndex && b.sortIndex) {
+                return 1;
+            } else if (a.sortIndex && !b.sortIndex) {
+                return -1;
+            } else if (!a.sortIndex && !b.sortIndex) {
+                return 0;
+            }
+            return a.sortIndex - b.sortIndex;
+        });
+        setRows(products);
+
+    }, [props, filter, categoryFilter])
     const handleChange = (event: React.MouseEvent<HTMLElement>, filterNum: number) => {
         setFilter(filterNum);
     };
@@ -142,6 +179,21 @@ function ProductsTable(props: TableProps): JSX.Element {
                     <ToggleButton value={1}>כל המוצרים</ToggleButton>
                     <ToggleButton value={-1}>מוסתרים</ToggleButton>
                 </ToggleButtonGroup>
+                <FormControl sx={{ minWidth: '100px', maxHeight: '40px', margin: '0.5rem', alignSelf: 'stretch' }} >
+                    <InputLabel id="demo-simple-scent-label">קטגורית ריח</InputLabel>
+                    <Select
+                        variant='standard'
+                        value={categoryFilter}
+                        onChange={(e) => { setCategoryFilter(e.target.value) }}
+                        labelId="demo-simple-scent-label"
+                        id="demo-simple-scent"
+                        label="קטגורית ריח"
+                    >
+                        <MenuItem value=''>ללא</MenuItem>
+                        {categories.map((c, i) => <MenuItem key={i} value={c._id}>{c.name}</MenuItem>)}
+
+                    </Select>
+                </FormControl>
             </div>
 
             <TableContainer>
@@ -173,10 +225,10 @@ function ProductsTable(props: TableProps): JSX.Element {
                                                         {column.id === 'name' && <span style={{ display: 'flex', flexDirection: 'column' }}>
                                                             <Checkbox disabled={isLoading} checked={row.isRecommended} onChange={handleCheckboxChange} id={row._id} color='warning' icon={<StarBorder />} checkedIcon={<Grade />} />
                                                             <span style={{ display: "flex", maxHeight: "60px" }}>
-                                                                <Button color="error" type="submit" onClick={async () => { await productsService.deleteProduct(row._id) }}><Delete /></Button>
+                                                                <IconButton color="error" type="submit" onClick={async () => { await productsService.deleteProduct(row._id) }}><Delete /></IconButton>
                                                                 <ProductForm product={row} />
                                                             </span></span>}
-                                                        {column.id === 'images' && value && <span><img style={{ width: "25%" }} src={globals.productsUrl + "img/" + column.format(value)} alt="" /></span>}
+                                                        {column.id === 'images' && value && <span><img style={{ width: "25%" }} src={globals.productsUrl + "/img/" + column.format(value)} alt="" /></span>}
                                                         {column.id === 'images' ? "" : column.format && value ? column.format(value) : !value ? <span> &#9940;</span> : value as string}
                                                     </span>
                                                 </TableCell>

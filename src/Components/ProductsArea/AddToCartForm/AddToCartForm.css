@@ -1,13 +1,12 @@
 
-.ProductSpecs .priceDiv{
+.AddToCartForm .priceDiv{
     padding:0 1rem 0 1rem;
     font-weight: bold;
     font-size: x-large;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
-.quantity p{
-    margin: 0;
-    padding-bottom: 3px;
+.quantity {
+  padding-top: 1rem;
 }
 .buyDiv{
     display: flex;

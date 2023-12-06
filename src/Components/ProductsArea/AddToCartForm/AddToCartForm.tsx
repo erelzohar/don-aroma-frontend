@@ -1,15 +1,15 @@
 import "./AddToCartForm.css";
 import { Button, Checkbox, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from "@mui/material";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Brightness1, RadioButtonUnchecked, ShoppingCart } from "@mui/icons-material";
-import UseNumberInputCompact from "../../Generics/NumberInput/NumberInput";
 import ProductModel from "../../../Models/ProductModel";
-import store from "../../../Redux/Store";
-import { addItem } from "../../../Redux/Reducers/cart.slice";
 import CartItemModel from "../../../Models/CartItemModel";
+import QuantityInput from "../../Generics/QuantityInput/QuantityInput";
+import cartService from "../../../Services/Cart";
 
 interface Props {
-    product: ProductModel
+    product: ProductModel;
+    modalSetOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const colorMap = {
@@ -20,29 +20,53 @@ const colorMap = {
 function AddToCartForm(props: Props): JSX.Element {
     const [scent, setScent] = useState('');
     const [color, setColor] = useState('');
+    const [ml, setMl] = useState<'200' | '500' | '1000'>(props.product.mlPrices ? '200' : null);
     const [quantity, setQuantity] = useState(1);
+    const spanErrorRef = useRef<HTMLSpanElement>(null)
     const handleScentChange = (e: SelectChangeEvent) => {
         setScent(e.target.value);
     }
     const handleColorChange = (e: React.MouseEvent, colorInput: string) => {
         setColor(colorInput);
     }
+    const handleMlChange = (e: SelectChangeEvent) => {
+        setMl(e.target.value as '200' | '500' | '1000');
+    }
 
     const submit = () => {
+
+        if ((props.product?.colors?.length > 0 && color === '') || (props.product?.scents?.length > 0 && scent === '')) {
+            if (spanErrorRef.current) {
+                spanErrorRef.current.textContent = "אנא מלא את פרטי המוצר";
+            }
+            return;
+        }
+        else {
+            if (spanErrorRef.current) {
+                spanErrorRef.current.textContent = "";
+            }
+        }
+        if (quantity > props.product.stock) {
+            if (spanErrorRef.current) {
+                spanErrorRef.current.textContent = `נשארו ${props.product.stock} יחידות במלאי`;
+                return;
+            }
+        }
         const cartItem: CartItemModel = {
             product: props.product,
             color,
             scent,
-            quantity
+            quantity,
+            ml
         };
-        store.dispatch(addItem(cartItem));
-
+        cartService.addToCart(cartItem);
+        if (props.modalSetOpen) props.modalSetOpen(false);
     }
     return (
         <div className="AddToCartForm">
             <div className="productPicker">
                 {props.product?.scents.length > 0 && <div className="scents">
-                    <FormControl fullWidth sx={{ minWidth: '70px' }} margin="normal">
+                    <FormControl fullWidth sx={{ minWidth: '75px' }} margin="normal">
                         <InputLabel id="demo-simple-scent-label">ניחוח </InputLabel>
                         <Select
                             labelId="demo-simple-scent-label"
@@ -52,12 +76,11 @@ function AddToCartForm(props: Props): JSX.Element {
                             value={scent}
                         >
                             {props.product.scents.map((c, i) => <MenuItem key={i} value={c}>{c}</MenuItem>)}
-
                         </Select>
                     </FormControl>
                 </div>}
                 {props.product?.colors.length > 0 && <div className="colorsContainer">
-                    <p>בחר צבע</p>
+                    <p>צבע המכשיר</p>
                     <div className="colorsDiv">
                         {props.product.colors.map((c, i) => {
                             let current = c.toLowerCase();
@@ -67,17 +90,31 @@ function AddToCartForm(props: Props): JSX.Element {
                     </div>
                     <span>{color}</span>
                 </div>}
+                {props.product?.mlPrices && <div dir='rtl'>
+                    <FormControl fullWidth sx={{ minWidth: '75px' }} margin="normal">
+                        <InputLabel id="demo-simple-ml-label"> מ"ל </InputLabel>
+                        <Select
+                            labelId="demo-simple-ml-label"
+                            id="demo-simple-ml"
+                            label='מ"ל'
+                            onChange={handleMlChange}
+                            value={ml}
+                        >
+                            {Object.keys(props.product.mlPrices).map(key => <MenuItem key={key} value={key}>{key + ' מ"ל'}</MenuItem>)}
+                        </Select>
+                    </FormControl>
+                </div>}
                 <div className="quantity">
-                    {/* <p>כמות</p>
-                    <UseNumberInputCompact setState={setQuantity} /> */}
+                    <QuantityInput changeHandler={(val: number) => { setQuantity(val); return true }} />
                 </div>
             </div>
+            <span ref={spanErrorRef} style={{ color: 'red' }}></span>
             <div className="priceDiv">
-                <p>מחיר : <span className="strikethrough">{(props.product.price * 1.3).toFixed()}&#8362;</span></p>
-                <p>מחיר באתר : {props.product.price}&#8362;</p>
+                <p>מחיר : <span className="strikethrough">{props.product.mlPrices ? (props.product.mlPrices[ml] * 1.3) : (props.product.price * 1.3).toFixed()}&#8362;</span></p>
+                <p>מחיר באתר : {props.product.mlPrices ? props.product.mlPrices[ml] : props.product.price}&#8362;</p>
             </div>
             <div className="buyDiv">
-                {/* <Button onClick={submit} variant="contained" color="success" endIcon={<ShoppingCart />}>הוסף לעגלה&nbsp;</Button> */}
+                <Button sx={{ margin: "1rem", padding: '0.5rem 2rem 0.5rem 2rem', borderRadius: '20px' }} onClick={submit} variant="contained" color="success" endIcon={<ShoppingCart />}>הוסף לעגלה&nbsp;</Button>
             </div>
         </div>
     );

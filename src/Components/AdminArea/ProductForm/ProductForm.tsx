@@ -5,12 +5,14 @@ import * as yup from "yup";
 import ProductModel from "../../../Models/ProductModel";
 import notify from "../../../Services/Notify";
 import globals from "../../../Services/Globals";
-import store from "../../../Redux/Store";
-import { Button, Dialog, DialogContent, DialogTitle, FormControl, FormControlLabel, FormLabel, InputLabel, MenuItem, Radio, RadioGroup, Select, SelectChangeEvent, TextField } from "@mui/material";
+import store, { useAppSelector } from "../../../Redux/Store";
+import { Button, Dialog, DialogContent, DialogTitle, FormControl, FormControlLabel, FormLabel, IconButton, InputLabel, MenuItem, Radio, RadioGroup, Select, SelectChangeEvent, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import productsService from "../../../Services/Products";
 import CategoryModel from "../../../Models/CategoryModel";
 import { Add, Delete, Edit } from "@mui/icons-material";
+import SaleModel from "../../../Models/SaleModel";
+import salesService from "../../../Services/Sales";
 
 
 interface ProductFormProps {
@@ -27,7 +29,8 @@ const schema = yup
         price: yup.number().min(0).max(10000),
         color: yup.string(),
         scentCategory: yup.string(),
-        stock: yup.number().min(-1).max(10000)
+        stock: yup.number().min(-1).max(10000),
+        sortIndex: yup.number().min(0).max(10000)
     })
 
 interface InitialState {
@@ -35,9 +38,11 @@ interface InitialState {
     ProductScentCategory: string
     productScents: string[]
     productColors: string[]
+    productSales: SaleModel[]
     productLevel: number
     categories: CategoryModel[]
     scentCategories: CategoryModel[]
+    allSales: SaleModel[]
     open: boolean
     imagesToPost?: File[]
     productImageNames: string[]
@@ -47,7 +52,6 @@ interface InitialState {
     isLoading: boolean
 }
 function ProductForm(props: ProductFormProps): JSX.Element {
-
     const [productToEdit, setProductToEdit] = useState(props?.product ? props.product : new ProductModel());
 
     const initiateState = (product: ProductModel) => {
@@ -56,11 +60,13 @@ function ProductForm(props: ProductFormProps): JSX.Element {
             ProductScentCategory: product.scentCategory ? product.scentCategory._id : '',
             productLevel: product.level ? product.level : 0,
             productScents: product.scents ? product.scents : [],
+            productSales: product.sales ? product.sales : [],
             scentToPush: '',
             colorToPush: '',
             productColors: product.colors ? product.colors : [],
             categories: store.getState().productsState.categories,
             scentCategories: store.getState().productsState.scentCategories,
+            allSales: store.getState().salesState.sales,
             open: false,
             isLoading: false,
             productImageNames: product.images ? product.images : [],
@@ -69,8 +75,15 @@ function ProductForm(props: ProductFormProps): JSX.Element {
         }
         return initialState;
     }
-    const [{ productImageNames, imagesToPost, imagesToDelete, isLoading, productCategory, colorToPush, scentToPush, productScents, productColors, ProductScentCategory, productLevel, categories, scentCategories, open }, setState] = useState(initiateState(productToEdit));
-
+    const [{ productImageNames, allSales, productSales, imagesToPost, imagesToDelete, isLoading, productCategory, colorToPush, scentToPush, productScents, productColors, ProductScentCategory, productLevel, categories, scentCategories, open }, setState] = useState(initiateState(productToEdit));
+    const fixSelectOption = (pruductCurrentSales: SaleModel[], all: SaleModel[]) => {
+        const fixedSales = [...all];
+        pruductCurrentSales.forEach(s => {
+            const index = fixedSales.findIndex(ss => s._id === ss._id);
+            if (index >= 0) fixedSales.splice(index, 1);
+        });
+        return fixedSales;
+    }
     const handleOpen = () => setState(prevState => ({ ...prevState, open: true }));
     const handleClose = () => {
         if (!productToEdit._id) {
@@ -84,15 +97,20 @@ function ProductForm(props: ProductFormProps): JSX.Element {
         reset();
         setProductToEdit(props?.product ? props.product : new ProductModel());
         setState(initiateState(props?.product ? props.product : new ProductModel()));
+        if (allSales.length === 0) salesService.getSales().then(res => { setState(prevState => ({ ...prevState, allSales: res })) });
         if (categories.length === 0) productsService.getCategories().then(res => { setState(prevState => ({ ...prevState, categories: res })) });
         if (scentCategories.length === 0) productsService.getScentCategories().then(res => { setState(prevState => ({ ...prevState, scentCategories: res })) });
     }, [props]);
 
-    const handleScentDelete = (event: React.MouseEvent<HTMLButtonElement>) => {
-        const index = event.currentTarget.id.split("-id-")[1];
+    const handleScentDelete = (event: React.MouseEvent<HTMLButtonElement>, index: number) => {
         const newState = [...productScents];
         newState.splice(+index, 1);
         setState(prevState => ({ ...prevState, productScents: newState }));
+    }
+    const handleSaleDelete = (event: React.MouseEvent<HTMLButtonElement>, index: number) => {
+        const newState = [...productSales];
+        newState.splice(+index, 1);
+        setState(prevState => ({ ...prevState, productSales: newState }));
     }
     const handleScentAdd = (event: React.MouseEvent<HTMLButtonElement>) => {
         if (scentToPush.length < 2) return;
@@ -100,8 +118,7 @@ function ProductForm(props: ProductFormProps): JSX.Element {
         newState.push(scentToPush);
         setState(prev => ({ ...prev, productScents: newState, scentToPush: '' }));
     }
-    const handleColorDelete = (event: React.MouseEvent<HTMLButtonElement>) => {
-        const index = event.currentTarget.id.split("-id-")[1];
+    const handleColorDelete = (event: React.MouseEvent<HTMLButtonElement>, index: number) => {
         const newState = [...productColors];
         newState.splice(+index, 1);
         setState(prevState => ({ ...prevState, productColors: newState }));
@@ -112,6 +129,13 @@ function ProductForm(props: ProductFormProps): JSX.Element {
         newState.push(colorToPush);
         setState(prev => ({ ...prev, productColors: newState, colorToPush: '' }));
     }
+    const handleSaleChange = (event: SelectChangeEvent) => {
+        const saleToAdd = allSales.find(s => s._id === event.target.value);
+        const newProductSales = [...productSales];
+        if (saleToAdd) newProductSales.push(saleToAdd);
+        setState(prevState => ({ ...prevState, productSales: newProductSales }))
+    };
+
 
     const handleImageDelete = (event: React.MouseEvent<HTMLButtonElement>, imageName: string) => {
         const oldImages = [...productImageNames];
@@ -149,23 +173,24 @@ function ProductForm(props: ProductFormProps): JSX.Element {
         }
     };
 
-    const { register, handleSubmit, reset, formState: { errors }, setError } = useForm({ resolver: yupResolver(schema), mode: 'onBlur' });
+    const { register, handleSubmit, reset, formState: { errors } } = useForm({ resolver: yupResolver(schema), mode: 'onBlur' });
     const submit: SubmitHandler<ProductModel> = async data => {
         try {
             setState(prev => ({ ...prev, isLoading: true }));
             const productToUpsert: ProductModel = { ...data };
+            console.log(productToUpsert);
+            productToUpsert.sales = productSales;
             productToUpsert._id = productToEdit._id;
             productToUpsert.images = productImageNames;
             productToUpsert.scents = productScents;
             productToUpsert.colors = productColors;
             productToUpsert.level = productLevel;
             productToUpsert.category = categories.find(c => productCategory === c._id);
-            productToUpsert.scentCategory = productCategory === "650acfabc4c0c3b0a4da8ad3" ? scentCategories.find(c => ProductScentCategory === c._id) : null;            
+            productToUpsert.scentCategory = productCategory === "650acfabc4c0c3b0a4da8ad3" ? scentCategories.find(c => ProductScentCategory === c._id) : null;
             const res = await productsService.upsertProduct(productToUpsert, imagesToPost, imagesToDelete);
-
-            setState(prev => ({ ...prev, isLoading: false, productImageNames: res?.images }));
             if (!res) return notify.error("משהו השתבש...");
-            else handleClose();
+            handleClose();
+            setState(prev => ({ ...prev, isLoading: false, productImageNames: res?.images }));
         }
         catch (err: any) {
             notify.error(err);
@@ -174,12 +199,12 @@ function ProductForm(props: ProductFormProps): JSX.Element {
 
     return (
         <div className="ProductForm">
-            <Button
+            <IconButton
                 onClick={handleOpen}
                 color={props.product ? 'info' : 'success'}
             >
                 {props.product ? <Edit /> : <Add />}
-            </Button>
+            </IconButton>
             <Dialog open={open} onClose={handleClose} fullWidth maxWidth='md'>
                 <Button onClick={handleClose} color='error' sx={{ maxWidth: '5%', margin: '5px' }}>X</Button>
                 <DialogTitle dir="rtl">{props.product ? "עריכת מוצר" : "הוספת מוצר"}</DialogTitle>
@@ -206,7 +231,7 @@ function ProductForm(props: ProductFormProps): JSX.Element {
                                 id="demo-simple-select"
                                 label="קטגוריה"
                             >
-                                {categories.map((c, i) => <MenuItem key={i} value={c._id}>{c.name}</MenuItem>)}
+                                {categories.map((c, i) => <MenuItem dir="rtl" key={i} value={c._id}>{c.name}</MenuItem>)}
 
                             </Select>
                             <span style={{ direction: "ltr", fontSize: 'small', color: 'red', margin: '5px' }}>{errors.category?.message}</span>
@@ -223,7 +248,7 @@ function ProductForm(props: ProductFormProps): JSX.Element {
                                     id="demo-simple-scent"
                                     label="קטגורית ריח"
                                 >
-                                    {scentCategories.map((c, i) => <MenuItem key={i} value={c._id}>{c.name}</MenuItem>)}
+                                    {scentCategories.map((c, i) => <MenuItem dir="rtl" key={i} value={c._id}>{c.name}</MenuItem>)}
 
                                 </Select>
                             </FormControl>
@@ -255,8 +280,20 @@ function ProductForm(props: ProductFormProps): JSX.Element {
                             helperText={errors.stock?.message}
                             type="number"
                             margin="normal"
-                            id="price-input"
+                            id="stock-input"
                             label="מלאי (-1 להוריד מהמדף)"
+                            variant="outlined"
+                        />
+                        <TextField
+                            {...register("sortIndex")}
+                            defaultValue={productToEdit.sortIndex ? productToEdit.sortIndex : 0}
+                            dir="ltr"
+                            error={errors.sortIndex ? true : false}
+                            helperText={errors.sortIndex?.message}
+                            type="number"
+                            margin="normal"
+                            id="sortIndex-input"
+                            label="מיקום המוצר"
                             variant="outlined"
                         />
                         <TextField
@@ -271,6 +308,39 @@ function ProductForm(props: ProductFormProps): JSX.Element {
                             label="0-10,000 מחיר"
                             variant="outlined"
                         />
+                        {productSales.length > 0 && <> <FormLabel id="colors-label">מבצעים קיימים </FormLabel>
+                            <div className="sales-array-div">
+                                {productSales.map((s, i) => <span key={i} className="form-array-child">
+                                    <TextField
+                                        margin="dense"
+                                        value={s.name}
+                                        dir="rtl"
+                                        variant="outlined"
+                                        disabled
+                                    />
+                                    <Button
+                                        color="error"
+                                        onClick={(e) => { handleSaleDelete(e, i) }}
+                                    >
+                                        <Delete />
+                                    </Button>
+                                </span>
+                                )}
+                            </div>
+                        </>}
+                        <FormControl fullWidth margin="normal" >
+                            <InputLabel id="demo-simple-select-label">הוסף מבצע</InputLabel>
+                            <Select
+                                value=''
+                                onChange={handleSaleChange}
+                                labelId="demo-simple-select-label"
+                                id="demo-sales-select"
+                                label="הוסף מבצע"
+                            >
+                                {fixSelectOption(productSales, allSales).map((s, i) => <MenuItem dir="rtl" key={i} value={s._id}>{s.name}</MenuItem>)}
+
+                            </Select>
+                        </FormControl>
                         <div className="form-arrays-div">
                             <FormControl margin="normal" fullWidth >
                                 <FormLabel id="colors-label">ריחות נוספים</FormLabel>
@@ -284,9 +354,8 @@ function ProductForm(props: ProductFormProps): JSX.Element {
                                             disabled
                                         />
                                         <Button
-                                            id={"button-id-" + i}
                                             color="error"
-                                            onClick={handleScentDelete}
+                                            onClick={(e) => { handleScentDelete(e, i) }}
                                         >
                                             <Delete />
                                         </Button>
@@ -321,9 +390,8 @@ function ProductForm(props: ProductFormProps): JSX.Element {
                                             disabled
                                         />
                                         <Button
-                                            id={"button-id-" + i}
                                             color="error"
-                                            onClick={handleColorDelete}
+                                            onClick={(e) => { handleColorDelete(e, i) }}
                                         >
                                             <Delete />
                                         </Button>

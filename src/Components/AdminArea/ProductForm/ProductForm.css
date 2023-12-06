@@ -1,8 +1,9 @@
 .form-array-child {
     display: flex;
-
 }
-
+.sales-array-div{
+    display: flex;
+}
 .form-arrays-div {
     display: flex;
     align-items: center;

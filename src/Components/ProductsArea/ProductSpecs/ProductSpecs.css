@@ -35,7 +35,7 @@
 .specDiv .productName {
     line-height: 4rem;
     color: #9f7a0c;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .ProductSpecs .imgDiv {
@@ -79,7 +79,6 @@
     color: rgb(78, 78, 165);
     text-decoration: underline;
     margin: 0.2rem;
-    font-weight: 500;
 }
 
 @media screen and (max-width:900px) {

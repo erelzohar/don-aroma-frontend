@@ -24,6 +24,18 @@ const droprops: dropDownProps = {
         }
     ]
 }
+const adminDroprops: dropDownProps = {
+    name: "עריכה",
+    children: [
+        {
+            name: "עריכת מוצרים",
+            url: "/manage/admin"
+        }, {
+            name: "עריכת מבצעים",
+            url: "/manage/admin/sales"
+        }
+    ]
+}
 
 const pages = [
     {
@@ -188,7 +200,7 @@ function Header(): JSX.Element {
                         }}>
                         <DropDownMenu {...droprops} />
                         {pages.map((p, i) => <Link key={i} className='header-links' to={p.url}>{p.name}</Link>)}
-                        {user?.isAdmin && <Link key={"admin"} className='header-links' to="/manage/admin">עריכה</Link>}
+                        {user?.isAdmin && <DropDownMenu {...adminDroprops} />}
                     </Box>
                     <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
                         <HeaderDrawer pages={drawerPages} user={user} />

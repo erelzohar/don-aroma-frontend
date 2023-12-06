@@ -20,7 +20,7 @@ function Home(): JSX.Element {
     useEffect(() => {
         if (products.length === 0) productsService.getProducts();
         if (messages.length === 0) messagesService.getMessages();
-    }, [])
+    }, []);
     return (
         <div className="Home">
             {messages.length > 0 && <Slide direction="down" triggerOnce>

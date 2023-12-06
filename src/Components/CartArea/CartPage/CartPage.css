@@ -1,3 +1,89 @@
 .CartPage {
-	
+  display: grid;
+  direction: rtl;
+  grid-template-columns: 65vw 30vw;
+  column-gap: 2vw;
+  height: 100%;
+  justify-content: center;
+}
+
+.CartPage .topSpan {
+  display: flex;
+  width: 100%;
+}
+
+.CartPage .itemsList {
+  width: 100%;
+  max-height: 99vh;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 0 1rem 1rem ;
+  overflow-y: scroll;
+}
+
+/* width */
+.CartPage .itemsList::-webkit-scrollbar {
+  width: 6px;
+  height: 9px;
+}
+
+/* Track */
+.CartPage .itemsList::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+.CartPage .itemsList::-webkit-scrollbar-thumb {
+  background: #757575db;
+}
+
+/* Handle on hover */
+.CartPage .itemsList::-webkit-scrollbar-thumb:hover {
+  background: #3a3a3a;
+  cursor: pointer;
+}
+
+.CartPage .linearIconDiv {
+  display: flex;
+}
+
+.CartPage .pageContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.CartPage .buySum {
+  height: 100%;
+  padding: 1rem 0 1rem 1rem;
+  margin: 1rem;
+}
+.CartPage .thankYouDiv{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+}
+.CartPage .topSpan {
+  display: flex;
+  justify-content: space-around;
+}
+
+.CartPage .linearProgDiv {
+  border-bottom: 1px solid rgba(128, 128, 128, 0.455);
+  margin-top: 1rem;
+  padding: 0 1rem 0 1rem;
+  width: 90%;
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+@media screen and (max-width:1000px) {
+  .CartPage {
+    grid-template-columns: 90vw;
+  }
 }

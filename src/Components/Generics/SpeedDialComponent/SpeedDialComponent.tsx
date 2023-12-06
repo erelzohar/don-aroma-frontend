@@ -18,11 +18,11 @@ function SpeedDialComponent(): JSX.Element {
   return (
     <>
       {!user?.isAdmin && <Box className="SpeedDialComponent" component={'span'} sx={{
-        height: '60vh',
+        height: 'fit-content',
         transform: 'translateZ(1ch)',
         flexGrow: 1,
         position: 'fixed',
-        top: '25vh',
+        top: '40vh',
         right: '1vw',
         display: 'flex',
         zIndex: 100

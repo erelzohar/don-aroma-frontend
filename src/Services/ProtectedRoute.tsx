@@ -9,7 +9,7 @@ interface protectedRouteProps{
 
 
 export default function ProtectedRoute(props:protectedRouteProps){
-    const isAuthenticated = store.getState().authState.user && store.getState().authState.user.isAdmin && usersService.checkUserExp(store.getState().authState.user);    
+    const isAuthenticated = store.getState().authState.user && store.getState().authState.user.isAdmin && usersService.checkUserExp();    
     if (!isAuthenticated) return <Navigate to={props.redirectPath} replace/>
     return props.protectedComponent;
 }

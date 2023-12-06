@@ -11,15 +11,15 @@ function ContactUsPage(): JSX.Element {
                 </div>
                 <div className="contactInfo">
                     <h1 className="header">טלפון <Phone /></h1>
-                    <p>0503713852</p>
+                    <p> <a target="blank" href="tel:0503713852">050-3713852</a></p>
                 </div>
                 <div className="contactInfo">
                     <h1 className="header">דוא"ל <AlternateEmail /></h1>
-                    <p>donaroma.sr@gmail.com</p>
+                    <p> <a href="mailto:donaroma.sr@gmail.com">donaroma.sr@gmail.com</a></p>
                 </div>
                 <div className="contactInfo">
                     <h1 className="header">שעות פעילות <LockClock /></h1>
-                    <p>א'-ה' בין השעות 09 - 17</p>
+                    <p>א'-ה' בין השעות 09:00 - 17:00</p>
                 </div>
             </div>
             <div className="form-map">

@@ -48,7 +48,7 @@ const resolver: Resolver<UserModel> = async (values) => {
 
 function Register(): JSX.Element {
     const navigate = useNavigate();
-    const { register, handleSubmit, reset, formState: { errors }, setError } = useForm<UserModel>({ resolver, mode: 'onBlur' });
+    const { register, handleSubmit, formState: { errors }, setError } = useForm<UserModel>({ resolver, mode: 'onBlur' });
     const submit: SubmitHandler<UserModel> = async data => {
         try {
             const userToRegister = new UserModel(data);
@@ -94,7 +94,7 @@ function Register(): JSX.Element {
                         <TextField required margin="normal" type="tel" dir="ltr" {...register("phone")} error={errors.phone ? true : false} helperText={errors.phone?.message} label="טלפון" variant="outlined" />
                         <TextField required margin="normal" type="email" dir="ltr" {...register("email")} error={errors.email ? true : false} helperText={errors.email?.message} label="אימייל" variant="outlined" />
                         <TextField required margin="normal" type="password" dir="ltr" {...register("password")} error={errors.password ? true : false} helperText={errors.password?.message} label="סיסמא" variant="outlined" />
-                        <Button sx={{ margin: "1rem" }} variant="contained" color="success" type="submit">שלח</Button>
+                        <Button sx={{ margin: "1rem", padding: '0.5rem 2rem 0.5rem 2rem', borderRadius: '20px' }} variant="contained" color="success" type="submit">שליחה</Button>
                     </form>
                     <span className="registerSpan">יש לך חשבון ? <Link to="/auth/login">התחבר </Link></span>
                 </Box>

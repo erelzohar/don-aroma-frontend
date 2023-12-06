@@ -7,7 +7,7 @@ import notify from "../../../Services/Notify";
 function Logout(): JSX.Element {
     useEffect(()=>{
         store.dispatch(userLoggedOut());
-        localStorage.removeItem("donaroma");
+        localStorage.removeItem("donaromauser");
         notify.custom("הינך מחובר כאורח");
     },[])
     return <Navigate to="/" />

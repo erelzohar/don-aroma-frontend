@@ -1,4 +1,5 @@
 import CategoryModel from "./CategoryModel";
+import SaleModel from "./SaleModel";
 
 class ProductModel {
     _id: string;
@@ -7,13 +8,19 @@ class ProductModel {
     category: CategoryModel;
     images: string[];
     colors: string[];
+    sales: SaleModel[];
     description: string;
     level: number;
     scentCategory: CategoryModel = null;
     isRecommended: boolean = false;
     scents: string[];
     stock: number;
-
+    sortIndex: number;
+    mlPrices:{
+        "1000":number,
+        "500":number,
+        "200":number
+    }
 
     public static convertToFormData(product: ProductModel, images: File[] = null, imagesToDelete: string[] = null): FormData {
         const formData = new FormData();
@@ -29,8 +36,10 @@ class ProductModel {
         formData.append("description", product.description);
         formData.append("level", product.level?.toString());
         formData.append("stock",product.stock.toString());
+        formData.append("sortIndex",product.sortIndex.toString());
         if (product.colors) formData.append("colors", JSON.stringify(product.colors));
         if (product.scents) formData.append("scents", JSON.stringify(product.scents));
+        if (product.sales) formData.append("sales", JSON.stringify(product.sales));
         if (product.scentCategory) formData.append("scentCategory", product.scentCategory?._id);
         if (product.isRecommended !== undefined) formData.append("isRecommended", product.isRecommended?.toString());
         return formData;

@@ -22,6 +22,7 @@ import AdminPage from "../../AdminArea/AdminPage/AdminPage";
 import NotFoundPage from "../../Generics/NotFoundPage/NotFoundPage";
 import Logout from "../../AuthArea/Logout/Logout";
 import CartPage from "../../CartArea/CartPage/CartPage";
+import SalesPage from "../../AdminArea/SalesArea/SalesPage/SalesPage";
 
 
 
@@ -44,7 +45,7 @@ function Layout(): JSX.Element {
             <div className="Layout" ref={layoutRef} >
                 <header><Header /></header>
                 <main id="layout-main">
-                    {/* <CartBtn /> */}
+                    <CartBtn />
                     <Routes>
                         <Route path="/" element={<Home />} />
                         {/* auth routes */}
@@ -63,9 +64,11 @@ function Layout(): JSX.Element {
                         <Route path="contact-us" element={<ContactUsPage />} />
                         <Route path="business" element={<BusinessPage />} />
                         <Route path="cart" element={<CartPage />} />
+                        <Route path="cart/:orderNumber" element={<CartPage />} />
 
                         {/* protected */}
                         <Route path="/manage/admin" element={<ProtectedRoute redirectPath="/*" protectedComponent={<AdminPage />} />} />
+                        <Route path="/manage/admin/sales" element={<ProtectedRoute redirectPath="/*" protectedComponent={<SalesPage />} />} />
 
                         {/* not found */}
                         <Route path="/*" element={<NotFoundPage />} />

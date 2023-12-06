@@ -10,6 +10,7 @@ function Footer(): JSX.Element {
                 <div className="footer-info">
                     <p className="footer-info-header">מידע ושירות</p>
                     <Link className='social-links' to="/">ראשי</Link>
+                    <Link className='social-links' to="/business">שירות חודשי לעסקים</Link>
                     <Link className='social-links' to="/about-us">אודותינו</Link>
                     <Link className='social-links' to="/policy">תקנון</Link>
                     <Link className='social-links' to="/contact-us">צור קשר</Link>
@@ -21,8 +22,7 @@ function Footer(): JSX.Element {
                     <Link className='social-links' to="/products/650acfabc4c0c3b0a4da8ad3">ניחוחות</Link>
                     <Link className='social-links' to="/products/650acf8fc4c0c3b0a4da8ad2">מפיצי ריח דיגיטליים</Link>
                     <Link className='social-links' to="/products/650adc37c4c0c3b0a4da8aec">חבילות/מארזים</Link>
-                    <Link className='social-links' to="/business">שירות חודשי לעסקים</Link>
-
+                    <Link className='social-links' to="/products/650ad02dc4c0c3b0a4da8ad4">אביזרים נלווים</Link>
                 </div>
                 <div className="footer-info">
                     <p className="footer-info-header">עקבו אחרינו</p>

@@ -1,6 +1,5 @@
 import CategoryModel from "../Models/CategoryModel";
 import ProductModel from "../Models/ProductModel";
-import SignedUrl from "../Models/SignedUrl";
 import { addProduct, deleteProduct, setCategories, setProducts, setScentCategories, updateProduct } from "../Redux/Reducers/products.slice";
 import store from "../Redux/Store";
 import globals from "./Globals";
@@ -66,19 +65,19 @@ class ProductsService {
             notify.error(err);
         }
     }
-    public async upsertProduct(productToUpsert: ProductModel, images: File[], imagesToDelete: string[] = null) {
+    public async upsertProduct(productToUpsert: ProductModel, images: File[], imagesToDelete: string[] = null, shouldUpdate: boolean = true) {
         try {
-            if (images.length === 0) images = null;
+            if (images?.length === 0) images = null;
             const formData = ProductModel.convertToFormData(productToUpsert, images, imagesToDelete);
             const res = await jwtAxios.post<ProductModel>(globals.productsUrl, formData);
 
             if (productToUpsert._id) {
                 store.dispatch(updateProduct(res.data));
-                notify.success('!המוצר עודכן בהצלחה');
+                shouldUpdate && notify.success('!המוצר עודכן בהצלחה');
                 return res.data;
             }
             store.dispatch(addProduct(res.data));
-            notify.success('!המוצר נוסף בהצלחה');
+            shouldUpdate && notify.success('!המוצר נוסף בהצלחה');
             return res.data;
         }
         catch (err) {

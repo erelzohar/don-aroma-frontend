@@ -12,10 +12,11 @@ a {
   text-decoration: none;
 }
 
-.registerSpan{
+.registerSpan {
   direction: rtl;
   font-size: meidum;
 }
-.registerSpan a{
+
+.registerSpan a {
   color: rgb(53, 53, 209);
 }

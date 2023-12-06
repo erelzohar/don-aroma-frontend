@@ -5,8 +5,8 @@ import { IconButton } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { Remove, KeyboardArrowDown, Menu as MenuIcon } from '@mui/icons-material';
 import { Slide } from 'react-awesome-reveal';
-import {BiLogOut,BiLogIn,BiEditAlt} from "react-icons/bi";
-import {BsFillPersonPlusFill} from "react-icons/bs"
+import { BiLogOut, BiLogIn, BiEditAlt } from "react-icons/bi";
+import { BsFillPersonPlusFill } from "react-icons/bs"
 import UserModel from '../../../Models/UserModel';
 
 
@@ -25,7 +25,9 @@ interface HeaderDrawerProps {
 export default function HeaderDrawer(props: HeaderDrawerProps) {
     const childRef = React.useRef<HTMLSpanElement>(null);
     const loggedinUserRef = React.useRef<HTMLSpanElement>(null);
+    const adminRef = React.useRef<HTMLSpanElement>(null);
     const userIconRef = React.useRef<HTMLSpanElement>(null);
+    const adminIconRef = React.useRef<HTMLSpanElement>(null);
     const iconSpanRef = React.useRef<HTMLSpanElement>(null);
     const [state, setState] = React.useState(false);
 
@@ -100,19 +102,54 @@ export default function HeaderDrawer(props: HeaderDrawerProps) {
                         <Divider />
                     </>
                 }
-                {props.user?.isAdmin && <ListItem
-                    disablePadding
-                    onClick={toggleDrawer(false)}
-                    onKeyDown={toggleDrawer(false)}>
-                    <Link to="/manage/admin">
-                        <ListItemButton>
-                            <ListItemIcon>
-                                <BiEditAlt />
-                            </ListItemIcon>
-                            <ListItemText primary="עריכה" />
-                        </ListItemButton>
-                    </Link>
-                </ListItem>}
+                {props.user?.isAdmin &&
+                    <span >
+                        <Divider />
+                        <List>
+                            <ListItem disablePadding
+                                onClick={(e) => handleChild(e, adminRef, adminIconRef)}
+                            >
+                                <ListItemButton >
+                                    <ListItemIcon >
+                                        <span style={{ transition: "all 500ms ease" }} ref={adminIconRef}><KeyboardArrowDown /></span>
+                                    </ListItemIcon>
+                                    <ListItemText primary="עריכה" />
+                                </ListItemButton>
+                            </ListItem>
+                            <span className={"childrenDiv"} ref={adminRef}>
+                                <Slide direction='down' cascade duration={150}>
+                                    <ListItem
+                                        disableGutters
+                                        onClick={toggleDrawer(false)}
+                                        onKeyDown={toggleDrawer(false)}>
+                                        <Link to={"/manage/admin"}>
+                                            <ListItemButton>
+                                                <ListItemIcon>
+                                                    <BiEditAlt />
+                                                </ListItemIcon>
+                                                <ListItemText primary={"עריכת מוצרים"} />
+                                            </ListItemButton>
+                                        </Link>
+                                    </ListItem>
+                                    <ListItem
+                                        disableGutters
+                                        onClick={toggleDrawer(false)}
+                                        onKeyDown={toggleDrawer(false)}>
+                                        <Link to={"/manage/admin/sales"}>
+                                            <ListItemButton>
+                                                <ListItemIcon>
+                                                    <BiEditAlt />
+                                                </ListItemIcon>
+                                                <ListItemText primary={"עריכת מבצעים"} />
+                                            </ListItemButton>
+                                        </Link>
+                                    </ListItem>
+                                </Slide>
+                            </span>
+                        </List>
+                        <Divider />
+                    </span>
+                }
                 {!props.user && <><ListItem
                     disablePadding
                     onClick={toggleDrawer(false)}
@@ -154,7 +191,7 @@ export default function HeaderDrawer(props: HeaderDrawerProps) {
                                         <ListItemText primary={p.name} />
                                     </ListItemButton>
                                 </ListItem>
-                                <span className={"childrenDiv" + p.url.split("/")[p.url.split("/").length - 1]} ref={childRef}>
+                                <span className={"childrenDiv"} ref={childRef}>
                                     <Slide direction='down' cascade duration={150}>
                                         {p.children.map((c, i) => <ListItem
                                             disableGutters

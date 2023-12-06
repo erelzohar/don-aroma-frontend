@@ -8,7 +8,7 @@ export class AuthState {
 
 
 const initialState: AuthState = {
-    user: usersService.checkUserExp(JSON.parse(localStorage.getItem("donaroma")))
+    user: usersService.checkUserExp()
 }
 
 const userReducer = createSlice({

@@ -15,6 +15,10 @@
 }
 .ProductCard .lazyimgDiv{
     min-height: 12rem;
+   
+}
+.ProductCard .lazyimgDiv>*{
+    max-width: 60%;
 }
 .ProductCard .product-div-button{
     display: flex;

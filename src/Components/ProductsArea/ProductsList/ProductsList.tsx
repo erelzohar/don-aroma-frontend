@@ -30,9 +30,9 @@ function ProductsList(): JSX.Element {
         store.dispatch(setProductListDisplay(fixedView));
         gridDiv.current.style.display = nextView;
     };
-    const sortProducts = (products: ProductModel[]): ProductModel[] => {
+    const sortProductsByStock = (products: ProductModel[]): ProductModel[] => {
         if (!products) return;
-        products = productsService.shuffle(products);
+        let tmpProducts = [...products];
         const customSort = (a: ProductModel, b: ProductModel) => {
             if (a.stock === 0) return 1;
             else if (b.stock === 0) return -1;
@@ -41,7 +41,7 @@ function ProductsList(): JSX.Element {
             else return 0;
         };
 
-        const sortedProducts = products.sort(customSort);
+        const sortedProducts = tmpProducts.sort(customSort);
         return sortedProducts.filter(item => item.stock !== 0);
     }
 
@@ -49,7 +49,16 @@ function ProductsList(): JSX.Element {
         productsService.getProducts()
             .then(res => {
                 if (scentCategory) setProducts(res.filter(p => p.scentCategory?._id === scentCategory));
-                else if (category) setProducts(res.filter(p => p.category._id === category));
+                else if (category) setProducts(res.filter(p => p.category._id === category).sort((a, b) => {
+                    if ((!a.sortIndex && b.sortIndex) || (a.sortIndex === 0 && b.sortIndex > 0)) {
+                        return 1;
+                    } else if ((a.sortIndex && !b.sortIndex) || (a.sortIndex > 0 && b.sortIndex === 0)) {
+                        return -1;
+                    } else if ((!a.sortIndex && !b.sortIndex) || (a.sortIndex === 0 && b.sortIndex === 0)) {
+                        return 0;
+                    }
+                    return a.sortIndex - b.sortIndex;
+                }));
                 else setProducts(res);
             });
     }, [params]);
@@ -72,7 +81,7 @@ function ProductsList(): JSX.Element {
             </div>
             <div className={productsState.length > 0 ? "ProductsListGrid" : ""} ref={gridDiv} style={{ display: view }}>
                 {productsState.length === 0 && <Loader />}
-                {sortProducts(productsState).map((p, i) => view === "grid" ? <ProductCard key={i} {...p} /> : <HorizonalProduct key={i} {...p} />)}
+                {sortProductsByStock(productsState).map((p, i) => <span key={i}>{view === "grid" ? <ProductCard {...p} /> : <HorizonalProduct {...p} />}</span>)}
             </div>
         </div>
     );
