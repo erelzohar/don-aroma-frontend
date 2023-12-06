@@ -8,6 +8,7 @@ import notify from "../../../Services/Notify";
 import store from "../../../Redux/Store";
 import { userLoggedIn } from "../../../Redux/Reducers/user.slice";
 import { Link, useNavigate } from "react-router-dom";
+import usersService from "../../../Services/Users";
 
 
 
@@ -54,6 +55,7 @@ function Register(): JSX.Element {
             const userToRegister = new UserModel(data);
             const res = await axios.post<UserModel>(globals.registerUrl, UserModel.convertToFormData(userToRegister));
             store.dispatch(userLoggedIn(res.data));
+            usersService.SaveUserLocal(res.data);
             notify.success('!נרשמת בהצלחה');
             navigate("/");
         }
