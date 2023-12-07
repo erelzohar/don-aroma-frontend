@@ -64,6 +64,9 @@ function PaymentTest(props: Props): JSX.Element {
             props.data.phone,
             props.data.email
         );
+        store.getState().cartState.items.forEach(i => {
+            order.products.push({ product: i.product._id, quantity: i.quantity });
+        })
         cartService.getPaymentFormURL(
             props.data.firstName + " " + props.data.lastName,
             props.data.phone,

@@ -1,3 +1,5 @@
+import ProductModel from "./ProductModel";
+
 export class OrderModel {
     public transactionId: string;
     public orderNumber: string;
@@ -10,6 +12,10 @@ export class OrderModel {
     public phone: string;
     public email: string;
     public orderDate: number;
+    public products: {
+        product: string | ProductModel,
+        quantity: number
+    }[];
     public done: boolean;
     constructor(
         orderNumber: string,
@@ -35,5 +41,6 @@ export class OrderModel {
         this.email = email;
         this.orderDate = orderDate;
         this.done = done;
+        this.products=[];
     }
 }
