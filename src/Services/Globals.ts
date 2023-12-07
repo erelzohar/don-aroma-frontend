@@ -18,7 +18,7 @@ class ProductionGlobals extends Globals {
     public loginUrl = "https://polar-garden-74885-12cdd1b0d0eb.herokuapp.com/api/auth/login";
     public productsUrl = "https://polar-garden-74885-12cdd1b0d0eb.herokuapp.com/api/products";
     public messagesUrl = "https://polar-garden-74885-12cdd1b0d0eb.herokuapp.com/api/message";
-    public paymentUrl = "https://secure.meshulam.co.il/";
+    public paymentUrl = "https://polar-garden-74885-12cdd1b0d0eb.herokuapp.com/api/meshulam-test";
 
 }
 

@@ -36,6 +36,7 @@ const NumberInput = React.forwardRef(function CustomNumberInput(
 interface StateProps {
   changeHandler: (num: number) => boolean;
   startVal?: number;
+  maxVal?: number;
 }
 export default function QuantityInput(props: StateProps) {
   const startVal = props.startVal ? props.startVal : 1;
@@ -47,7 +48,12 @@ export default function QuantityInput(props: StateProps) {
   }, [props]);
 
 
-  return <NumberInput dir='ltr' aria-label="Quantity Input" min={1} max={99} value={val} onChange={(e, value) => { props.changeHandler(value) && setVal(value) }} />;
+  return <>
+    <NumberInput dir='ltr' readOnly aria-label="Quantity Input" min={1} max={props.maxVal ? props.maxVal : 99} value={val} onChange={(e, value) => { props.changeHandler(value) && setVal(value) }} />
+    {props.maxVal && <div style={{textAlign:'center'}}>
+      {`${props.maxVal} יחידות במלאי`}
+    </div>}
+  </>;
 }
 
 const blue = {

@@ -57,9 +57,9 @@ class CartService {
         try {
             const formRequest = new FormData();
             formRequest.append("sum", sum.toString());
-            formRequest.append("successUrl", "http://donaroma-il.com/auth/register");
+            formRequest.append("successUrl", "http://donaroma-il.com/cart");
             formRequest.append("description", 'Don aroma');
-            formRequest.append("cancelUrl", "http://donaroma-il.com/auth/login");
+            formRequest.append("cancelUrl", "http://donaroma-il.com/cart");
             formRequest.append("pageCode", pageCode);
             formRequest.append("orderJSON", orderJSON);
             formRequest.append("fullName", fullName);

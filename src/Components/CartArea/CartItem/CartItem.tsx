@@ -44,7 +44,7 @@ function CartItem(props: Props): JSX.Element {
                     <Link to={"/specs/" + props.item.product._id}>
                         <p className="productsName"> {props.item.product.name}</p>
                     </Link>
-                    <span style={{ cursor: 'pointer', color: 'red', textAlign: 'center', padding: '1rem 0 0 0', fontFamily: 'cursive', fontWeight: 'bold' }} onClick={removeFromCart}>x</span>
+                    <span style={{ cursor: 'pointer', color: 'red', textAlign: 'center', padding: '1rem 0 0 0', fontWeight: 'bold' }} onClick={removeFromCart}>x</span>
                 </div>
                 <div className="inner-flex">
                     <div className="imageDiv">
@@ -68,7 +68,7 @@ function CartItem(props: Props): JSX.Element {
                         </div>
                     </div>
                     <span className="quantitySpan">
-                        <QuantityInput changeHandler={numberChangeHandler} startVal={props.item.quantity} />
+                        <QuantityInput maxVal={props.item.product.stock ? props.item.product.stock : 99} changeHandler={numberChangeHandler} startVal={props.item.quantity} />
                     </span>
                 </div>
             </div>

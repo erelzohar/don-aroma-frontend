@@ -105,7 +105,7 @@ function AddToCartForm(props: Props): JSX.Element {
                     </FormControl>
                 </div>}
                 <div className="quantity">
-                    <QuantityInput changeHandler={(val: number) => { setQuantity(val); return true }} />
+                    <QuantityInput maxVal={props.product.stock ? props.product.stock : 99} changeHandler={(val: number) => { setQuantity(val); return true }} />
                 </div>
             </div>
             <span ref={spanErrorRef} style={{ color: 'red' }}></span>
