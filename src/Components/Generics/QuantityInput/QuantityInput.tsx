@@ -48,12 +48,12 @@ export default function QuantityInput(props: StateProps) {
   }, [props]);
 
 
-  return <>
+  return <span>
     <NumberInput dir='ltr' readOnly aria-label="Quantity Input" min={1} max={props.maxVal ? props.maxVal : 99} value={val} onChange={(e, value) => { props.changeHandler(value) && setVal(value) }} />
-    {props.maxVal && <div style={{textAlign:'center'}}>
-      {`${props.maxVal} יחידות במלאי`}
+    {props.maxVal && <div style={{textAlign:'center',fontSize:'small'}}>
+      {props.maxVal > 1 ? `${props.maxVal} יחידות במלאי` : <span style={{color:'red'}}>נותרה יחידה אחרונה</span>}
     </div>}
-  </>;
+  </span>;
 }
 
 const blue = {

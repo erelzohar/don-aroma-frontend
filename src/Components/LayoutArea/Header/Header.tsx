@@ -82,8 +82,8 @@ const drawerPages: HeaderDrawerChild[] = [
     },
     {
         name: "ניחוחות",
-        url: "/products/650acfabc4c0c3b0a4da8ad3",
-        children: []
+        url: "",
+        children: [{ name: 'כל הניחוחות', url: "/products/650acfabc4c0c3b0a4da8ad3" }]
     },
     {
         name: "דף הבית",
