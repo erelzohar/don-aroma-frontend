@@ -66,7 +66,9 @@ function PaymentTest(props: Props): JSX.Element {
         );
         store.getState().cartState.items.forEach(i => {
             order.products.push({ product: i.product._id, quantity: i.quantity });
-        })
+        });
+        console.log(order);
+        
         cartService.getPaymentFormURL(
             props.data.firstName + " " + props.data.lastName,
             props.data.phone,
@@ -76,6 +78,8 @@ function PaymentTest(props: Props): JSX.Element {
             JSON.stringify(order)
         )
             .then(res => {
+                console.log(res);
+                
                 if (iframeRef.current) iframeRef.current.src = res;
             })
     }, [])

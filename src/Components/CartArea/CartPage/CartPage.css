@@ -65,6 +65,7 @@
   text-align: center;
   justify-content: center;
   align-items: center;
+  user-select: all;
 }
 .CartPage .topSpan {
   display: flex;

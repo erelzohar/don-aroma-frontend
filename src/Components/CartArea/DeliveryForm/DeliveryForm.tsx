@@ -8,8 +8,6 @@ import { Link } from "react-router-dom";
 import { useAppSelector } from "../../../Redux/Store";
 import 'dayjs/locale/he';
 import { CartState } from "../../../Redux/Reducers/cart.slice";
-import PaymentTest from "../PaymentTest/PaymentTest";
-import { useState } from "react";
 import bitLogo from "../../../Assets/Images/Bit_logo.svg.png"
 import { FaApple } from "react-icons/fa";
 
@@ -41,7 +39,7 @@ const schema = yup
     .shape({
         firstName: yup.string().max(100, "ערך לא תקין").min(2, "מינימום 2 תווים").required("שדה זה הינו שדה חובה"),
         lastName: yup.string().max(100, "ערך לא תקין").min(2, "מינימום 2 תווים").required("שדה זה הינו שדה חובה"),
-        phone: yup.string().max(12).min(8, "מינימום 8 תווים").required("שדה זה הינו שדה חובה"),
+        phone: yup.string().max(10).min(10, "טלפון לא תקין ").required("שדה זה הינו שדה חובה"),
         email: yup.string().email("אימייל לא תקין").required("שדה זה הינו שדה חובה"),
         city: yup.string().max(100, "ערך לא תקין").min(2, "מינימום 2 תווים").required("שדה זה הינו שדה חובה"),
         delivery: yup.string().required(),
@@ -52,8 +50,6 @@ const schema = yup
 
 function DeliveryForm(props: CartFormProps): JSX.Element {
     const user = useAppSelector(state => state.authState.user);
-    // const [formData, setFormData] = useState<DeliveryFormI>(null);
-    // const [pageCode, setPageCode] = useState<string>(null);
     const deliveries = [
         {
             type: "express",
@@ -75,9 +71,7 @@ function DeliveryForm(props: CartFormProps): JSX.Element {
 
     const submit: SubmitHandler<DeliveryFormI> = async data => {
         try {
-            console.log(props.delivery);
             props.setFormData(data);
-            console.log(data);
             props.setStep(1);
         }
         catch (err: any) {

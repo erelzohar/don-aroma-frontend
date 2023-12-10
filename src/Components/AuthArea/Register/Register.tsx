@@ -1,5 +1,5 @@
 import { Resolver, SubmitHandler, useForm } from "react-hook-form";
-import { Box, Button, Modal, TextField, Typography } from "@mui/material";
+import { Box, Button, InputAdornment, Modal, TextField, Typography } from "@mui/material";
 import axios from 'axios';
 import UserModel from "../../../Models/UserModel";
 import globals from '../../../Services/Globals';
@@ -33,7 +33,7 @@ const resolver: Resolver<UserModel> = async (values) => {
                         type: 'required',
                         message: 'מינימום 6 תווים   .',
                     }
-                } : !values.phone || values.phone.length < 8 || values.phone[0] !== "0" ? {
+                } : !values.phone || values.phone.length !== 8 ? {
                     phone: {
                         type: 'required',
                         message: 'טלפון לא תקין  .',
@@ -53,6 +53,7 @@ function Register(): JSX.Element {
     const submit: SubmitHandler<UserModel> = async data => {
         try {
             const userToRegister = new UserModel(data);
+            userToRegister.phone = '05'+userToRegister.phone;
             const res = await axios.post<UserModel>(globals.registerUrl, UserModel.convertToFormData(userToRegister));
             store.dispatch(userLoggedIn(res.data));
             usersService.SaveUserLocal(res.data);
@@ -93,7 +94,20 @@ function Register(): JSX.Element {
                     <form className="modalForm" id="login-form" noValidate onSubmit={handleSubmit(submit)}>
                         <TextField dir="rtl" required margin="normal" {...register("firstName")} error={errors.firstName ? true : false} helperText={errors.firstName?.message} label="שם פרטי" variant="outlined" />
                         <TextField dir="rtl" required margin="normal" {...register("lastName")} error={errors.lastName ? true : false} helperText={errors.lastName?.message} label="שם משפחה" variant="outlined" />
-                        <TextField required margin="normal" type="tel" dir="ltr" {...register("phone")} error={errors.phone ? true : false} helperText={errors.phone?.message} label="טלפון" variant="outlined" />
+                        <TextField
+                            required
+                            margin="normal"
+                            type="tel"
+                            dir="ltr"
+                            {...register("phone")}
+                            error={errors.phone ? true : false}
+                            helperText={errors.phone?.message}
+                            label="טלפון"
+                            variant="outlined"
+                            InputProps={{
+                                startAdornment: <InputAdornment sx={{ margin: 0,fontWeight:'bold',color:'black' }} disableTypography position="start">05</InputAdornment>,
+                            }}
+                        />
                         <TextField required margin="normal" type="email" dir="ltr" {...register("email")} error={errors.email ? true : false} helperText={errors.email?.message} label="אימייל" variant="outlined" />
                         <TextField required margin="normal" type="password" dir="ltr" {...register("password")} error={errors.password ? true : false} helperText={errors.password?.message} label="סיסמא" variant="outlined" />
                         <Button sx={{ margin: "1rem", padding: '0.5rem 2rem 0.5rem 2rem', borderRadius: '20px' }} variant="contained" color="success" type="submit">שליחה</Button>

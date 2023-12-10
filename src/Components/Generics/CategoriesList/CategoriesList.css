@@ -9,6 +9,7 @@
     overflow-x: auto;
     justify-content: center;
     min-height: 25vh;
+    overflow: hidden;
 }
 @media screen and (max-width:1005px){
     .CategoriesList{
