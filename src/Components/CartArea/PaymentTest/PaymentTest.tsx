@@ -3,7 +3,6 @@ import { DeliveryFormI } from "../DeliveryForm/DeliveryForm";
 import "./PaymentTest.css";
 import cartService from "../../../Services/Cart";
 import { Dialog, DialogContent } from "@mui/material";
-import Loader from "../../Generics/Loader/Loader";
 import notify from "../../../Services/Notify";
 import store from "../../../Redux/Store";
 import { resetCartState } from "../../../Redux/Reducers/cart.slice";
@@ -64,10 +63,7 @@ function PaymentTest(props: Props): JSX.Element {
             props.data.phone,
             props.data.email
         );
-        store.getState().cartState.items.forEach(i => {
-            order.products.push({ product: i.product._id, quantity: i.quantity });
-        });
-        console.log(order);
+        order.items = store.getState().cartState.items;        
         
         cartService.getPaymentFormURL(
             props.data.firstName + " " + props.data.lastName,

@@ -10,6 +10,7 @@ import 'dayjs/locale/he';
 import { CartState } from "../../../Redux/Reducers/cart.slice";
 import bitLogo from "../../../Assets/Images/Bit_logo.svg.png"
 import { FaApple } from "react-icons/fa";
+import cartService from "../../../Services/Cart";
 
 
 interface CartFormProps {
@@ -67,10 +68,11 @@ function DeliveryForm(props: CartFormProps): JSX.Element {
 
 
 
-    const { register, handleSubmit, formState: { errors, isValid, isSubmitSuccessful } } = useForm({ resolver: yupResolver(schema), mode: 'onBlur' });
+    const { register, handleSubmit, formState: { errors, isValid } } = useForm({ resolver: yupResolver(schema), mode: 'onBlur' });
 
     const submit: SubmitHandler<DeliveryFormI> = async data => {
         try {
+            if (!(await cartService.refreshStock())) return;
             props.setFormData(data);
             props.setStep(1);
         }

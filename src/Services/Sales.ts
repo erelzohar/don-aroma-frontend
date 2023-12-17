@@ -1,4 +1,3 @@
-
 import CartItemModel from "../Models/CartItemModel";
 import SaleModel from "../Models/SaleModel";
 import { addSale, deleteSale, setSales, updateSale } from "../Redux/Reducers/sales.slice";
@@ -13,7 +12,11 @@ class SalesService {
             if (store.getState().salesState.sales.length > 0) {
                 return store.getState().salesState.sales;
             }
+            console.log(store.getState().salesState.sales.length);
+            
             const response = await jwtAxios.get<SaleModel[]>(globals.productsUrl + "/sales");
+            console.log(response.data);
+            
             store.dispatch(setSales(response.data));
             return response.data;
         }

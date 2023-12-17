@@ -5,7 +5,7 @@ import * as yup from "yup";
 import ProductModel from "../../../Models/ProductModel";
 import notify from "../../../Services/Notify";
 import globals from "../../../Services/Globals";
-import store, { useAppSelector } from "../../../Redux/Store";
+import { useAppSelector } from "../../../Redux/Store";
 import { Button, Dialog, DialogContent, DialogTitle, FormControl, FormControlLabel, FormLabel, IconButton, InputLabel, MenuItem, Radio, RadioGroup, Select, SelectChangeEvent, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import productsService from "../../../Services/Products";
@@ -42,7 +42,7 @@ interface InitialState {
     productLevel: number
     categories: CategoryModel[]
     scentCategories: CategoryModel[]
-    allSales: SaleModel[]
+    sales: SaleModel[]
     open: boolean
     imagesToPost?: File[]
     productImageNames: string[]
@@ -53,7 +53,9 @@ interface InitialState {
 }
 function ProductForm(props: ProductFormProps): JSX.Element {
     const [productToEdit, setProductToEdit] = useState(props?.product ? props.product : new ProductModel());
-
+    const allSales = useAppSelector(state=>state.salesState.sales);
+    const allCategories = useAppSelector(state=>state.productsState.categories);
+    const allScentCategories = useAppSelector(state=>state.productsState.scentCategories);
     const initiateState = (product: ProductModel) => {
         const initialState: InitialState = {
             productCategory: product.category ? product.category._id : '',
@@ -64,9 +66,9 @@ function ProductForm(props: ProductFormProps): JSX.Element {
             scentToPush: '',
             colorToPush: '',
             productColors: product.colors ? product.colors : [],
-            categories: store.getState().productsState.categories,
-            scentCategories: store.getState().productsState.scentCategories,
-            allSales: store.getState().salesState.sales,
+            categories: allCategories,
+            scentCategories:allScentCategories,
+            sales: allSales,
             open: false,
             isLoading: false,
             productImageNames: product.images ? product.images : [],
@@ -75,7 +77,7 @@ function ProductForm(props: ProductFormProps): JSX.Element {
         }
         return initialState;
     }
-    const [{ productImageNames, allSales, productSales, imagesToPost, imagesToDelete, isLoading, productCategory, colorToPush, scentToPush, productScents, productColors, ProductScentCategory, productLevel, categories, scentCategories, open }, setState] = useState(initiateState(productToEdit));
+    const [{ productImageNames, sales, productSales, imagesToPost, imagesToDelete, isLoading, productCategory, colorToPush, scentToPush, productScents, productColors, ProductScentCategory, productLevel, categories, scentCategories, open }, setState] = useState(initiateState(productToEdit));
     const fixSelectOption = (pruductCurrentSales: SaleModel[], all: SaleModel[]) => {
         const fixedSales = [...all];
         pruductCurrentSales.forEach(s => {
@@ -97,9 +99,12 @@ function ProductForm(props: ProductFormProps): JSX.Element {
         reset();
         setProductToEdit(props?.product ? props.product : new ProductModel());
         setState(initiateState(props?.product ? props.product : new ProductModel()));
-        if (allSales.length === 0) salesService.getSales().then(res => { setState(prevState => ({ ...prevState, allSales: res })) });
-        if (categories.length === 0) productsService.getCategories().then(res => { setState(prevState => ({ ...prevState, categories: res })) });
-        if (scentCategories.length === 0) productsService.getScentCategories().then(res => { setState(prevState => ({ ...prevState, scentCategories: res })) });
+        console.log(allSales);
+        console.log(categories);
+        
+        if (sales.length === 0) salesService.getSales();
+        if (categories.length === 0) productsService.getCategories();
+        if (scentCategories.length === 0) productsService.getScentCategories();
     }, [props]);
 
     const handleScentDelete = (event: React.MouseEvent<HTMLButtonElement>, index: number) => {

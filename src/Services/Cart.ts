@@ -1,7 +1,8 @@
 import CartAction from "../Models/CartActionModel";
 import CartItemModel from "../Models/CartItemModel";
-import { CartState, addItem } from "../Redux/Reducers/cart.slice";
-import { updateProduct } from "../Redux/Reducers/products.slice";
+import ProductModel from "../Models/ProductModel";
+import { CartState, addItem, deleteItem, updateItem } from "../Redux/Reducers/cart.slice";
+import { setProducts, updateProduct } from "../Redux/Reducers/products.slice";
 import store from "../Redux/Store";
 import globals from "./Globals";
 import jwtAxios from "./JwtAxios";
@@ -52,7 +53,29 @@ class CartService {
         }
         return totalPrice
     }
-
+    public async refreshStock (){
+        const response = await jwtAxios.get<ProductModel[]>(globals.productsUrl);
+        const products = response.data;
+        store.dispatch(setProducts(products));
+        let isChanged = false;
+        store.getState().cartState.items.forEach(i=>{
+            const updatedStock = products.find(p=>p._id===i.product._id).stock;
+            if (updatedStock<i.quantity){
+                isChanged=true;
+                if (updatedStock ===0) store.dispatch(deleteItem());
+                else {
+                    const newItem = {...i};
+                    newItem.quantity = updatedStock;
+                    store.dispatch(updateItem(newItem));
+                }
+            }
+        });
+        if (isChanged) {
+            notify.custom('חלק מהמוצרים שרצית אזלו , אנא שים לב לשינויים');
+            return false;
+        }
+        return true;
+    }
     public async getPaymentFormURL(fullName: string, phone: string, email: string, sum: number, pageCode: string, orderJSON: string) {
         try {
             const formRequest = new FormData();

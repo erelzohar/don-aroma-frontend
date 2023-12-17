@@ -1,9 +1,8 @@
 import { useState } from "react";
 import "./CartForms.css";
-import { Box, Step, StepLabel, Stepper, TextField } from "@mui/material";
+import { Box, Step, StepLabel, Stepper } from "@mui/material";
 import DeliveryForm, { DeliveryFormI } from "../DeliveryForm/DeliveryForm";
 import { useAppSelector } from "../../../Redux/Store";
-import PaymentForm from "../PaymentForm/PaymentForm";
 import PaymentTest from "../PaymentTest/PaymentTest";
 import cartService from "../../../Services/Cart";
 
@@ -34,11 +33,6 @@ function CartForms(): JSX.Element {
             </Box>
             {step === 0 && <DeliveryForm totalSum={totalPrice} delivery={delivery} setDelivery={setDelivery} cartState={cartState} setStep={setStep} setFormData={setFormData} setPageCode={setPageCode} />}
             {step === 1 && <PaymentTest totalPrice={totalPrice} delivery={delivery} data={formData} pageCode={pageCode} setStep={setStep} />}
-            {/* {step === 2 &&
-                <div className="sumUp">
-                    <h1>תודה על קנייתך !</h1>
-                </div>
-            } */}
             {step < 2 && <div className="priceDiv">
                 {(delivery === "express" || delivery === "regular") && <p><span className="bigandstorng">משלוח :</span>{delivery === "express" ? "50" : delivery === "regular" && totalPrice < 200 ? "35" : "0"}&#8362;</p>}
                 <p><span className="bigandstorng">סה"כ :</span>{(totalPrice * 0.83).toFixed(2)}&#8362;</p>

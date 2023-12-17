@@ -9,6 +9,7 @@ import ContactUs from "../../Generics/ContactUs/ContactUs";
 import { useAppSelector } from "../../../Redux/Store";
 import clockGif from "../../../Assets/Images/clock.gif";
 import messagesService from "../../../Services/Messages";
+import salesService from "../../../Services/Sales";
 
 
 
@@ -16,10 +17,14 @@ import messagesService from "../../../Services/Messages";
 function Home(): JSX.Element {
     const products = useAppSelector(state => state.productsState.products);
     const messages = useAppSelector(state => state.messagesState.messages);
+    const sales = useAppSelector(state => state.salesState.sales);
+
 
     useEffect(() => {
         if (products.length === 0) productsService.getProducts();
-        if (messages.length === 0) messagesService.getMessages();
+        if (messages.length === 0) messagesService.getMessages();  
+        if (sales.length === 0) salesService.getSales();
+
     }, []);
     return (
         <div className="Home">

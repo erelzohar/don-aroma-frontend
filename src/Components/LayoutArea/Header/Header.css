@@ -1,7 +1,7 @@
 
 .logo{
     width:100%;
-
+    max-width: 50vw;
 }
 .header-links{
     color: rgb(30, 29, 29);
@@ -31,7 +31,7 @@
         bottom: 0;
     }
 }
-@media screen and (max-width:899px){
+@media screen and (max-width:899.5px){
     .toolbar-flex{
         flex-direction: row;
         direction: rtl;

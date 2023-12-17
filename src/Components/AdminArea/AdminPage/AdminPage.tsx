@@ -3,13 +3,12 @@ import { useAppSelector } from "../../../Redux/Store";
 import { useEffect } from "react";
 import productsService from "../../../Services/Products";
 import AdminMessages from "../AdminMessages/AdminMessages";
+import salesService from "../../../Services/Sales";
 
 function AdminPage(): JSX.Element {
-    const products = useAppSelector(state => state.productsState.products)
+    const products = useAppSelector(state => state.productsState.products);
     useEffect(() => {
-        if (products.length === 0) {
-            productsService.getProducts()
-        }
+        if (products.length === 0) productsService.getProducts();
     }, [products])
     return (
         <div className="AdminPage">
