@@ -77,6 +77,8 @@ function DeliveryForm(props: CartFormProps): JSX.Element {
             props.setStep(1);
         }
         catch (err: any) {
+            console.log(err);
+            
             notify.error(err);
         }
     }

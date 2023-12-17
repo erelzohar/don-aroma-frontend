@@ -59,19 +59,20 @@ class CartService {
         store.dispatch(setProducts(products));
         let isChanged = false;
         store.getState().cartState.items.forEach(i=>{
-            const updatedStock = products.find(p=>p._id===i.product._id).stock;
-            if (updatedStock<i.quantity){
+            const updatedProduct = products.find(p=>p._id===i.product._id);
+            if (updatedProduct.stock<i.quantity){
                 isChanged=true;
-                if (updatedStock ===0) store.dispatch(deleteItem());
-                else {
+                if (updatedProduct.stock ===0) store.dispatch(deleteItem(i));
+                else {                    
                     const newItem = {...i};
-                    newItem.quantity = updatedStock;
+                    newItem.product = updatedProduct;
+                    newItem.quantity = updatedProduct.stock;
                     store.dispatch(updateItem(newItem));
                 }
             }
         });
         if (isChanged) {
-            notify.custom('חלק מהמוצרים שרצית אזלו , אנא שים לב לשינויים');
+            notify.custom('חלק מהמוצרים שרצית אזלו - אנא שים לב לשינויים');
             return false;
         }
         return true;
