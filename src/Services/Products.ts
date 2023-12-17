@@ -65,7 +65,7 @@ class ProductsService {
             notify.error(err);
         }
     }
-    public async upsertProduct(productToUpsert: ProductModel, images: File[], imagesToDelete: string[] = null, shouldUpdate: boolean = true) {
+    public async upsertProduct(productToUpsert: ProductModel, images: File[]=null, imagesToDelete: string[] = null, shouldUpdate: boolean = true) {
         try {
             if (images?.length === 0) images = null;
             const formData = ProductModel.convertToFormData(productToUpsert, images, imagesToDelete);

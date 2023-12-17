@@ -2,11 +2,12 @@ import CartAction from "../Models/CartActionModel";
 import CartItemModel from "../Models/CartItemModel";
 import ProductModel from "../Models/ProductModel";
 import { CartState, addItem, deleteItem, updateItem } from "../Redux/Reducers/cart.slice";
-import { setProducts, updateProduct } from "../Redux/Reducers/products.slice";
+import { setProducts } from "../Redux/Reducers/products.slice";
 import store from "../Redux/Store";
 import globals from "./Globals";
 import jwtAxios from "./JwtAxios";
 import notify from "./Notify";
+import productsService from "./Products";
 
 class CartService {
 
@@ -70,11 +71,17 @@ class CartService {
                     store.dispatch(updateItem(newItem));
                 }
             }
+            else{
+                const productToUpdate = {...updatedProduct};
+                productToUpdate.stock = productToUpdate.stock-i.quantity;
+                productsService.upsertProduct(productToUpdate);
+            }
         });
         if (isChanged) {
             notify.custom('חלק מהמוצרים שרצית אזלו - אנא שים לב לשינויים');
             return false;
         }
+
         return true;
     }
     public async getPaymentFormURL(fullName: string, phone: string, email: string, sum: number, pageCode: string, orderJSON: string) {
