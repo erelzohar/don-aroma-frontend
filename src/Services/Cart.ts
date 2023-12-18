@@ -71,11 +71,6 @@ class CartService {
                     store.dispatch(updateItem(newItem));
                 }
             }
-            else{
-                const productToUpdate = {...updatedProduct};
-                productToUpdate.stock = productToUpdate.stock-i.quantity;
-                productsService.upsertProduct(productToUpdate);
-            }
         });
         if (isChanged) {
             notify.custom('חלק מהמוצרים שרצית אזלו - אנא שים לב לשינויים');
