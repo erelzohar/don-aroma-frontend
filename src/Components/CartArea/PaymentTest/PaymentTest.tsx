@@ -38,6 +38,7 @@ function PaymentTest(props: Props): JSX.Element {
                     }
                     case 'payment': {
                         if (result.data.status === 1) {
+                            cartService.refreshStock();
                             store.dispatch(resetCartState());
                             setOpen(false);
                             props.setStep(2);
