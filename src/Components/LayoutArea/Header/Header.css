@@ -23,8 +23,10 @@
     cursor: pointer;
 }
 .toolbar-flex{
+    display: flex;
     justify-content: center;
     flex-direction:column ;
+    transition: all 500ms ease;
 }
 @media screen and (max-width:1200px){
     .logo{

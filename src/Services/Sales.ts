@@ -12,11 +12,8 @@ class SalesService {
             if (store.getState().salesState.sales.length > 0) {
                 return store.getState().salesState.sales;
             }
-            console.log(store.getState().salesState.sales.length);
             
-            const response = await jwtAxios.get<SaleModel[]>(globals.productsUrl + "/sales");
-            console.log(response.data);
-            
+            const response = await jwtAxios.get<SaleModel[]>(globals.productsUrl + "/sales");            
             store.dispatch(setSales(response.data));
             return response.data;
         }
@@ -57,21 +54,29 @@ class SalesService {
             notify.error(err);
         }
     }
-
-    // public async calcSales(cartItems: CartItemModel[]) {
-    //     const sales =  await salesService.getSales();
-    //     let sum = 0;
-    //     const salesSum = [];
-    //     cartItems.forEach(c=>{
-    //         c.product.sales.forEach(s=>{
-    //             let index = sales.findIndex(ss=>s._id===ss._id);
-    //             if (sales[index]) salesSum.push(sales[index])
-    //             else sales[index].quantity=1;
-    //         })
-    //     })
-    //     console.log(sales);
-        
-    // }
+    
+    public async calcSales(cartItems: CartItemModel[]) {
+        const sales =  await salesService.getSales();
+        let discount = 0;
+        let salesString = '';
+        const salesSum = [];
+        cartItems.forEach(c=>{
+            c.product.sales.forEach(s=>{
+                let index = sales.findIndex(ss=>s._id===ss._id);
+                if (sales[index]) {
+                    const current = sales[index];
+                    if (current.type==='plus'){
+                        const buyQunatity = +current.saleData.split('+')[0];
+                        const giftQunatity = +current.saleData.split('+')[1];
+                        const cartItemQuantity = c.quantity;
+                        if (cartItemQuantity>=buyQunatity){
+                            salesString = salesString + (salesString!=='' ? ',' : '') + c.product.name + " - " + current.name;
+                        }
+                    }
+                }
+            })
+        })        
+    }
 }
 
 const salesService = new SalesService();

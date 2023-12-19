@@ -6,6 +6,7 @@ import ProductModel from "../../../Models/ProductModel";
 import CartItemModel from "../../../Models/CartItemModel";
 import QuantityInput from "../../Generics/QuantityInput/QuantityInput";
 import cartService from "../../../Services/Cart";
+import store from "../../../Redux/Store";
 
 interface Props {
     product: ProductModel;
@@ -35,7 +36,7 @@ function AddToCartForm(props: Props): JSX.Element {
 
     const submit = () => {
 
-        if ((props.product?.colors?.length > 0 && color === '') || (props.product?.scents?.length > 0 && scent === '')) {
+        if ((props.product?.colors?.length > 0 && color === '') || ((props.product?.scents?.length > 0 || props.product?.category._id === "650adc37c4c0c3b0a4da8aec") && scent === '')) {
             if (spanErrorRef.current) {
                 spanErrorRef.current.textContent = "אנא מלא את פרטי המוצר";
             }
@@ -64,21 +65,24 @@ function AddToCartForm(props: Props): JSX.Element {
     }
     return (
         <div className="AddToCartForm">
+            {props.product?.scents.length > 0 && <div className="scents">
+                <FormControl fullWidth sx={{ minWidth: '75px' }} margin="normal">
+                    <InputLabel id="demo-simple-scent-label">ניחוח </InputLabel>
+                    <Select
+                        labelId="demo-simple-scent-label"
+                        id="demo-simple-scent"
+                        label="ניחוח "
+                        onChange={handleScentChange}
+                        value={scent}
+                    >
+                        {props.product?.scents[0] !== '***' && props.product.scents.map((c, i) => <MenuItem key={i} value={c}>{c}</MenuItem>)}
+                        {props.product?.scents[0] === '***' && store.getState().productsState.products.map((c, i) => c.level && <MenuItem key={i} value={c.name.replace("שמן למפיץ ריח -", "") ? c.name.replace("שמן למפיץ ריח -", "") : c.name}>
+                            {c.name.replace("שמן למפיץ ריח -", "") ? c.name.replace("שמן למפיץ ריח -", "") : c.name}
+                        </MenuItem>)}
+                    </Select>
+                </FormControl>
+            </div>}
             <div className="productPicker">
-                {props.product?.scents.length > 0 && <div className="scents">
-                    <FormControl fullWidth sx={{ minWidth: '75px' }} margin="normal">
-                        <InputLabel id="demo-simple-scent-label">ניחוח </InputLabel>
-                        <Select
-                            labelId="demo-simple-scent-label"
-                            id="demo-simple-scent"
-                            label="ניחוח "
-                            onChange={handleScentChange}
-                            value={scent}
-                        >
-                            {props.product.scents.map((c, i) => <MenuItem key={i} value={c}>{c}</MenuItem>)}
-                        </Select>
-                    </FormControl>
-                </div>}
                 {props.product?.colors.length > 0 && <div className="colorsContainer">
                     <p>צבע המכשיר</p>
                     <div className="colorsDiv">

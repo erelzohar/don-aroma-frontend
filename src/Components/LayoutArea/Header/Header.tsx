@@ -8,7 +8,7 @@ import { AiFillInstagram, AiFillHome, AiFillGift, AiOutlineWechat } from "react-
 import { RiWhatsappFill } from "react-icons/ri";
 import { FaAirFreshener, FaBusinessTime, FaQuestion, FaShoppingBag } from "react-icons/fa";
 import DropDownMenu, { dropDownProps } from '../../Generics/DropDownMenu/DropDownMenu';
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import productsService from "../../../Services/Products";
 import { useAppSelector } from "../../../Redux/Store";
 import UserSettings from "../../Generics/UserSettings/UserSettings";
@@ -115,8 +115,25 @@ const drawerPages: HeaderDrawerChild[] = [
 function Header(): JSX.Element {
 
     const user = useAppSelector(state => state.authState.user);
+    const [isHiding, setIsHiding] = useState(false);
+    const [scrollY, setScrollY] = useState(0);
+    const scrollHandler = () => {
+        setScrollY(prevState => {
+            const diff = window.scrollY - prevState;
+            if ((diff >= 4) || (diff <= -4)) {
+                if (window.scrollY > prevState && !isHiding) {
+                    setIsHiding(true);
+                }
+                else if (window.scrollY < prevState) {
+                    setIsHiding(false);
+                }
+            }
+            return window.scrollY;
+        });
+    }
 
     useEffect(() => {
+        window.addEventListener('scroll', scrollHandler, { passive: true });
         let index = drawerPages.findIndex(p => p.children);
         productsService.getScentCategories()
             .then(res => {
@@ -126,21 +143,27 @@ function Header(): JSX.Element {
                     drawerPages[index].children.push(obj);
                 })
             })
+        return () => {
+            window.removeEventListener('scroll', scrollHandler);
+        }
     }, [])
 
     return (
-        <AppBar color='inherit' enableColorOnDark>
-            <Container maxWidth="xl" disableGutters>
-                <Toolbar className='toolbar-flex' disableGutters>
+        <AppBar color='inherit' enableColorOnDark >
+            <Container maxWidth="xl" disableGutters >
+                <Toolbar className='toolbar-flex' disableGutters >
                     <Box
                         sx={{
+                            maxHeight: (isHiding ? '0px' : '500vh'),
                             display: { xs: 'none', md: 'block' },
                             position: "absolute",
                             right: '0',
                             top: '1vh',
                             marginRight: '1vw',
                             fontSize: 'medium',
-                            fontFamily: 'sans-serif'
+                            fontFamily: 'sans-serif',
+                            transition: 'all 200ms',
+                            transform: (isHiding ? "translateY(-30vh)" : "translateY(0)")
                         }}
                     >
                         <div className="header-side-div" dir="rtl">
@@ -160,25 +183,30 @@ function Header(): JSX.Element {
                         component="a"
                         href="/"
                         sx={{
+                            maxHeight: (isHiding ? '0px' : '500vh'),
+                            height: '15vh',
                             display: { xs: 'none', md: 'flex' },
                             margin: "0 0 1rem 0",
                             padding: 0,
-                            height: '15vh',
                             width: '20vw',
                             backgroundImage: `url(${logo})`,
                             backgroundPosition: "center",
-                            backgroundSize: "cover"
+                            backgroundSize: "cover",
+                            transition: 'all 400ms',
                         }}
                     >
                     </Box>
                     <Box
                         sx={{
+                            maxHeight: (isHiding ? '0px' : '500vh'),
                             display: { xs: 'none', md: 'flex' },
                             position: "absolute",
                             flexDirection: 'row',
                             left: '0',
                             top: '1vh',
-                            fontSize: '30px'
+                            fontSize: '30px',
+                            transition: 'all 200ms',
+                            transform: (isHiding ? "translateY(-30vh)" : "translateY(0)")
                         }}
                     >
                         <a target="blank" className='social-links' href="https://wa.me/972503713852"><RiWhatsappFill /></a>
@@ -196,7 +224,8 @@ function Header(): JSX.Element {
                             margin: "0 1rem 1rem 1rem",
                             borderTop: "1px solid black",
                             paddingTop: "1rem",
-                            direction: "rtl"
+                            direction: "rtl",
+                            transition: 'all 300ms',
                         }}>
                         <DropDownMenu {...droprops} />
                         {pages.map((p, i) => <Link key={i} className='header-links' to={p.url}>{p.name}</Link>)}

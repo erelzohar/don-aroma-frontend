@@ -74,9 +74,7 @@ function PaymentTest(props: Props): JSX.Element {
             props.pageCode,
             JSON.stringify(order)
         )
-            .then(res => {
-                console.log(res);
-                
+            .then(res => {                
                 if (iframeRef.current) iframeRef.current.src = res;
             })
     }, [])

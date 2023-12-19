@@ -180,14 +180,14 @@ function ProductsTable(props: TableProps): JSX.Element {
                     <ToggleButton value={-1}>מוסתרים</ToggleButton>
                 </ToggleButtonGroup>
                 <FormControl sx={{ minWidth: '100px', maxHeight: '40px', margin: '0.5rem', alignSelf: 'stretch' }} >
-                    <InputLabel id="demo-simple-scent-label">קטגורית ריח</InputLabel>
+                    <InputLabel id="demo-simple-scent-label">קטגוריה</InputLabel>
                     <Select
                         variant='standard'
                         value={categoryFilter}
                         onChange={(e) => { setCategoryFilter(e.target.value) }}
                         labelId="demo-simple-scent-label"
                         id="demo-simple-scent"
-                        label="קטגורית ריח"
+                        label="קטגוריה"
                     >
                         <MenuItem value=''>ללא</MenuItem>
                         {categories.map((c, i) => <MenuItem key={i} value={c._id}>{c.name}</MenuItem>)}

@@ -98,10 +98,7 @@ function ProductForm(props: ProductFormProps): JSX.Element {
     useEffect(() => {
         reset();
         setProductToEdit(props?.product ? props.product : new ProductModel());
-        setState(initiateState(props?.product ? props.product : new ProductModel()));
-        console.log(allSales);
-        console.log(categories);
-        
+        setState(initiateState(props?.product ? props.product : new ProductModel()));        
         if (sales.length === 0) salesService.getSales();
         if (categories.length === 0) productsService.getCategories();
         if (scentCategories.length === 0) productsService.getScentCategories();
@@ -183,7 +180,6 @@ function ProductForm(props: ProductFormProps): JSX.Element {
         try {
             setState(prev => ({ ...prev, isLoading: true }));
             const productToUpsert: ProductModel = { ...data };
-            console.log(productToUpsert);
             productToUpsert.sales = productSales;
             productToUpsert._id = productToEdit._id;
             productToUpsert.images = productImageNames;
@@ -348,7 +344,7 @@ function ProductForm(props: ProductFormProps): JSX.Element {
                         </FormControl>
                         <div className="form-arrays-div">
                             <FormControl margin="normal" fullWidth >
-                                <FormLabel id="colors-label">ריחות נוספים</FormLabel>
+                                <FormLabel id="colors-label">(*** לכל הריחות) ריחות נוספים</FormLabel>
                                 {productScents.map((e, i) =>
                                     <span key={i} className="form-array-child">
                                         <TextField

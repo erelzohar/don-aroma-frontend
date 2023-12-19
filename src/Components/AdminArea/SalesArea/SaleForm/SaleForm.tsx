@@ -53,10 +53,6 @@ function SaleForm(props: Props): JSX.Element {
     const handleSubmit = async (e: FormEvent) => {
         try {
             e.preventDefault();
-            console.log(formData.date);
-            console.log(dayjs(formData.date).format('DD/MM/YYYY'));
-
-
             const res = await salesService.upsertSale(formData);
             if (res) handleClose();
         }
@@ -159,7 +155,6 @@ function SaleForm(props: Props): JSX.Element {
                         label="תוקף מבצע"
                         value={formData.date ? dayjs(+formData.date) : null}
                         onAccept={(newValue: Dayjs) => {
-                            console.log(newValue.valueOf().toString());
                             setFormData(prev => ({ ...prev, date: newValue.valueOf().toString() }))
                         }}
                     />

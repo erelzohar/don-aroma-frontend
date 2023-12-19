@@ -62,7 +62,7 @@ export default function SalesTable() {
     sales.forEach(s => rows.push(createData(s)));
 
     return (
-        <TableContainer component={Paper} sx={{ direction: 'rtl', maxWidth: '70vw' }}>
+        <TableContainer component={Paper} sx={{ direction: 'rtl', maxWidth: '95vw' }}>
             <Table aria-label="customized table">
                 <TableHead>
                     <TableRow>
