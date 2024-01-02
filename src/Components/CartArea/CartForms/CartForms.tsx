@@ -34,7 +34,7 @@ function CartForms(): JSX.Element {
             {step === 0 && <DeliveryForm totalSum={totalPrice} delivery={delivery} setDelivery={setDelivery} cartState={cartState} setStep={setStep} setFormData={setFormData} setPageCode={setPageCode} />}
             {step === 1 && <PaymentTest totalPrice={totalPrice} delivery={delivery} data={formData} pageCode={pageCode} setStep={setStep} />}
             {step < 2 && <div className="priceDiv">
-                {(delivery === "express" || delivery === "regular") && <p><span className="bigandstorng">משלוח :</span>{delivery === "express" ? "50" : delivery === "regular" && totalPrice < 200 ? "35" : "0"}&#8362;</p>}
+                {(delivery === "express" || delivery === "regular") && <p><span className="bigandstorng">משלוח :</span>{delivery === "express" ? <span> 50&#8362;</span> : delivery === "regular" && totalPrice < 200 ? <span>35&#8362;</span> : "חינם!"}</p>}
                 <p><span className="bigandstorng">סה"כ :</span>{(totalPrice * 0.83).toFixed(2)}&#8362;</p>
                 <p> <span className="bigandstorng">מע"מ : </span> {(totalPrice * 0.17).toFixed(2)}&#8362;</p>
                 <p><span className="bigandstorng">סה"כ כולל מע"מ : </span>{totalPrice}&#8362;</p>

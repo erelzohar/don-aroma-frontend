@@ -1,4 +1,3 @@
-import CartAction from "../Models/CartActionModel";
 import CartItemModel from "../Models/CartItemModel";
 import ProductModel from "../Models/ProductModel";
 import { CartState, addItem, deleteItem, updateItem } from "../Redux/Reducers/cart.slice";
@@ -7,24 +6,17 @@ import store from "../Redux/Store";
 import globals from "./Globals";
 import jwtAxios from "./JwtAxios";
 import notify from "./Notify";
-import productsService from "./Products";
 
 class CartService {
 
     public async addToCart(cartItem: CartItemModel) {
         try {
-            // const cartAction = new CartAction();
-            // cartAction.productId = cartItem.product._id;
-            // cartAction.updatedStock =cartItem.product.stock - cartItem.quantity ;
-            // const formData = CartAction.convertToFormData(cartAction);
-            // const res = await jwtAxios.post(globals.productsUrl + "/cart-action", formData);
-            // if (res) {
-            //     const updatedProduct = {...cartItem.product};
-            //     updatedProduct.stock = cartAction.updatedStock;
-            //     store.dispatch(updateProduct(updatedProduct));
+            const item = store.getState().cartState.items.find(i => i.product._id === cartItem.product._id && i.color === cartItem.color && i.scent === cartItem.scent && i.ml === cartItem.ml);
+            if (item) {
+                if (item.product.stock < (item.quantity + cartItem.quantity)) return notify.custom('כמות לא זמינה');
+            }
             store.dispatch(addItem(cartItem));
             notify.success('מוצר חדש נכנס לעגלה');
-            // }
         }
         catch (err) {
             notify.error(err);
@@ -54,18 +46,18 @@ class CartService {
         }
         return totalPrice
     }
-    public async refreshStock (){
+    public async refreshStock() {
         const response = await jwtAxios.get<ProductModel[]>(globals.productsUrl);
         const products = response.data;
         store.dispatch(setProducts(products));
         let isChanged = false;
-        store.getState().cartState.items.forEach(i=>{
-            const updatedProduct = products.find(p=>p._id===i.product._id);
-            if (updatedProduct.stock<i.quantity){
-                isChanged=true;
-                if (updatedProduct.stock ===0) store.dispatch(deleteItem(i));
-                else {                    
-                    const newItem = {...i};
+        store.getState().cartState.items.forEach(i => {
+            const updatedProduct = products.find(p => p._id === i.product._id);
+            if (updatedProduct.stock < i.quantity) {
+                isChanged = true;
+                if (updatedProduct.stock === 0) store.dispatch(deleteItem(i));
+                else {
+                    const newItem = { ...i };
                     newItem.product = updatedProduct;
                     newItem.quantity = updatedProduct.stock;
                     store.dispatch(updateItem(newItem));
@@ -79,13 +71,12 @@ class CartService {
 
         return true;
     }
-    public async getPaymentFormURL(fullName: string, phone: string, email: string, sum: number, pageCode: string, orderJSON: string) {
+    public async getPaymentFormURL(fullName: string, phone: string, email: string, pageCode: string, orderJSON: string) {
         try {
             const formRequest = new FormData();
-            formRequest.append("sum", sum.toString());
-            formRequest.append("successUrl", "http://donaroma-il.com/cart");
+            formRequest.append("successUrl", "https://donaroma-il.com/cart");
             formRequest.append("description", 'Don aroma');
-            formRequest.append("cancelUrl", "http://donaroma-il.com/cart");
+            formRequest.append("cancelUrl", "https://donaroma-il.com/cart");
             formRequest.append("pageCode", pageCode);
             formRequest.append("orderJSON", orderJSON);
             formRequest.append("fullName", fullName);

@@ -1,5 +1,6 @@
 import "./DeliveryForm.css";
-import { Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
+import { Button, Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
+import * as SearchSelect from 'react-select';
 import { SubmitHandler, useForm } from "react-hook-form";
 import notify from "../../../Services/Notify";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -33,8 +34,8 @@ export interface DeliveryFormI {
     streetNum: number;
     delivery: string;
     aptNum?: number;
+    policyAccepted: boolean;
 }
-
 const schema = yup
     .object()
     .shape({
@@ -47,6 +48,7 @@ const schema = yup
         street: yup.string().max(100).min(2, "מינימום 2 תווים").required("שדה זה הינו שדה חובה"),
         streetNum: yup.number().min(1, "ערך לא תקין").required("שדה זה הינו שדה חובה").typeError("ערך לא תקין"),
         aptNum: yup.mixed().optional(),
+        policyAccepted: yup.boolean().oneOf([true], 'אנא אשר את התקנון')
     })
 
 function DeliveryForm(props: CartFormProps): JSX.Element {
@@ -76,7 +78,7 @@ function DeliveryForm(props: CartFormProps): JSX.Element {
             props.setFormData(data);
             props.setStep(1);
         }
-        catch (err: any) {            
+        catch (err: any) {
             notify.error(err);
         }
     }
@@ -97,6 +99,9 @@ function DeliveryForm(props: CartFormProps): JSX.Element {
             </div>
             <p style={{ fontWeight: "bold" }}>פרטי משלוח :</p>
             <div className="gridContainer">
+                {/* <SearchSelect.default
+                    options={[{ value: "abc", label: 'lol' }]}
+                /> */}
                 <TextField fullWidth required margin="normal" {...register("city")} error={errors.city ? true : false} helperText={errors.city?.message} label="עיר" variant="outlined" />
                 <TextField fullWidth required margin="normal" {...register("street")} error={errors.street ? true : false} helperText={errors.street?.message} label="רחוב" variant="outlined" />
                 <TextField fullWidth required className="shortInput" margin="dense" type="number" dir="ltr" {...register("streetNum")} error={errors.streetNum ? true : false} helperText={errors.streetNum?.message} label="מספר רחוב" variant="outlined" />
@@ -118,6 +123,13 @@ function DeliveryForm(props: CartFormProps): JSX.Element {
                 >
                     {deliveries.map((d, i) => <MenuItem key={i} value={d.type}>{d.name}</MenuItem>)}
                 </Select>
+            </FormControl>
+            <FormControl margin="dense" fullWidth >
+                <div className="policyFlex">
+                    <FormControlLabel style={{ margin: '0 0 0 1%' }} control={<Checkbox {...register("policyAccepted")} />} label="הריני מאשר כי קראתי והסכמתי " />
+                    <span style={{ color: '#0072e5', textDecoration: 'underline' }}><Link to="/policy">לתנאי התקנון.</Link></span>
+                </div>
+                {errors.policyAccepted && <strong style={{ color: 'red' }}>{errors.policyAccepted.message}</strong>}
             </FormControl>
             <div className="payBtn">
                 <Button fullWidth sx={{ margin: "0.5rem", padding: '0.5rem 2rem 0.5rem 2rem', borderRadius: '20px' }} variant="contained" color="inherit" type='submit' onClick={() => { isValid && props.setPageCode("applePay") }}>Apple pay &nbsp;<FaApple /> </Button>

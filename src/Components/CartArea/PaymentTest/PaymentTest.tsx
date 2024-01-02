@@ -33,7 +33,6 @@ function PaymentTest(props: Props): JSX.Element {
                     case 'close': {
                         setOpen(false);
                         props.setStep(0);
-                        notify.custom("לא התקבל חיוב");
                         break;
                     }
                     case 'payment': {
@@ -43,6 +42,10 @@ function PaymentTest(props: Props): JSX.Element {
                             setOpen(false);
                             props.setStep(2);
                             navigate(`/cart/${orderNumber}`);
+                        }
+                        else {
+                            setOpen(false);
+                            notify.error('התשלום נדחה.');
                         }
                         break;
                     }
@@ -64,17 +67,24 @@ function PaymentTest(props: Props): JSX.Element {
             props.data.phone,
             props.data.email
         );
-        order.items = store.getState().cartState.items;        
-        
+
+        order.items = store.getState().cartState.items.map((i) => {
+            const item = { ...i }
+            delete item.product;
+            return {
+                ...item,
+                productId: i.product._id
+            }
+        });
+
         cartService.getPaymentFormURL(
             props.data.firstName + " " + props.data.lastName,
             props.data.phone,
             props.data.email,
-            props.totalPrice,
             props.pageCode,
             JSON.stringify(order)
         )
-            .then(res => {                
+            .then(res => {
                 if (iframeRef.current) iframeRef.current.src = res;
             })
     }, [])

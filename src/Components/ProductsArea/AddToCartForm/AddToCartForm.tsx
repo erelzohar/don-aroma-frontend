@@ -36,7 +36,7 @@ function AddToCartForm(props: Props): JSX.Element {
 
     const submit = () => {
 
-        if ((props.product?.colors?.length > 0 && color === '') || ((props.product?.scents?.length > 0 || props.product?.category._id === "650adc37c4c0c3b0a4da8aec") && scent === '')) {
+        if ((props.product?.colors?.length > 0 && color === '') || (props.product?.scents?.length > 0 && scent === '')) {
             if (spanErrorRef.current) {
                 spanErrorRef.current.textContent = "אנא מלא את פרטי המוצר";
             }
