@@ -45,7 +45,7 @@ function ContactUs(): JSX.Element {
     const submit: SubmitHandler<contactForm> = data => {
         try {
             const obj = { ...data };
-            emailjs.send('service_t61zdur', 'template_wqtke8g', obj, 'GdC_mO1pCeDSGqzJS')
+            emailjs.send('service_xp8ebd5', 'template_h8tgaxp', obj, 'R1UHneZOVvhggtbl8')
                 .then((res: EmailJSResponseStatus) => {
                 }, (error: any) => {
                     notify.error(error);

@@ -44,6 +44,7 @@ function PaymentTest(props: Props): JSX.Element {
                             navigate(`/cart/${orderNumber}`);
                         }
                         else {
+                            props.setStep(0);
                             setOpen(false);
                             notify.error('התשלום נדחה.');
                         }

@@ -48,8 +48,10 @@ const cartReducer = createSlice({
         deleteItem: (state, action: PayloadAction<CartItemModel>) => {
             const index = state.items.findIndex(item => item.product._id === action.payload.product._id && item.color === action.payload.color && item.scent === action.payload.scent);
             if (index < 0) return;
-            state.items.splice(index, 1);
-            localStorage.setItem('donaromacart', JSON.stringify(state));
+            const newState = {...state};
+            newState.items.splice(index, 1);
+            localStorage.setItem('donaromacart', JSON.stringify(newState));
+            state=newState;
         }
     }
 });

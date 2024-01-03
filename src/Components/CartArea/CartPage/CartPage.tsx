@@ -72,13 +72,10 @@ function CartPage(): JSX.Element {
                     </>}
                 </div>
             </div>
-            {store.getState().authState.user?.isAdmin && cartState.items.length > 0 && <div className="buySum">
+            {cartState.items.length > 0 && <div className="buySum">
                 <CartForms />
             </div>}
-            {!store.getState().authState.user?.isAdmin && <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                <h1>העגלה סגורה לשיפוצים</h1>
-                <SiRenovatebot size='100' color="#b28d1c" />
-            </div>}
+
         </div>
     );
 }
