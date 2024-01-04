@@ -28,7 +28,9 @@
     width: 100%;
     justify-items: center;
 }
-
+#delivery-form .gridContainer:first-child{
+    justify-items: normal;
+}
 #delivery-form .gridContainer>* {
     max-width: 250px;
 }

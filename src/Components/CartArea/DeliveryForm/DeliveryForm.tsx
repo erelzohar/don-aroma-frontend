@@ -1,6 +1,5 @@
 import "./DeliveryForm.css";
 import { Button, Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
-import * as SearchSelect from 'react-select';
 import { SubmitHandler, useForm } from "react-hook-form";
 import notify from "../../../Services/Notify";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -9,9 +8,10 @@ import { Link } from "react-router-dom";
 import { useAppSelector } from "../../../Redux/Store";
 import 'dayjs/locale/he';
 import { CartState } from "../../../Redux/Reducers/cart.slice";
-import bitLogo from "../../../Assets/Images/Bit_logo.svg.png"
+import bitLogo from "../../../Assets/Images/Bit_logo.svg.png";
 import { FaApple } from "react-icons/fa";
 import cartService from "../../../Services/Cart";
+import SearchSelect from "../SearchSelect/SearchSelect";
 
 
 interface CartFormProps {
@@ -53,6 +53,12 @@ const schema = yup
 
 function DeliveryForm(props: CartFormProps): JSX.Element {
     const user = useAppSelector(state => state.authState.user);
+    // const [cities, setCities] = useState<City[]>([]);
+
+    // useEffect(() => {
+    //     axios.get("https://data.gov.il/api/3/action/datastore_search?resource_id=d4901968-dad3-4845-a9b0-a57d027f11ab&")
+    //         .then(res => setCities(res.data.records))
+    // }, [])
     const deliveries = [
         {
             type: "express",
@@ -70,9 +76,11 @@ function DeliveryForm(props: CartFormProps): JSX.Element {
 
 
 
-    const { register, handleSubmit, formState: { errors, isValid } } = useForm({ resolver: yupResolver(schema), mode: 'onBlur' });
+    const { register, handleSubmit, setValue, formState: { errors, isValid } } = useForm({ resolver: yupResolver(schema), mode: 'onBlur' });
 
     const submit: SubmitHandler<DeliveryFormI> = async data => {
+        console.log(data);
+        
         try {
             if (!(await cartService.refreshStock())) return;
             props.setFormData(data);
@@ -99,15 +107,16 @@ function DeliveryForm(props: CartFormProps): JSX.Element {
             </div>
             <p style={{ fontWeight: "bold" }}>פרטי משלוח :</p>
             <div className="gridContainer">
+                <SearchSelect setFormValue={setValue} />
+
                 {/* <SearchSelect.default
-                    options={[{ value: "abc", label: 'lol' }]}
+                    options={cities.map(c => ({ label: c.שם_ישוב, value: c.שם_ישוב }))}
                 /> */}
-                <TextField fullWidth required margin="normal" {...register("city")} error={errors.city ? true : false} helperText={errors.city?.message} label="עיר" variant="outlined" />
+                {/* <TextField fullWidth required margin="normal" {...register("city")} error={errors.city ? true : false} helperText={errors.city?.message} label="עיר" variant="outlined" /> */}
                 <TextField fullWidth required margin="normal" {...register("street")} error={errors.street ? true : false} helperText={errors.street?.message} label="רחוב" variant="outlined" />
                 <TextField fullWidth required className="shortInput" margin="dense" type="number" dir="ltr" {...register("streetNum")} error={errors.streetNum ? true : false} helperText={errors.streetNum?.message} label="מספר רחוב" variant="outlined" />
                 <TextField fullWidth className="shortInput" margin="dense" type="number" dir="ltr" {...register("aptNum")} label="דירה" variant="outlined" />
             </div>
-            {/*cities url //https://data.gov.il/api/3/action/datastore_search?resource_id=d4901968-dad3-4845-a9b0-a57d027f11ab&q=jones */}
 
             <FormControl fullWidth margin="normal">
                 <InputLabel id="demo-simple-scent-label">סוג משלוח </InputLabel>
