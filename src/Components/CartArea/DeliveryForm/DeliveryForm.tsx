@@ -41,7 +41,7 @@ const schema = yup
     .shape({
         firstName: yup.string().max(100, "ערך לא תקין").min(2, "מינימום 2 תווים").required("שדה זה הינו שדה חובה"),
         lastName: yup.string().max(100, "ערך לא תקין").min(2, "מינימום 2 תווים").required("שדה זה הינו שדה חובה"),
-        phone: yup.string().max(10).min(10, "טלפון לא תקין ").required("שדה זה הינו שדה חובה"),
+        phone: yup.string().matches(/^05\d{8}$/, "טלפון לא תקין ").required("שדה זה הינו שדה חובה"),
         email: yup.string().email("אימייל לא תקין").required("שדה זה הינו שדה חובה"),
         city: yup.string().max(100, "ערך לא תקין").min(2, "מינימום 2 תווים").required("שדה זה הינו שדה חובה"),
         delivery: yup.string().required(),
@@ -141,7 +141,7 @@ function DeliveryForm(props: CartFormProps): JSX.Element {
                 {errors.policyAccepted && <strong style={{ color: 'red' }}>{errors.policyAccepted.message}</strong>}
             </FormControl>
             <div className="payBtn">
-                <Button fullWidth sx={{ margin: "0.5rem", padding: '0.5rem 2rem 0.5rem 2rem', borderRadius: '20px' }} variant="contained" color="inherit" type='submit' onClick={() => { isValid && props.setPageCode("applePay") }}>Apple pay &nbsp;<FaApple /> </Button>
+                {/* <Button fullWidth sx={{ margin: "0.5rem", padding: '0.5rem 2rem 0.5rem 2rem', borderRadius: '20px' }} variant="contained" color="inherit" type='submit' onClick={() => { isValid && props.setPageCode("applePay") }}>Apple pay &nbsp;<FaApple /> </Button> */}
                 <Button fullWidth sx={{ margin: "0.5rem", padding: '0.5rem 2rem 0.5rem 2rem', borderRadius: '20px' }} variant="contained" color="info" type='submit' onClick={() => { isValid && props.setPageCode("bit") }}><img width="40px" src={bitLogo} alt="" /></Button>
                 <Button fullWidth sx={{ margin: "0.5rem", padding: '0.5rem 2rem 0.5rem 2rem', borderRadius: '20px' }} variant="contained" color="success" type='submit' onClick={() => { isValid && props.setPageCode("credit") }}>תשלום באשראי</Button>
             </div>

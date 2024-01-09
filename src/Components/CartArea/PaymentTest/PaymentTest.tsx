@@ -28,13 +28,13 @@ function PaymentTest(props: Props): JSX.Element {
     useEffect(() => {
         window.addEventListener('message', function (result) {
             if (result.origin === 'https://meshulam.co.il' || result.origin === 'https://sandbox.meshulam.co.il') {
-
                 switch (result.data.action) {
                     case 'close': {
                         setOpen(false);
                         props.setStep(0);
                         break;
                     }
+                    case 'bit_payment':
                     case 'payment': {
                         if (result.data.status === 1) {
                             cartService.refreshStock();

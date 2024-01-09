@@ -47,7 +47,7 @@ function SearchSelect(props: SelectProps): JSX.Element {
                     }),
                     menu: baseStyle => ({ ...baseStyle, zIndex: 9999 })
                 }}
-                onChange={(e) => { props.setFormValue("city", e.value) }}
+                onChange={(e) => { if (e.value) props.setFormValue("city", e.value) }}
                 cacheOptions
                 loadOptions={loadOptions}
                 defaultOptions
