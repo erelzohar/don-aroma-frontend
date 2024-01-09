@@ -30,9 +30,14 @@ const adminDroprops: dropDownProps = {
         {
             name: "עריכת מוצרים",
             url: "/manage/admin"
-        }, {
+        },
+        {
             name: "עריכת מבצעים",
             url: "/manage/admin/sales"
+        },
+        {
+            name: "עריכת הזמנות",
+            url: "/manage/admin/orders"
         }
     ]
 }

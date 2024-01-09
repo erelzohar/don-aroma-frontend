@@ -8,7 +8,6 @@ import Login from "../../AuthArea/Login/Login";
 import SpeedDialComponent from "../../Generics/SpeedDialComponent/SpeedDialComponent";
 import ProductsList from "../../ProductsArea/ProductsList/ProductsList";
 import CartBtn from "../../CartArea/CartBtn/CartBtn";
-import { useAppSelector } from "../../../Redux/Store";
 import ScrollToTop from "../../../Services/ScrollToTop";
 import ProductSpecs from "../../ProductsArea/ProductSpecs/ProductSpecs";
 import Faq from "../../Faq/Faq";
@@ -23,6 +22,7 @@ import NotFoundPage from "../../Generics/NotFoundPage/NotFoundPage";
 import Logout from "../../AuthArea/Logout/Logout";
 import CartPage from "../../CartArea/CartPage/CartPage";
 import SalesPage from "../../AdminArea/SalesArea/SalesPage/SalesPage";
+import OrdersPage from "../../AdminArea/OrdersArea/OrdersPage/OrdersPage";
 
 
 
@@ -69,6 +69,7 @@ function Layout(): JSX.Element {
                         {/* protected */}
                         <Route path="/manage/admin" element={<ProtectedRoute redirectPath="/*" protectedComponent={<AdminPage />} />} />
                         <Route path="/manage/admin/sales" element={<ProtectedRoute redirectPath="/*" protectedComponent={<SalesPage />} />} />
+                        <Route path="/manage/admin/orders" element={<ProtectedRoute redirectPath="/*" protectedComponent={<OrdersPage />} />} />
 
                         {/* not found */}
                         <Route path="/*" element={<NotFoundPage />} />

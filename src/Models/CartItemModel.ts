@@ -2,7 +2,7 @@ import ProductModel from "./ProductModel";
 
 class CartItemModel {
     public product: ProductModel;
-    public productId? :string;
+    public productId? :string; //used for calculating price at server side
     public quantity: number;
     public color?: string = null;
     public scent?: string = null;

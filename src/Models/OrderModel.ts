@@ -1,6 +1,7 @@
 import CartItemModel from "./CartItemModel";
 
 export class OrderModel {
+    public _id: string;
     public transactionId: string;
     public orderNumber: string;
     public deliveryType: string;

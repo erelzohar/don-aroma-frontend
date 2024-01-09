@@ -43,7 +43,7 @@ function QuickAddToCart(props: Props): JSX.Element {
             <DialogTitle>הוסף לעגלה</DialogTitle>
             <DialogContent>
                {(props.product.colors?.length>0 || props.product.scents?.length>0) && <DialogContentText>
-                    אנא בחר אחת מהאפשרויות:
+                    אנא מלא את פרטי המוצר:
                 </DialogContentText>}
                 <AddToCartForm product={props.product} modalSetOpen={props.setState} />
             </DialogContent>

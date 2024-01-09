@@ -4,11 +4,13 @@ import productsReducer from "./products.slice";
 import cartReducer from "./cart.slice";
 import messagesReducer from "./messages.slice"
 import salesReducer from "./sales.slice";
+import ordersReducer from "./orders.slice";
 
 export default combineReducers({
      authState: userReducer,
      productsState:productsReducer,
      cartState:cartReducer,
      messagesState:messagesReducer,
-     salesState:salesReducer
+     salesState:salesReducer,
+     ordersState:ordersReducer
 })

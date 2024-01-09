@@ -5,8 +5,7 @@ import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import { useAppSelector } from '../../../../Redux/Store';
 import salesService from '../../../../Services/Sales';
 import SaleModel from '../../../../Models/SaleModel';
-import { Delete } from '@mui/icons-material';
-import dayjs from 'dayjs';
+import { Delete } from '@mui/icons-material';import "./OrdersTable.css";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -27,32 +26,13 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }));
 
-function createData(sale: SaleModel): SaleModel {
-    let info = "";
-    switch (sale.type) {
-        case ('percent'):
-            info = sale.saleData + " אחוז הנחה";
-            break;
-        case ('quantity'):
-            const pQuantity = sale.saleData.split('in')[0];
-            const price = sale.saleData.split('in')[sale.saleData.split('in').length - 1];
-            info = pQuantity + " ב - " + price;
-            break;
-        default:
-            info = sale.saleData
-    }
-    const type = sale.type === 'quantity' ? 'הנחה על כמות מסוימת' : sale.type === 'percent' ? 'הנחה באחוזים' : "כמות + כמות"
-    return { _id: sale._id, name: sale.name, type, saleData: info, date: sale.date };
-}
-
-
-export default function SalesTable() {
-    const sales = useAppSelector(state => state.salesState.sales);
+function OrdersTable(): JSX.Element {
+    const orders = useAppSelector(state => state.salesState.sales);
     const rows: SaleModel[] = [];
-    React.useEffect(() => {
-        if (sales.length === 0) salesService.getSales();
-    }, [])
-    sales.forEach(s => rows.push(createData(s)));
+    // React.useEffect(() => {
+    //     if (sales.length === 0) salesService.getSales();
+    // }, [])
+    // sales.forEach(s => rows.push(createData(s)));
 
     return (
         <TableContainer component={Paper} sx={{ direction: 'rtl', maxWidth: '95vw' }}>
@@ -74,7 +54,7 @@ export default function SalesTable() {
                             </StyledTableCell>
                             <StyledTableCell align="right">{row.type}</StyledTableCell>
                             <StyledTableCell align="right">{row.saleData}</StyledTableCell>
-                            <StyledTableCell dir='ltr' align="right">{row.date ? dayjs(+row.date).format("DD/MM/YY - HH:mm") : ''}</StyledTableCell>
+                            {/* <StyledTableCell dir='ltr' align="right">{row.date ? dayjs(+row.date).format("DD/MM/YY - HH:mm") : ''}</StyledTableCell> */}
                             <StyledTableCell align="right"><IconButton color='error' onClick={async () => { await salesService.deleteSale(row._id) }} ><Delete /></IconButton></StyledTableCell>
                         </StyledTableRow>
                     ))}
@@ -83,3 +63,5 @@ export default function SalesTable() {
         </TableContainer>
     );
 }
+
+export default OrdersTable;

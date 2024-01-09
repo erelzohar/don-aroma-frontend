@@ -144,6 +144,19 @@ export default function HeaderDrawer(props: HeaderDrawerProps) {
                                             </ListItemButton>
                                         </Link>
                                     </ListItem>
+                                    <ListItem
+                                        disableGutters
+                                        onClick={toggleDrawer(false)}
+                                        onKeyDown={toggleDrawer(false)}>
+                                        <Link to={"/manage/admin/orders"}>
+                                            <ListItemButton>
+                                                <ListItemIcon>
+                                                    <BiEditAlt />
+                                                </ListItemIcon>
+                                                <ListItemText primary={"עריכת הזמנות"} />
+                                            </ListItemButton>
+                                        </Link>
+                                    </ListItem>
                                 </Slide>
                             </span>
                         </List>
