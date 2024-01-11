@@ -129,7 +129,7 @@ function DeliveryForm(props: CartFormProps): JSX.Element {
                 {errors.policyAccepted && <strong style={{ color: 'red' }}>{errors.policyAccepted.message}</strong>}
             </FormControl>
             <div className="payBtn">
-                <Button fullWidth sx={{ margin: "0.5rem", padding: '0.5rem 2rem 0.5rem 2rem', borderRadius: '20px' }} variant="contained" color="inherit" type='submit' onClick={() => { isValid && props.setPageCode("applePay") }}>Apple pay &nbsp;<FaApple /> </Button>
+                {/* <Button fullWidth sx={{ margin: "0.5rem", padding: '0.5rem 2rem 0.5rem 2rem', borderRadius: '20px' }} variant="contained" color="inherit" type='submit' onClick={() => { isValid && props.setPageCode("applePay") }}>Apple pay &nbsp;<FaApple /> </Button> */}
                 <Button fullWidth sx={{ margin: "0.5rem", padding: '0.5rem 2rem 0.5rem 2rem', borderRadius: '20px' }} variant="contained" color="info" type='submit' onClick={() => { isValid && props.setPageCode("bit") }}><img width="40px" src={bitLogo} alt="" /></Button>
                 <Button fullWidth sx={{ margin: "0.5rem", padding: '0.5rem 2rem 0.5rem 2rem', borderRadius: '20px' }} variant="contained" color="success" type='submit' onClick={() => { isValid && props.setPageCode("credit") }}>תשלום באשראי</Button>
             </div>
