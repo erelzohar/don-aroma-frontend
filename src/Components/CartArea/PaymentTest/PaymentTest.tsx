@@ -27,8 +27,9 @@ function PaymentTest(props: Props): JSX.Element {
     const orderNumber = date.getTime().toString() + props.totalPrice;
     useEffect(() => {
         window.addEventListener('message', function (result) {
-            if (result.origin === 'https://meshulam.co.il' || result.origin === 'https://sandbox.meshulam.co.il') {
+            if (result.origin === 'https://secure.meshulam.co.il' || result.origin === 'https://sandbox.meshulam.co.il') {
                 switch (result.data.action) {
+                    case 'bit_cancel':
                     case 'close': {
                         setOpen(false);
                         props.setStep(0);

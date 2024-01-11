@@ -53,12 +53,7 @@ const schema = yup
 
 function DeliveryForm(props: CartFormProps): JSX.Element {
     const user = useAppSelector(state => state.authState.user);
-    // const [cities, setCities] = useState<City[]>([]);
 
-    // useEffect(() => {
-    //     axios.get("https://data.gov.il/api/3/action/datastore_search?resource_id=d4901968-dad3-4845-a9b0-a57d027f11ab&")
-    //         .then(res => setCities(res.data.records))
-    // }, [])
     const deliveries = [
         {
             type: "express",
@@ -79,8 +74,6 @@ function DeliveryForm(props: CartFormProps): JSX.Element {
     const { register, handleSubmit, setValue, formState: { errors, isValid } } = useForm({ resolver: yupResolver(schema), mode: 'onBlur' });
 
     const submit: SubmitHandler<DeliveryFormI> = async data => {
-        console.log(data);
-        
         try {
             if (!(await cartService.refreshStock())) return;
             props.setFormData(data);
@@ -108,11 +101,6 @@ function DeliveryForm(props: CartFormProps): JSX.Element {
             <p style={{ fontWeight: "bold" }}>פרטי משלוח :</p>
             <div className="gridContainer">
                 <SearchSelect setFormValue={setValue} />
-
-                {/* <SearchSelect.default
-                    options={cities.map(c => ({ label: c.שם_ישוב, value: c.שם_ישוב }))}
-                /> */}
-                {/* <TextField fullWidth required margin="normal" {...register("city")} error={errors.city ? true : false} helperText={errors.city?.message} label="עיר" variant="outlined" /> */}
                 <TextField fullWidth required margin="normal" {...register("street")} error={errors.street ? true : false} helperText={errors.street?.message} label="רחוב" variant="outlined" />
                 <TextField fullWidth required className="shortInput" margin="dense" type="number" dir="ltr" {...register("streetNum")} error={errors.streetNum ? true : false} helperText={errors.streetNum?.message} label="מספר רחוב" variant="outlined" />
                 <TextField fullWidth className="shortInput" margin="dense" type="number" dir="ltr" {...register("aptNum")} label="דירה" variant="outlined" />
@@ -141,7 +129,7 @@ function DeliveryForm(props: CartFormProps): JSX.Element {
                 {errors.policyAccepted && <strong style={{ color: 'red' }}>{errors.policyAccepted.message}</strong>}
             </FormControl>
             <div className="payBtn">
-                {/* <Button fullWidth sx={{ margin: "0.5rem", padding: '0.5rem 2rem 0.5rem 2rem', borderRadius: '20px' }} variant="contained" color="inherit" type='submit' onClick={() => { isValid && props.setPageCode("applePay") }}>Apple pay &nbsp;<FaApple /> </Button> */}
+                <Button fullWidth sx={{ margin: "0.5rem", padding: '0.5rem 2rem 0.5rem 2rem', borderRadius: '20px' }} variant="contained" color="inherit" type='submit' onClick={() => { isValid && props.setPageCode("applePay") }}>Apple pay &nbsp;<FaApple /> </Button>
                 <Button fullWidth sx={{ margin: "0.5rem", padding: '0.5rem 2rem 0.5rem 2rem', borderRadius: '20px' }} variant="contained" color="info" type='submit' onClick={() => { isValid && props.setPageCode("bit") }}><img width="40px" src={bitLogo} alt="" /></Button>
                 <Button fullWidth sx={{ margin: "0.5rem", padding: '0.5rem 2rem 0.5rem 2rem', borderRadius: '20px' }} variant="contained" color="success" type='submit' onClick={() => { isValid && props.setPageCode("credit") }}>תשלום באשראי</Button>
             </div>
