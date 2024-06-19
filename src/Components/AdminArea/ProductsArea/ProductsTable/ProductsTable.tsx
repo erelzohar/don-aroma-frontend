@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Checkbox, FormControl, InputLabel, Select, MenuItem, IconButton } from '@mui/material';
-import ProductModel from '../../../Models/ProductModel';
-import CategoryModel from '../../../Models/CategoryModel';
+import ProductModel from '../../../../Models/ProductModel';
+import CategoryModel from '../../../../Models/CategoryModel';
 import { Delete, StarBorder, Grade } from '@mui/icons-material';
-import productsService from '../../../Services/Products';
-import globals from '../../../Services/Globals';
+import productsService from '../../../../Services/Products';
+import globals from '../../../../Services/Globals';
 import ProductForm from '../ProductForm/ProductForm';
 import { ToggleButton, ToggleButtonGroup } from '@mui/material';
-import { useAppSelector } from '../../../Redux/Store';
-import SaleModel from '../../../Models/SaleModel';
+import { useAppSelector } from '../../../../Redux/Store';
+import SaleModel from '../../../../Models/SaleModel';
 
 interface Column {
     id: 'name' | 'price' | 'sales' | 'stock' | 'category' | 'sortIndex' | 'images' | 'scents' | 'colors' | 'description' | 'level' | 'scentCategory';
@@ -32,8 +32,8 @@ const columns: readonly Column[] = [
         label: 'מבצעים',
         minWidth: 100,
         format: (value: SaleModel[]) => {
-            let string ='';
-            value.forEach(v=>string=string+v.name+", ");
+            let string = '';
+            value.forEach(v => string = string + v.name + (value.length > 1 ? ', ' : ''));
             return string;
         }
     },

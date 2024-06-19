@@ -10,6 +10,8 @@ import { useAppSelector } from "../../../Redux/Store";
 import clockGif from "../../../Assets/Images/clock.gif";
 import messagesService from "../../../Services/Messages";
 import salesService from "../../../Services/Sales";
+import ParticlesBg from "particles-bg";
+
 
 
 
@@ -30,6 +32,7 @@ function Home(): JSX.Element {
         <div className="Home">
             {messages.length > 0 && <Slide direction="down" triggerOnce>
                 <div className="intro-message">
+                <ParticlesBg type="lines" color="#353935" bg={true} />
                     <h1>{messages.find(m => m.type === "intro")?.message}</h1>
                 </div>
             </Slide>}

@@ -103,7 +103,7 @@ function SaleForm(props: Props): JSX.Element {
                                 required
                                 type="number"
                                 value={formData.saleData ? +formData.saleData.split('in')[0] : ''}//3in200
-                                onChange={(e) => { if (+e.target.value > 0) setFormData(prev => ({ ...prev, saleData: e.target.value + 'in0' })) }}
+                                onChange={(e) => { if (+e.target.value > 0) setFormData(prev => ({ ...prev, saleData: +e.target.value + 'in0' })) }}
                             />
                             <p style={{ margin: '2px' }}> ב-</p>
                             <TextField
@@ -112,7 +112,7 @@ function SaleForm(props: Props): JSX.Element {
                                 required
                                 type="number"
                                 value={formData.saleData ? +formData.saleData.split('in')[1] : ''}//3in200
-                                onChange={(e) => { if (+e.target.value > 0) setFormData(prev => ({ ...prev, saleData: (prev.saleData ? prev.saleData.split('in')[0] : '0') + "in" + e.target.value })) }}
+                                onChange={(e) => { if (+e.target.value > 0) setFormData(prev => ({ ...prev, saleData: (prev.saleData ? prev.saleData.split('in')[0] : '0') + "in" + +e.target.value })) }}
                             />
                         </span>}
                         {formData.type === 'percent' && <>
@@ -125,7 +125,7 @@ function SaleForm(props: Props): JSX.Element {
                                 required
                                 type="number"
                                 value={formData.saleData ? +formData.saleData.replace('%', '') : 0}//3in200
-                                onChange={(e) => { if (+e.target.value > 0) setFormData(prev => ({ ...prev, saleData: e.target.value + "%" })) }}
+                                onChange={(e) => { if (+e.target.value > 0) setFormData(prev => ({ ...prev, saleData: +e.target.value + "%" })) }}
                             />
 
                         </>}
@@ -136,7 +136,7 @@ function SaleForm(props: Props): JSX.Element {
                                 required
                                 type="number"
                                 value={formData.saleData ? +formData.saleData.split('+')[0] : ''}
-                                onChange={(e) => { if (+e.target.value > 0) setFormData(prev => ({ ...prev, saleData: e.target.value + '+0' })) }}
+                                onChange={(e) => { if (+e.target.value > 0) setFormData(prev => ({ ...prev, saleData: +e.target.value + '+0' })) }}
                             />
                             <p style={{ margin: '2px' }}>+</p>
                             <TextField
@@ -145,7 +145,7 @@ function SaleForm(props: Props): JSX.Element {
                                 required
                                 type="number"
                                 value={formData.saleData ? +formData.saleData.split('+')[1] : ''}
-                                onChange={(e) => { if (+e.target.value > 0) setFormData(prev => ({ ...prev, saleData: (prev.saleData ? prev.saleData.split('+')[0] : '0') + "+" + e.target.value })) }}
+                                onChange={(e) => { if (+e.target.value > 0) setFormData(prev => ({ ...prev, saleData: (prev.saleData ? prev.saleData.split('+')[0] : '0') + "+" + +e.target.value })) }}
                             />
                         </span>}
                     </span>}

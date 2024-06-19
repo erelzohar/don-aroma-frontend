@@ -5,6 +5,7 @@ import DeliveryForm, { DeliveryFormI } from "../DeliveryForm/DeliveryForm";
 import { useAppSelector } from "../../../Redux/Store";
 import PaymentTest from "../PaymentTest/PaymentTest";
 import cartService from "../../../Services/Cart";
+import salesService from "../../../Services/Sales";
 
 function CartForms(): JSX.Element {
     const cartState = useAppSelector(state => state.cartState);
@@ -13,7 +14,9 @@ function CartForms(): JSX.Element {
     const [pageCode, setPageCode] = useState('');
     const [formData, setFormData] = useState<DeliveryFormI>(null);
 
-
+    let salesSum = salesService.calcSales();
+    console.log(salesSum);
+    
     let totalPrice = cartService.getTotalPrice(delivery);
 
     return (

@@ -2,17 +2,17 @@ import "./ProductForm.css";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import ProductModel from "../../../Models/ProductModel";
-import notify from "../../../Services/Notify";
-import globals from "../../../Services/Globals";
-import { useAppSelector } from "../../../Redux/Store";
+import ProductModel from "../../../../Models/ProductModel";
+import notify from "../../../../Services/Notify";
+import globals from "../../../../Services/Globals";
+import { useAppSelector } from "../../../../Redux/Store";
 import { Button, Dialog, DialogContent, DialogTitle, FormControl, FormControlLabel, FormLabel, IconButton, InputLabel, MenuItem, Radio, RadioGroup, Select, SelectChangeEvent, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
-import productsService from "../../../Services/Products";
-import CategoryModel from "../../../Models/CategoryModel";
+import productsService from "../../../../Services/Products";
+import CategoryModel from "../../../../Models/CategoryModel";
 import { Add, Delete, Edit } from "@mui/icons-material";
-import SaleModel from "../../../Models/SaleModel";
-import salesService from "../../../Services/Sales";
+import SaleModel from "../../../../Models/SaleModel";
+import salesService from "../../../../Services/Sales";
 
 
 interface ProductFormProps {
@@ -342,7 +342,7 @@ function ProductForm(props: ProductFormProps): JSX.Element {
 
                             </Select>
                         </FormControl>
-                        <div className="form-arrays-div">
+                        {!productToEdit.scentCategory && <div className="form-arrays-div">
                             <FormControl margin="normal" fullWidth >
                                 <FormLabel id="colors-label">(*** לכל הריחות) ריחות נוספים</FormLabel>
                                 {productScents.map((e, i) =>
@@ -415,7 +415,7 @@ function ProductForm(props: ProductFormProps): JSX.Element {
                                     </Button>
                                 </span>
                             </FormControl>
-                        </div>
+                        </div>}
                         <TextField
                             error={errors.description ? true : false}
                             helperText={errors.description?.message}

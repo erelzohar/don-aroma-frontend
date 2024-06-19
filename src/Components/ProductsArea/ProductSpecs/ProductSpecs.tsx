@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import productsService from "../../../Services/Products";
 import { Link, useParams } from "react-router-dom";
 import { IoIosBowtie } from "react-icons/io";
-import ProductForm from "../../AdminArea/ProductForm/ProductForm";
+import ProductForm from "../../AdminArea/ProductsArea/ProductForm/ProductForm";
 import Slideshow from "../../Generics/Slideshow/Slideshow";
 import AddToCartForm from "../AddToCartForm/AddToCartForm";
 
@@ -65,7 +65,8 @@ function ProductSpecs(): JSX.Element {
                         <h1 className="productName">{productToSpec.name}</h1>
                         <section>{productToSpec.description} </section>
                     </div>
-                    <AddToCartForm product={productToSpec} />
+                    {productToSpec.stock > 0 && <AddToCartForm product={productToSpec} />}
+                    {productToSpec.stock < 1 && <h1 style={{ color: 'red' }}>אזל המלאי</h1>}
                 </div>
             </div>}
             <div className="interestedCarousel">

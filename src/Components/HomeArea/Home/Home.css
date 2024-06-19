@@ -7,10 +7,10 @@
 .Home .intro-message{
     height: 30vh;
     direction: rtl;
-    background-image: url("../../../Assets/Images/horizonal-cover.jpg");
+    /* background-image: url("../../../Assets/Images/horizonal-cover.jpg");
     background-size: cover;
     background-position: center;
-    background-repeat: no-repeat;
+    background-repeat: no-repeat; */
     justify-content: center;
     align-items: center;
     text-align: center;

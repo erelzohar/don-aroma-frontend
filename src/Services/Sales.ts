@@ -12,8 +12,8 @@ class SalesService {
             if (store.getState().salesState.sales.length > 0) {
                 return store.getState().salesState.sales;
             }
-            
-            const response = await jwtAxios.get<SaleModel[]>(globals.productsUrl + "/sales");            
+
+            const response = await jwtAxios.get<SaleModel[]>(globals.productsUrl + "/sales");
             store.dispatch(setSales(response.data));
             return response.data;
         }
@@ -54,28 +54,46 @@ class SalesService {
             notify.error(err);
         }
     }
-    
-    public async calcSales(cartItems: CartItemModel[]) {
-        const sales =  await salesService.getSales();
+
+    public calcSales() {
+        const cartItems = store.getState().cartState.items;
         let discount = 0;
-        let salesString = '';
-        const salesSum = [];
-        cartItems.forEach(c=>{
-            c.product.sales.forEach(s=>{
-                let index = sales.findIndex(ss=>s._id===ss._id);
-                if (sales[index]) {
-                    const current = sales[index];
-                    if (current.type==='plus'){
-                        const buyQunatity = +current.saleData.split('+')[0];
-                        const giftQunatity = +current.saleData.split('+')[1];
-                        const cartItemQuantity = c.quantity;
-                        if (cartItemQuantity>=buyQunatity){
-                            salesString = salesString + (salesString!=='' ? ',' : '') + c.product.name + " - " + current.name;
-                        }
+        const salesSum: string[] = [];
+        cartItems.forEach(c => {
+            c.product.sales.forEach(s => {
+                if (s.type === 'plus') {
+                    const buyQuantity = +s.saleData.split('+')[0];
+                    const cartItemQuantity = c.quantity;
+                    if (cartItemQuantity >= buyQuantity) {
+                        salesSum.push(c.product.name + " - " + s.name);
                     }
                 }
+                else if (s.type === 'percent') {
+                    const percent = +s.saleData.split('%')[0];
+                    const itemDiscount = Math.floor((c.product.price * c.quantity / 100) * percent);
+                    discount += itemDiscount;
+                    salesSum.push(c.product.name + " - " + s.name);
+
+                }
+                else if (s.type === 'quantity') {
+                    const buyQuantity = +s.saleData.split('in')[0];
+                    const salePrice = +s.saleData.split('in')[1];
+                    if (c.quantity >= buyQuantity) {
+                        const saleQuantity = Math.floor(c.quantity / buyQuantity);
+                        const itemOriginalPrice = buyQuantity * c.product.price;
+                        const itemDiscount = (itemOriginalPrice - salePrice) * saleQuantity;
+                        discount += itemDiscount;
+                        salesSum.push(c.product.name + " - " + s.name);
+                    }
+                }
+
+
             })
-        })        
+        })
+        return {
+            salesSum,
+            discount
+        }
     }
 }
 

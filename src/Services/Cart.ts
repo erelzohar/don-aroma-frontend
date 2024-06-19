@@ -10,7 +10,7 @@ import notify from "./Notify";
 class CartService {
 
     public async addToCart(cartItem: CartItemModel) {
-        try {
+        try {            
             const item = store.getState().cartState.items.find(i => i.product._id === cartItem.product._id && i.color === cartItem.color && i.scent === cartItem.scent && i.ml === cartItem.ml);
             if (item) {
                 if (item.product.stock < (item.quantity + cartItem.quantity)) return notify.custom('כמות לא זמינה');

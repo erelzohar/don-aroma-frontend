@@ -32,7 +32,7 @@ const cartReducer = createSlice({
             }
             state = newState;
             state.timeToRemove = new Date().getTime() + 3600000;
-            localStorage.setItem('donaromacart', JSON.stringify(state));
+            localStorage.setItem('donaromacart', JSON.stringify(state));            
         },
         updateItem: (state, action: PayloadAction<CartItemModel>) => {            
             const index = state.items.findIndex(item => item.product._id === action.payload.product._id && item.color === action.payload.color && item.scent === action.payload.scent&& item.ml === action.payload.ml);

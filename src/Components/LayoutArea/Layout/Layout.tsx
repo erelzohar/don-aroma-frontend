@@ -17,7 +17,7 @@ import ContactUsPage from "../../ContactUsPage/ContactUsPage";
 import BusinessPage from "../../BusinessPage/BusinessPage";
 import { useEffect, useRef } from 'react';
 import ProtectedRoute from "../../../Services/ProtectedRoute";
-import AdminPage from "../../AdminArea/AdminPage/AdminPage";
+import ProductsPage from "../../AdminArea/ProductsArea/ProductsPage/ProductsPage";
 import NotFoundPage from "../../Generics/NotFoundPage/NotFoundPage";
 import Logout from "../../AuthArea/Logout/Logout";
 import CartPage from "../../CartArea/CartPage/CartPage";
@@ -67,7 +67,7 @@ function Layout(): JSX.Element {
                         <Route path="cart/:orderNumber" element={<CartPage />} />
 
                         {/* protected */}
-                        <Route path="/manage/admin" element={<ProtectedRoute redirectPath="/*" protectedComponent={<AdminPage />} />} />
+                        <Route path="/manage/admin" element={<ProtectedRoute redirectPath="/*" protectedComponent={<ProductsPage />} />} />
                         <Route path="/manage/admin/sales" element={<ProtectedRoute redirectPath="/*" protectedComponent={<SalesPage />} />} />
                         <Route path="/manage/admin/orders" element={<ProtectedRoute redirectPath="/*" protectedComponent={<OrdersPage />} />} />
 

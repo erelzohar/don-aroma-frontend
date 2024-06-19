@@ -24,7 +24,7 @@ function PaymentTest(props: Props): JSX.Element {
     const [open, setOpen] = useState(true);
     const iframeRef = useRef<HTMLIFrameElement>(null);
     const date = new Date();
-    const orderNumber = date.getTime().toString() + props.totalPrice;
+    const orderNumber = date.getTime().toString().substring(4) + props.totalPrice;
     useEffect(() => {
         window.addEventListener('message', function (result) {
             if (result.origin === 'https://secure.meshulam.co.il' || result.origin === 'https://sandbox.meshulam.co.il') {
