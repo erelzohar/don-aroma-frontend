@@ -21,6 +21,7 @@
 }
 
 .Layout>main {
+    height: 100%;
     background-image: linear-gradient(rgba(255, 255, 255, .75), rgba(255, 255, 255, .75)), url(../../../Assets/Images/main-bg-desktop.png);
     grid-column: span 6;
     background-position: center;

@@ -25,3 +25,10 @@
 .footer-info-header{
 	color: #9d7500;
 }
+.ezLink{
+	color: rgb(73, 73, 73);
+	transition: color 0.5s ease;
+}
+.ezLink:hover{
+	color: rgb(137, 137, 137);
+}

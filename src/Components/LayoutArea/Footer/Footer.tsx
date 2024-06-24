@@ -30,7 +30,7 @@ function Footer(): JSX.Element {
                     <a target="blank" className='social-links' href="https://www.instagram.com/don_aromaisr/"><AiFillInstagram size="25"/></a>
                 </div>
             </div>
-            &copy; All rights reserved to EZ web development.
+            <span>&copy; All rights reserved to <a className="ezLink" href="https://www.instagram.com/ezwebs/"> EZ web development.</a></span>
         </div>
     );
 }
